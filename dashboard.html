@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Data Jemaat</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-blue-700 text-white px-6 py-4 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <img src="logo.png" alt="Logo" class="h-10 w-10 rounded-full bg-white" />
+      <h1 class="text-xl font-bold">Sistem Informasi Warga Jemaat</h1>
+      <p class="text-sm text-white font-light">GKI Diaspora Kotaraja</p>
+    </div>
+    <button onclick="logout()" class="bg-red-500 px-3 py-1 rounded hover:bg-red-600">Logout</button>
+  </header>
+  
+
+  <!-- Konten -->
+  <main class="p-6">
+    <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
+      <input type="text" id="searchInput" placeholder="Cari nama jemaat..." class="px-3 py-2 border rounded w-full md:w-1/2" />
+      <button onclick="bukaModal()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">+ Tambah Data</button>
+    </div>
+    <div class="mb-4">
+      <label for="rowsPerPage" class="text-sm mr-2">Tampilkan</label>
+      <select id="rowsPerPage" class="px-2 py-1 border rounded text-sm">
+        <option value="10">10 Baris</option>
+        <option value="20">20 Baris</option>
+        <option value="50">50 Baris</option>
+        <option value="9999">Semua</option>
+      </select>
+    </div>
+    <div class="overflow-x-auto bg-white shadow rounded">
+      <table class="min-w-full text-xs">
+        <thead class="bg-blue-200 text-left">
+          <tr id="tableHeader"></tr>
+        </thead>
+        <tbody id="dataTable"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="js/dashboard.js"></script>
+  <footer class="bg-gray-200 text-center text-sm text-gray-700 py-4 mt-8">
+    <p class="font-semibold">PHMJ GKI Diaspora Kotaraja</p>
+    <p>Alamat : Kompleks Pendidikan Kristen Kotaraja Dalam</p>
+    <p>Tahun 2025</p>
+  </footer>
+  <!-- Modal Tambah Data -->
+<div id="modalTambah" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+  <div class="bg-white p-6 rounded shadow w-full max-w-lg">
+    <h2 class="text-xl font-bold mb-4">Tambah Data Jemaat</h2>
+    <form id="formTambah" class="space-y-3">
+      <input type="text" name="kode" placeholder="Kode Anggota" class="w-full border px-3 py-2 rounded" required />
+      <input type="text" name="nama" placeholder="Nama Lengkap" class="w-full border px-3 py-2 rounded" required />
+      <select name="gender" class="w-full border px-3 py-2 rounded">
+        <option value="">-- Pilih Jenis Kelamin --</option>
+        <option value="Laki-laki">Laki-laki</option>
+        <option value="Perempuan">Perempuan</option>
+      </select>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+      <button type="button" onclick="tutupModal()" class="ml-2 text-sm text-gray-600">Batal</button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>
