@@ -1,6 +1,6 @@
 window.onload = function () {
   const url = 'https://script.google.com/macros/s/AKfycbwchcqYjRgCxKsOJZ213lIt0YE9UswGkvHkxM9NwGFEJAHaEKJNf2UNJCFYkfbOXQzv4A/exec?action=getData';
-  let fullData = []; // untuk menyimpan semua data
+  let fullData = [];
 
   fetch(url)
     .then(res => res.json())
@@ -13,7 +13,6 @@ window.onload = function () {
   document.getElementById("searchInput").addEventListener("input", function () {
     const keyword = this.value.toLowerCase();
     const filtered = [fullData[0]];
-
     for (let i = 1; i < fullData.length; i++) {
       const row = fullData[i];
       const nama = row[1]?.toLowerCase() || "";
@@ -21,7 +20,6 @@ window.onload = function () {
         filtered.push(row);
       }
     }
-
     renderTable(filtered);
   });
 
@@ -73,7 +71,7 @@ window.onload = function () {
     document.getElementById("modalTambah").classList.add("hidden");
   };
 
-  // Handle form tambah data
+  // Handle form tambah data (pakai GET untuk menghindari CORS)
   document.getElementById("formTambah").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -87,25 +85,20 @@ window.onload = function () {
     }
 
     const data = [kode, nama, gender];
-    const addUrl = 'https://script.google.com/macros/s/AKfycbwchcqYjRgCxKsOJZ213lIt0YE9UswGkvHkxM9NwGFEJAHaEKJNf2UNJCFYkfbOXQzv4A/exec?action=addData';
+    const dataStr = encodeURIComponent(JSON.stringify(data));
+    const getUrl = `https://script.google.com/macros/s/AKfycbwchcqYjRgCxKsOJZ213lIt0YE9UswGkvHkxM9NwGFEJAHaEKJNf2UNJCFYkfbOXQzv4A/exec?action=addData&data=${dataStr}`;
 
-    fetch(addUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `data=${encodeURIComponent(JSON.stringify(data))}`,
-    })
+    fetch(getUrl)
       .then(res => res.text())
       .then(msg => {
-        console.log("Respon dari server:", msg);
+        console.log("Respon:", msg);
         alert(msg);
         tutupModal();
         location.reload();
       })
       .catch(err => {
         console.error("Fetch error:", err);
-        alert("Terjadi kesalahan saat menyimpan data.");
+        alert("Gagal menyimpan data.");
       });
   });
-}; // ← Ini penutup window.onload
+};
