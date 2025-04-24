@@ -1,6 +1,7 @@
 let fullData = []; // deklarasi dulu
 let currentPage = 1;
 const rowsPerPage = 10;
+const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
 
 //renderTable
   window.renderTable = function (data) {
@@ -97,7 +98,7 @@ fetch(url)
 
 
 window.onload = function () {
-  const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
+  
   
   // Format tanggal dari ISO ke dd/mm/yyyy
 function formatTanggal(isoStr) {
