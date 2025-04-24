@@ -1,4 +1,4 @@
-const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
+const url = 'https://script.google.com/macros/s/AKfycbzr-ru9JdBLLl6ocz357aerdqYugPmoivF8WyGv8THsPSwFrSqiF8bGJVETv75fbZaWOg/exec?action=getData';
 
 let fullData = [];
 let currentPage = 1;
@@ -76,7 +76,7 @@ window.renderTable = function (data) {
       const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
 
       if (confirm("Apakah kamu yakin ingin menghapus data ini?")) {
-        const deleteUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=deleteData&row=${rowIndex}`;
+        const deleteUrl = `https://script.google.com/macros/s/AKfycbzr-ru9JdBLLl6ocz357aerdqYugPmoivF8WyGv8THsPSwFrSqiF8bGJVETv75fbZaWOg/exec?action=deleteData&row=${rowIndex}`;
         fetch(deleteUrl)
           .then(res => res.text())
           .then(msg => {
@@ -175,7 +175,7 @@ window.onload = function () {
   }
 
   const dataStr = encodeURIComponent(JSON.stringify(data));
-  const addUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=addData&data=${dataStr}`;
+  const addUrl = `https://script.google.com/macros/s/AKfycbzr-ru9JdBLLl6ocz357aerdqYugPmoivF8WyGv8THsPSwFrSqiF8bGJVETv75fbZaWOg/exec?action=addData&data=${dataStr}`;
 
   fetch(addUrl)
     .then(res => res.text())
@@ -395,7 +395,7 @@ window.onload = function () {
      data.push(val);
    }
 
-    const updateUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
+    const updateUrl = `https://script.google.com/macros/s/AKfycbzr-ru9JdBLLl6ocz357aerdqYugPmoivF8WyGv8THsPSwFrSqiF8bGJVETv75fbZaWOg/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
     fetch(updateUrl)
       .then(res => res.text())
