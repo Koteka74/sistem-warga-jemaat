@@ -1,10 +1,28 @@
-let fullData = []; // deklarasi dulu
-let currentPage = 1;
-const rowsPerPage = 10;
 const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
 
-//renderTable
-  window.renderTable = function (data) {
+let fullData = [];
+let currentPage = 1;
+const rowsPerPage = 10;
+
+// Fungsi bantu format tanggal ISO ke dd/mm/yyyy
+function formatTanggal(isoStr) {
+  if (!isoStr || !isoStr.includes("T")) return isoStr;
+  const date = new Date(isoStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
+// Format ISO ke YYYY-MM-DD untuk input[type="date"]
+function isoToInputDate(isoStr) {
+  if (!isoStr || !isoStr.includes("T")) return "";
+  const date = new Date(isoStr);
+  return date.toISOString().slice(0, 10);
+}
+
+// Render tabel utama
+window.renderTable = function (data) {
   const headerRow = document.getElementById("tableHeader");
   const tableBody = document.getElementById("dataTable");
 
@@ -12,15 +30,14 @@ const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eks
   tableBody.innerHTML = '';
 
   const headers = data[0];
-  const rows = data.slice(1); // tanpa header
+  const rows = data.slice(1);
 
-  // Tambahkan kolom header "Aksi"
+  // Tambah kolom "Aksi"
   const thAksi = document.createElement("th");
   thAksi.className = "px-2 py-1 border";
   thAksi.textContent = "Aksi";
   headerRow.appendChild(thAksi);
 
-  // Header lain
   headers.forEach(header => {
     const th = document.createElement("th");
     th.className = "px-2 py-1 border";
@@ -28,7 +45,6 @@ const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eks
     headerRow.appendChild(th);
   });
 
-  // Pagination
   const start = (currentPage - 1) * rowsPerPage;
   const end = start + rowsPerPage;
   const rowsToDisplay = rows.slice(start, end);
@@ -36,7 +52,6 @@ const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eks
   rowsToDisplay.forEach(row => {
     const tr = document.createElement("tr");
 
-    // Kolom Aksi
     const tdAction = document.createElement("td");
     const btnEdit = document.createElement("button");
     btnEdit.textContent = "Edit";
@@ -50,7 +65,6 @@ const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eks
     tdAction.className = "px-2 py-1 border";
     tr.appendChild(tdAction);
 
-    // Kolom data
     row.forEach((cell, j) => {
       const td = document.createElement("td");
       const header = headers[j];
@@ -68,12 +82,12 @@ const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eks
     tableBody.appendChild(tr);
   });
 
-  // Tampilkan info halaman
   const pageInfo = document.getElementById("pageInfo");
   const totalPages = Math.ceil(rows.length / rowsPerPage);
   pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
-}
+};
 
+// Pagination
 window.nextPage = function () {
   const totalPages = Math.ceil((fullData.length - 1) / rowsPerPage);
   if (currentPage < totalPages) {
@@ -89,38 +103,20 @@ window.prevPage = function () {
   }
 };
 
+// Ambil data awal
 fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      fullData = data;
-      renderTable(fullData);
-    });
+  .then(res => res.json())
+  .then(data => {
+    fullData = data;
+    renderTable(fullData);
+  });
+
 
 
 window.onload = function () {
   
   
-  // Format tanggal dari ISO ke dd/mm/yyyy
-function formatTanggal(isoStr) {
-  if (!isoStr || !isoStr.includes("T")) return isoStr; // bukan ISO
-
-  const date = new Date(isoStr);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-
-  return `${day}/${month}/${year}`;
-}
-
-// Format ISO ke yyyy-mm-dd (untuk input type="date")
-function isoToInputDate(isoStr) {
-  if (!isoStr || !isoStr.includes("T")) return "";
-  const date = new Date(isoStr);
-  return date.toISOString().slice(0, 10); // YYYY-MM-DD
-}
-
-  
-
+ 
   //formTambah
   document.getElementById("formTambah").addEventListener("submit", function (e) {
   e.preventDefault();
