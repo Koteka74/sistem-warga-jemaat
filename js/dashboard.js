@@ -225,6 +225,13 @@ window.onload = function () {
       input.className = "w-full border px-3 py-2 rounded";
       input.name = `field_${i}`;
 
+      const optDefault = document.createElement("option");
+      optDefault.value = "";
+      optDefault.textContent = "-- Pilih --";
+      optDefault.disabled = false;
+      if (!value) optDefault.selected = true;
+      input.appendChild(optDefault);
+      
       dropdownFields[header].forEach(optionText => {
         const opt = document.createElement("option");
         opt.value = optionText;
@@ -232,11 +239,6 @@ window.onload = function () {
         if (optionText === value) opt.selected = true;
         input.appendChild(opt);
       });
-    } else {
-      input = document.createElement("input");
-      input.className = "w-full border px-3 py-2 rounded";
-      input.name = `field_${i}`;
-      input.value = value;
     }
 
     const wrapper = document.createElement("div");
