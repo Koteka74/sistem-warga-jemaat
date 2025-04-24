@@ -76,7 +76,7 @@ window.renderTable = function (data) {
       const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
 
       if (confirm("Apakah kamu yakin ingin menghapus data ini?")) {
-        const deleteUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=deleteData&row=${rowIndex}`;
+        const deleteUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=deleteData&row=${rowIndex}`;
         fetch(deleteUrl)
           .then(res => res.text())
           .then(msg => {
