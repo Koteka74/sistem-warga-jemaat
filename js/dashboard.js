@@ -229,7 +229,10 @@ window.onload = function () {
       const optDefault = document.createElement("option");
       optDefault.value = "";
       optDefault.textContent = "-- Pilih --";
-      if (!value || value === "") {
+      optDefault.disabled = true;
+
+      // ✅ FIX: cek secara eksplisit apakah value kosong
+      if (value === "" || value === undefined || value === null) {
         optDefault.selected = true;
       }
       input.appendChild(optDefault);
