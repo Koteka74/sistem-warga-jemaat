@@ -252,8 +252,13 @@ window.onload = function () {
   document.getElementById("formEdit").addEventListener("submit", function (e) {
     e.preventDefault();
     const rowIndex = this.rowIndex.value;
-    const inputs = this.querySelectorAll("input[name^='field_']");
-    const data = Array.from(inputs).map(input => input.value.trim());
+
+    // Ambil semua field berdasarkan urutan field_0, field_1, dst.
+    const data = [];
+    for (let i = 0; i < fullData[0].length; i++) {
+      const input = this.querySelector(`[name="field_${i}"]`);
+      data.push(input ? input.value.trim() : "");
+    }
 
     const updateUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
