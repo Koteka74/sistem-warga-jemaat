@@ -192,6 +192,15 @@ window.onload = function () {
 
   const headers = fullData[0];
 
+  const dropdownFields = {
+    "Jenis Kelamin": ["Laki-laki", "Perempuan"],
+    "Agama": ["Kristen", "Katolik", "Islam", "Hindu", "Budha", "Lainnya"],
+    "Status Baptis": ["Sudah", "Belum"],
+    "Status Sidi": ["Sudah", "Belum"],
+    "Status Nikah": ["Sudah", "Belum"],
+    "Golongan Darah": ["A", "B", "AB", "O"]
+  };
+
   headers.forEach((header, i) => {
     const value = rowData[i] || "";
 
@@ -201,50 +210,39 @@ window.onload = function () {
 
     let input;
 
-    // Buat dropdown khusus untuk kolom tertentu
-    const dropdownFields = {
-      "Jenis Kelamin": ["Laki-laki", "Perempuan"],
-      "Agama": ["Kristen", "Katolik", "Islam", "Hindu", "Budha", "Lainnya"],
-      "Status Baptis": ["Sudah", "Belum"],
-      "Status Sidi": ["Sudah", "Belum"],
-      "Status Nikah": ["Sudah", "Belum"],
-      "Golongan Darah": ["A", "B", "AB", "O"]
-    };
-
     if (dropdownFields[header]) {
       input = document.createElement("select");
-      //if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
-        //input = document.createElement("input");
-        //input.type = "date";
-        //input.placeholder = "Format: DD/MM/YYYY"; // 👈 petunjuk format
-        //input.className = "w-full border px-3 py-2 rounded";
-        //input.name = `field_${i}`;
-        //input.value = value || ""; // saat edit
-      //}
-      
       input.className = "w-full border px-3 py-2 rounded";
       input.name = `field_${i}`;
 
-      // Opsi default kosong
-      const optDefault = document.createElement("option");
-      optDefault.value = "";
-      optDefault.textContent = "-- Pilih --";
-      optDefault.disabled = true;
-
-      // ✅ FIX: cek secara eksplisit apakah value kosong
-      if (value === "" || value === undefined || value === null) {
-        optDefault.selected = true;
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.textContent = "-- Pilih --";
+      if (value === "") {
+        defaultOption.selected = true;
       }
-      input.appendChild(optDefault);
+      input.appendChild(defaultOption);
 
-      // Tambahkan opsi dari daftar
       dropdownFields[header].forEach(optionText => {
         const opt = document.createElement("option");
         opt.value = optionText;
         opt.textContent = optionText;
-        if (optionText === value) opt.selected = true;
-        input.appendChild(opt);
+        if (optionText === value) {
+          opt.selected = true;
+        }
+        input.appendChild(opt); // ✅ tidak error karena pasti <option>
       });
+    } else if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+      input = document.createElement("input");
+      input.type = "date";
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+      input.value = value;
+    } else {
+      input = document.createElement("input");
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+      input.value = value;
     }
 
     const wrapper = document.createElement("div");
@@ -254,9 +252,10 @@ window.onload = function () {
   });
 
   document.getElementById("modalEdit").classList.remove("hidden");
-};
+}
 
 
+  //TUtup ModalEdit
   window.tutupModalEdit = function () {
     document.getElementById("modalEdit").classList.add("hidden");
   };
