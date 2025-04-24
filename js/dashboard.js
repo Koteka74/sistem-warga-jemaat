@@ -131,6 +131,15 @@ window.onload = function () {
 
     if (dropdownFields[header]) {
       input = document.createElement("select");
+      if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+        input = document.createElement("input");
+        input.type = "date";
+        input.placeholder = "Format: DD/MM/YYYY"; // 👈 petunjuk format
+        input.className = "w-full border px-3 py-2 rounded";
+        input.name = `field_${i}`;
+        input.value = value || ""; // saat edit
+      }
+
       input.className = "w-full border px-3 py-2 rounded";
       input.name = `field_${i}`;
 
@@ -202,6 +211,14 @@ window.onload = function () {
       input = document.createElement("select");
       input.className = "w-full border px-3 py-2 rounded";
       input.name = `field_${i}`;
+      if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+        input = document.createElement("input");
+        input.type = "date";
+        input.placeholder = "Format: DD/MM/YYYY"; // 👈 petunjuk format
+        input.className = "w-full border px-3 py-2 rounded";
+        input.name = `field_${i}`;
+        input.value = value || ""; // saat edit
+      }
 
       dropdownFields[header].forEach(optionText => {
         const opt = document.createElement("option");
