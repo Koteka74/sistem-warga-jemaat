@@ -130,7 +130,7 @@ window.onload = function () {
     const inputs = this.querySelectorAll("input[name^='field_']");
     const data = Array.from(inputs).map(input => input.value.trim());
 
-    const updateUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
+    const updateUrl = `https://script.google.com/macros/s/AKfycbxg2PRFq7c6Q89xZL3EFjR73nZlQb9GAvekYUXi0cdRZdaRfv6_JK9ZLThEj4O7Wbd8EQ/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
     fetch(updateUrl)
       .then(res => res.text())
