@@ -2,120 +2,8 @@ let fullData = []; // deklarasi dulu
 let currentPage = 1;
 const rowsPerPage = 10;
 
-function nextPage() {
-  const totalPages = Math.ceil((fullData.length - 1) / rowsPerPage);
-  if (currentPage < totalPages) {
-    currentPage++;
-    renderTable(fullData);
-  }
-}
-
-function prevPage() {
-  if (currentPage > 1) {
-    currentPage--;
-    renderTable(fullData);
-  }
-}
-
-window.onload = function () {
-  const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
-  let currentPage = 1;
-  const rowsPerPage = 10;
-
-  // Format tanggal dari ISO ke dd/mm/yyyy
-function formatTanggal(isoStr) {
-  if (!isoStr || !isoStr.includes("T")) return isoStr; // bukan ISO
-
-  const date = new Date(isoStr);
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-
-  return `${day}/${month}/${year}`;
-}
-
-// Format ISO ke yyyy-mm-dd (untuk input type="date")
-function isoToInputDate(isoStr) {
-  if (!isoStr || !isoStr.includes("T")) return "";
-  const date = new Date(isoStr);
-  return date.toISOString().slice(0, 10); // YYYY-MM-DD
-}
-
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      fullData = data;
-      renderTable(fullData);
-    });
-
-  //formTambah
-  document.getElementById("formTambah").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const headers = fullData[0];
-
-  //const inputs = this.querySelectorAll("input[name^='field_'], select[name^='field_']");
-  const data = [];
-
-  for (let i = 0; i < headers.length; i++) {
-    const input = this.querySelector(`[name="field_${i}"]`);
-    let val = input ? input.value.trim() : "";
-
-    // Kosongkan "-- Pilih --"
-    if (val === "-- Pilih --") {
-      val = "";
-    }
-    
-    // Format tanggal ke dd/mm/yyyy sebelum dikirim
-    if (["Tanggal Lahir", "Tanggal Nikah"].includes(headers[i]) && val.includes("-")) {
-      const parts = val.split("-");
-      val = `${parts[2]}/${parts[1]}/${parts[0]}`; // dd/mm/yyyy
-    }
-
-    data.push(val);
-  }
-
-  const dataStr = encodeURIComponent(JSON.stringify(data));
-  const addUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=addData&data=${dataStr}`;
-
-  fetch(addUrl)
-    .then(res => res.text())
-    .then(msg => {
-      console.log("Respon:", msg);
-      alert(msg);
-      tutupModal();
-      location.reload();
-    })
-    .catch(err => {
-      console.error("Fetch error:", err);
-      alert("Gagal menyimpan data.");
-    });
-});
-
-
-
-  document.getElementById("searchInput").addEventListener("input", function () {
-    const keyword = this.value.toLowerCase();
-    const filtered = [fullData[0]];
-    for (let i = 1; i < fullData.length; i++) {
-      const row = fullData[i];
-      const nama = row[1]?.toLowerCase() || "";
-      if (nama.includes(keyword)) {
-        filtered.push(row);
-      }
-    }
-    renderTable(filtered);
-  });
-
-  document.getElementById("rowsPerPage").addEventListener("change", () => {
-    fetch(url)
-      .then(res => res.json())
-      .then(data => {
-        renderTable(data);
-      });
-  });
-
-  //renderTable
-  function renderTable(data) {
+//renderTable
+  window.renderTable = function (data) {
   const headerRow = document.getElementById("tableHeader");
   const tableBody = document.getElementById("dataTable");
 
@@ -184,6 +72,121 @@ function isoToInputDate(isoStr) {
   const totalPages = Math.ceil(rows.length / rowsPerPage);
   pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
 }
+
+window.nextPage = function () {
+  const totalPages = Math.ceil((fullData.length - 1) / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTable(fullData);
+  }
+};
+
+window.prevPage = function () {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTable(fullData);
+  }
+};
+
+fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      fullData = data;
+      renderTable(fullData);
+    });
+
+
+window.onload = function () {
+  const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
+  
+  // Format tanggal dari ISO ke dd/mm/yyyy
+function formatTanggal(isoStr) {
+  if (!isoStr || !isoStr.includes("T")) return isoStr; // bukan ISO
+
+  const date = new Date(isoStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+// Format ISO ke yyyy-mm-dd (untuk input type="date")
+function isoToInputDate(isoStr) {
+  if (!isoStr || !isoStr.includes("T")) return "";
+  const date = new Date(isoStr);
+  return date.toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
+  
+
+  //formTambah
+  document.getElementById("formTambah").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const headers = fullData[0];
+
+  //const inputs = this.querySelectorAll("input[name^='field_'], select[name^='field_']");
+  const data = [];
+
+  for (let i = 0; i < headers.length; i++) {
+    const input = this.querySelector(`[name="field_${i}"]`);
+    let val = input ? input.value.trim() : "";
+
+    // Kosongkan "-- Pilih --"
+    if (val === "-- Pilih --") {
+      val = "";
+    }
+    
+    // Format tanggal ke dd/mm/yyyy sebelum dikirim
+    if (["Tanggal Lahir", "Tanggal Nikah"].includes(headers[i]) && val.includes("-")) {
+      const parts = val.split("-");
+      val = `${parts[2]}/${parts[1]}/${parts[0]}`; // dd/mm/yyyy
+    }
+
+    data.push(val);
+  }
+
+  const dataStr = encodeURIComponent(JSON.stringify(data));
+  const addUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=addData&data=${dataStr}`;
+
+  fetch(addUrl)
+    .then(res => res.text())
+    .then(msg => {
+      console.log("Respon:", msg);
+      alert(msg);
+      tutupModal();
+      location.reload();
+    })
+    .catch(err => {
+      console.error("Fetch error:", err);
+      alert("Gagal menyimpan data.");
+    });
+});
+
+
+
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const keyword = this.value.toLowerCase();
+    const filtered = [fullData[0]];
+    for (let i = 1; i < fullData.length; i++) {
+      const row = fullData[i];
+      const nama = row[1]?.toLowerCase() || "";
+      if (nama.includes(keyword)) {
+        filtered.push(row);
+      }
+    }
+    renderTable(filtered);
+  });
+
+  document.getElementById("rowsPerPage").addEventListener("change", () => {
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        renderTable(data);
+      });
+  });
+
+  
 
 
   //bukaModal
