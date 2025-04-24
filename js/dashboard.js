@@ -123,33 +123,62 @@ window.onload = function () {
   // ========================
   // ====== FITUR EDIT ======
   // ========================
-  window.bukaModalEdit = function (rowIndex, rowData) {
-    const form = document.getElementById("formEdit");
-    const fieldsDiv = document.getElementById("editFields");
+  function bukaModalEdit(rowIndex, rowData) {
+  const form = document.getElementById("formEdit");
+  const fieldsDiv = document.getElementById("editFields");
 
-    form.rowIndex.value = rowIndex;
-    fieldsDiv.innerHTML = '';
+  form.rowIndex.value = rowIndex;
+  fieldsDiv.innerHTML = '';
 
-    const headers = fullData[0];
-    headers.forEach((header, i) => {
-      const label = document.createElement("label");
-      label.className = "text-sm font-medium";
-      label.textContent = header;
+  const headers = fullData[0];
 
-      const input = document.createElement("input");
+  headers.forEach((header, i) => {
+    const value = rowData[i] || "";
+
+    const label = document.createElement("label");
+    label.className = "text-sm font-medium";
+    label.textContent = header;
+
+    let input;
+
+    // Buat dropdown khusus untuk kolom tertentu
+    const dropdownFields = {
+      "Jenis Kelamin": ["Laki-laki", "Perempuan"],
+      "Agama": ["Kristen", "Katolik", "Islam", "Hindu", "Budha", "Lainnya"],
+      "Status Baptis": ["Sudah", "Belum"],
+      "Status Sidi": ["Sudah", "Belum"],
+      "Status Nikah": ["Sudah", "Belum"],
+      "Golongan Darah": ["A", "B", "AB", "O"]
+    };
+
+    if (dropdownFields[header]) {
+      input = document.createElement("select");
       input.className = "w-full border px-3 py-2 rounded";
       input.name = `field_${i}`;
-      input.value = rowData[i] || "";
 
-      const wrapper = document.createElement("div");
-      wrapper.appendChild(label);
-      wrapper.appendChild(input);
+      dropdownFields[header].forEach(optionText => {
+        const opt = document.createElement("option");
+        opt.value = optionText;
+        opt.textContent = optionText;
+        if (optionText === value) opt.selected = true;
+        input.appendChild(opt);
+      });
+    } else {
+      input = document.createElement("input");
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+      input.value = value;
+    }
 
-      fieldsDiv.appendChild(wrapper);
-    });
+    const wrapper = document.createElement("div");
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+    fieldsDiv.appendChild(wrapper);
+  });
 
-    document.getElementById("modalEdit").classList.remove("hidden");
-  };
+  document.getElementById("modalEdit").classList.remove("hidden");
+};
+
 
   window.tutupModalEdit = function () {
     document.getElementById("modalEdit").classList.add("hidden");
