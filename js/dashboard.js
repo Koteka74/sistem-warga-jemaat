@@ -225,13 +225,16 @@ window.onload = function () {
       input.className = "w-full border px-3 py-2 rounded";
       input.name = `field_${i}`;
 
+      // Opsi default kosong
       const optDefault = document.createElement("option");
       optDefault.value = "";
       optDefault.textContent = "-- Pilih --";
-      optDefault.disabled = false;
-      if (!value) optDefault.selected = true;
+      if (!value || value === "") {
+        optDefault.selected = true;
+      }
       input.appendChild(optDefault);
-      
+
+      // Tambahkan opsi dari daftar
       dropdownFields[header].forEach(optionText => {
         const opt = document.createElement("option");
         opt.value = optionText;
