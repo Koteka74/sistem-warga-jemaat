@@ -1,6 +1,22 @@
+let fullData = []; // deklarasi dulu
+
+function nextPage() {
+  const totalPages = Math.ceil((fullData.length - 1) / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTable(fullData);
+  }
+}
+
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTable(fullData);
+  }
+}
+
 window.onload = function () {
   const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
-  let fullData = [];
   let currentPage = 1;
   const rowsPerPage = 10;
 
@@ -361,18 +377,3 @@ function isoToInputDate(isoStr) {
       });
   });
 };
-
-  function nextPage() {
-  const totalPages = Math.ceil((fullData.length - 1) / rowsPerPage);
-  if (currentPage < totalPages) {
-    currentPage++;
-    renderTable(fullData);
-  }
-}
-
-function prevPage() {
-  if (currentPage > 1) {
-    currentPage--;
-    renderTable(fullData);
-  }
-}
