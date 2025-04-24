@@ -38,6 +38,7 @@ window.renderTable = function (data) {
   thAksi.textContent = "Aksi";
   headerRow.appendChild(thAksi);
 
+  // Header lainnya
   headers.forEach(header => {
     const th = document.createElement("th");
     th.className = "px-2 py-1 border";
@@ -52,19 +53,48 @@ window.renderTable = function (data) {
   rowsToDisplay.forEach(row => {
     const tr = document.createElement("tr");
 
+    // === Kolom Aksi (Edit + Hapus) ===
     const tdAction = document.createElement("td");
+
+    // Tombol Edit
     const btnEdit = document.createElement("button");
     btnEdit.textContent = "Edit";
-    btnEdit.className = "text-blue-600 underline";
+    btnEdit.className = "text-blue-600 underline mr-2";
     btnEdit.setAttribute("data-index", fullData.indexOf(row));
     btnEdit.onclick = function () {
       const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
       bukaModalEdit(rowIndex, row);
     };
     tdAction.appendChild(btnEdit);
+
+    // Tombol Hapus
+    const btnHapus = document.createElement("button");
+    btnHapus.textContent = "Hapus";
+    btnHapus.className = "text-red-600 underline";
+    btnHapus.setAttribute("data-index", fullData.indexOf(row));
+    btnHapus.onclick = function () {
+      const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
+
+      if (confirm("Apakah kamu yakin ingin menghapus data ini?")) {
+        const deleteUrl = `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec?action=deleteData&row=${rowIndex}`;
+        fetch(deleteUrl)
+          .then(res => res.text())
+          .then(msg => {
+            alert(msg);
+            location.reload();
+          })
+          .catch(err => {
+            alert("Gagal menghapus data.");
+            console.error(err);
+          });
+      }
+    };
+    tdAction.appendChild(btnHapus);
+
     tdAction.className = "px-2 py-1 border";
     tr.appendChild(tdAction);
 
+    // === Data row ===
     row.forEach((cell, j) => {
       const td = document.createElement("td");
       const header = headers[j];
@@ -86,6 +116,7 @@ window.renderTable = function (data) {
   const totalPages = Math.ceil(rows.length / rowsPerPage);
   pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
 };
+
 
 // Pagination
 window.nextPage = function () {
