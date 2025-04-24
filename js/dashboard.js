@@ -1,5 +1,5 @@
 window.onload = function () {
-  const url = 'https://script.google.com/macros/s/AKfycbxg2PRFq7c6Q89xZL3EFjR73nZlQb9GAvekYUXi0cdRZdaRfv6_JK9ZLThEj4O7Wbd8EQ/exec?action=getData';
+  const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
   let fullData = [];
 
   fetch(url)
@@ -24,7 +24,7 @@ window.onload = function () {
   const data = [kode, nama, gender];
   const dataStr = encodeURIComponent(JSON.stringify(data));
 
-  const addUrl = `https://script.google.com/macros/s/AKfycbxg2PRFq7c6Q89xZL3EFjR73nZlQb9GAvekYUXi0cdRZdaRfv6_JK9ZLThEj4O7Wbd8EQ/exec?action=addData&data=${dataStr}`;
+  const addUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=addData&data=${dataStr}`;
 
   fetch(addUrl)
     .then(res => res.text())
@@ -161,7 +161,7 @@ window.onload = function () {
     const inputs = this.querySelectorAll("input[name^='field_']");
     const data = Array.from(inputs).map(input => input.value.trim());
 
-    const updateUrl = `https://script.google.com/macros/s/AKfycbxg2PRFq7c6Q89xZL3EFjR73nZlQb9GAvekYUXi0cdRZdaRfv6_JK9ZLThEj4O7Wbd8EQ/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
+    const updateUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
     fetch(updateUrl)
       .then(res => res.text())
