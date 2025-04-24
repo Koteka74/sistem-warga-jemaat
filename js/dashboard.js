@@ -1,5 +1,5 @@
 window.onload = function () {
-  const url = 'https://script.google.com/macros/s/AKfycbwchcqYjRgCxKsOJZ213lIt0YE9UswGkvHkxM9NwGFEJAHaEKJNf2UNJCFYkfbOXQzv4A/exec?action=getData';
+  const url = 'https://script.google.com/macros/s/AKfycbxg2PRFq7c6Q89xZL3EFjR73nZlQb9GAvekYUXi0cdRZdaRfv6_JK9ZLThEj4O7Wbd8EQ/exec?action=getData';
   let fullData = [];
 
   fetch(url)
