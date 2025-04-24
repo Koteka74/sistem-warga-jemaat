@@ -9,6 +9,37 @@ window.onload = function () {
       renderTable(fullData);
     });
 
+  document.getElementById("formTambah").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const kode = this.kode.value.trim();
+  const nama = this.nama.value.trim();
+  const gender = this.gender.value;
+
+  if (!kode || !nama || !gender) {
+    alert("Semua kolom wajib diisi.");
+    return;
+  }
+
+  const data = [kode, nama, gender];
+  const dataStr = encodeURIComponent(JSON.stringify(data));
+
+  const addUrl = `https://script.google.com/macros/s/AKfycbxg2PRFq7c6Q89xZL3EFjR73nZlQb9GAvekYUXi0cdRZdaRfv6_JK9ZLThEj4O7Wbd8EQ/exec?action=addData&data=${dataStr}`;
+
+  fetch(addUrl)
+    .then(res => res.text())
+    .then(msg => {
+      console.log("Respon:", msg);  // 🧪 Debug
+      alert(msg);
+      tutupModal();
+      location.reload();
+    })
+    .catch(err => {
+      console.error("Fetch error:", err);
+      alert("Gagal menyimpan data.");
+    });
+});
+
   document.getElementById("searchInput").addEventListener("input", function () {
     const keyword = this.value.toLowerCase();
     const filtered = [fullData[0]];
