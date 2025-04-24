@@ -1,4 +1,4 @@
-const url = 'https://script.google.com/macros/s/AKfycbzr-ru9JdBLLl6ocz357aerdqYugPmoivF8WyGv8THsPSwFrSqiF8bGJVETv75fbZaWOg/exec?action=getData';
+const url = 'https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=getData';
 
 let fullData = [];
 let currentPage = 1;
@@ -76,7 +76,7 @@ window.renderTable = function (data) {
       const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
 
       if (confirm("Apakah kamu yakin ingin menghapus data ini?")) {
-        const deleteUrl = `https://script.google.com/macros/s/AKfycbzr-ru9JdBLLl6ocz357aerdqYugPmoivF8WyGv8THsPSwFrSqiF8bGJVETv75fbZaWOg/exec?action=deleteData&row=${rowIndex}`;
+        const deleteUrl = `https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=deleteData&row=${rowIndex}`;
         fetch(deleteUrl)
           .then(res => res.text())
           .then(msg => {
@@ -145,7 +145,32 @@ fetch(url)
 
 
 window.onload = function () {
-  
+  const role = localStorage.getItem("role");
+  const username = localStorage.getItem("username");
+
+  if (!role || !username) {
+    alert("Silakan login terlebih dahulu.");
+    window.location.href = "index.html";
+    return;
+  }
+
+  if (role === "jemaat") {
+    const btnTambah = document.getElementById("btnTambah");
+    if (btnTambah) btnTambah.style.display = "none";
+  }
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      fullData = data;
+
+      if (role === "jemaat") {
+        // Anggap username disimpan di kolom "Kode Anggota" (kolom ke-0)
+        fullData = [data[0], ...data.filter(row => row[0] === username)];
+      }
+
+      renderTable(fullData);
+    });
   
  
   //formTambah
@@ -175,7 +200,7 @@ window.onload = function () {
   }
 
   const dataStr = encodeURIComponent(JSON.stringify(data));
-  const addUrl = `https://script.google.com/macros/s/AKfycbzr-ru9JdBLLl6ocz357aerdqYugPmoivF8WyGv8THsPSwFrSqiF8bGJVETv75fbZaWOg/exec?action=addData&data=${dataStr}`;
+  const addUrl = `https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=addData&data=${dataStr}`;
 
   fetch(addUrl)
     .then(res => res.text())
@@ -395,7 +420,7 @@ window.onload = function () {
      data.push(val);
    }
 
-    const updateUrl = `https://script.google.com/macros/s/AKfycbzr-ru9JdBLLl6ocz357aerdqYugPmoivF8WyGv8THsPSwFrSqiF8bGJVETv75fbZaWOg/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
+    const updateUrl = `https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
     fetch(updateUrl)
       .then(res => res.text())
