@@ -12,9 +12,23 @@ window.onload = function () {
   //formTambah
   document.getElementById("formTambah").addEventListener("submit", function (e) {
   e.preventDefault();
+  const headers = fullData[0];
 
   const inputs = this.querySelectorAll("input[name^='field_'], select[name^='field_']");
-  const data = Array.from(inputs).map(input => input.value.trim());
+  const data = [];
+
+  for (let i = 0; i < headers.length; i++) {
+    const input = this.querySelector(`[name="field_${i}"]`);
+    let val = input ? input.value.trim() : "";
+
+    // Format tanggal ke dd/mm/yyyy sebelum dikirim
+    if (["Tanggal Lahir", "Tanggal Nikah"].includes(headers[i]) && val.includes("-")) {
+      const parts = val.split("-");
+      val = `${parts[2]}/${parts[1]}/${parts[0]}`; // dd/mm/yyyy
+    }
+
+    data.push(val);
+  }
 
   const dataStr = encodeURIComponent(JSON.stringify(data));
   const addUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=addData&data=${dataStr}`;
@@ -32,6 +46,7 @@ window.onload = function () {
       alert("Gagal menyimpan data.");
     });
 });
+
 
 
   document.getElementById("searchInput").addEventListener("input", function () {
@@ -263,13 +278,23 @@ window.onload = function () {
   document.getElementById("formEdit").addEventListener("submit", function (e) {
     e.preventDefault();
     const rowIndex = this.rowIndex.value;
+    const headers = fullData[0];
 
     // Ambil semua field berdasarkan urutan field_0, field_1, dst.
     const data = [];
-    for (let i = 0; i < fullData[0].length; i++) {
-      const input = this.querySelector(`[name="field_${i}"]`);
-      data.push(input ? input.value.trim() : "");
-    }
+    
+    for (let i = 0; i < headers.length; i++) {
+     const input = this.querySelector(`[name="field_${i}"]`);
+     let val = input ? input.value.trim() : "";
+
+     // Konversi ke dd/mm/yyyy jika input type date (val = yyyy-mm-dd)
+     if (["Tanggal Lahir", "Tanggal Nikah"].includes(headers[i]) && val.includes("-")) {
+       const parts = val.split("-");
+       val = `${parts[2]}/${parts[1]}/${parts[0]}`; // dd/mm/yyyy
+     }
+
+     data.push(val);
+   }
 
     const updateUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
