@@ -1,4 +1,6 @@
 let fullData = []; // deklarasi dulu
+let currentPage = 1;
+const rowsPerPage = 10;
 
 function nextPage() {
   const totalPages = Math.ceil((fullData.length - 1) / rowsPerPage);
