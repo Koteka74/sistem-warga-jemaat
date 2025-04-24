@@ -77,12 +77,10 @@
 
 <!-- Modal Edit Dinamis -->
 <!-- Modal Edit Data -->
-<div id="modalEdit" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
-  <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] p-6 shadow relative flex flex-col">
-    <h2 class="text-xl font-semibold mb-4">Edit Data Jemaat</h2>
-    
-    <!-- Scrollable form wrapper -->
-    <div class="overflow-y-auto grow">
+<div id="modalEdit" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 overflow-auto">
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] p-6 shadow overflow-y-auto">
+      <h2 class="text-xl font-semibold mb-4">Edit Data Jemaat</h2>
       <form id="formEdit" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <input type="hidden" name="rowIndex" />
         <div id="editFields" class="col-span-full grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
@@ -94,6 +92,7 @@
     </div>
   </div>
 </div>
+
 
 
 
