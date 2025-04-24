@@ -1,6 +1,8 @@
 window.onload = function () {
   const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
   let fullData = [];
+  let currentPage = 1;
+  const rowsPerPage = 10;
 
   // Format tanggal dari ISO ke dd/mm/yyyy
 function formatTanggal(isoStr) {
@@ -94,68 +96,77 @@ function isoToInputDate(isoStr) {
       });
   });
 
+  //renderTable
   function renderTable(data) {
-    const headerRow = document.getElementById("tableHeader");
-    const tableBody = document.getElementById("dataTable");
+  const headerRow = document.getElementById("tableHeader");
+  const tableBody = document.getElementById("dataTable");
 
-    headerRow.innerHTML = '';
-    tableBody.innerHTML = '';
+  headerRow.innerHTML = '';
+  tableBody.innerHTML = '';
 
-    const headers = data[0];
-    const rows = data.slice(1);
+  const headers = data[0];
+  const rows = data.slice(1); // tanpa header
 
-    // Header
-    headers.forEach(header => {
-      const th = document.createElement("th");
-      th.className = "px-2 py-1 border";
-      th.textContent = header;
-      headerRow.appendChild(th);
+  // Tambahkan kolom header "Aksi"
+  const thAksi = document.createElement("th");
+  thAksi.className = "px-2 py-1 border";
+  thAksi.textContent = "Aksi";
+  headerRow.appendChild(thAksi);
+
+  // Header lain
+  headers.forEach(header => {
+    const th = document.createElement("th");
+    th.className = "px-2 py-1 border";
+    th.textContent = header;
+    headerRow.appendChild(th);
+  });
+
+  // Pagination
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const rowsToDisplay = rows.slice(start, end);
+
+  rowsToDisplay.forEach(row => {
+    const tr = document.createElement("tr");
+
+    // Kolom Aksi
+    const tdAction = document.createElement("td");
+    const btnEdit = document.createElement("button");
+    btnEdit.textContent = "Edit";
+    btnEdit.className = "text-blue-600 underline";
+    btnEdit.setAttribute("data-index", fullData.indexOf(row));
+    btnEdit.onclick = function () {
+      const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
+      bukaModalEdit(rowIndex, row);
+    };
+    tdAction.appendChild(btnEdit);
+    tdAction.className = "px-2 py-1 border";
+    tr.appendChild(tdAction);
+
+    // Kolom data
+    row.forEach((cell, j) => {
+      const td = document.createElement("td");
+      const header = headers[j];
+
+      let displayValue = cell;
+      if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+        displayValue = formatTanggal(cell);
+      }
+
+      td.textContent = displayValue;
+      td.className = "px-2 py-1 border";
+      tr.appendChild(td);
     });
 
-    // Tambahkan kolom aksi
-    const aksiTh = document.createElement("th");
-    aksiTh.textContent = "Aksi";
-    aksiTh.className = "px-2 py-1 border";
-    headerRow.appendChild(aksiTh);
+    tableBody.appendChild(tr);
+  });
 
-    // Isi Data
-    const rowsPerPage = parseInt(document.getElementById("rowsPerPage").value);
-    const rowsToDisplay = rows.slice(0, rowsPerPage);
+  // Tampilkan info halaman
+  const pageInfo = document.getElementById("pageInfo");
+  const totalPages = Math.ceil(rows.length / rowsPerPage);
+  pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
+}
 
-    rowsToDisplay.forEach((row, i) => {
-      const tr = document.createElement("tr");
-
-      row.forEach((cell, j) => {
-        const td = document.createElement("td");
-
-        let displayValue = cell;
-        const header = headers[j];
-        if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
-          displayValue = formatTanggal(cell);
-        }
-
-        td.textContent = displayValue;
-        td.className = "px-2 py-1 border";
-        tr.appendChild(td);
-      });
-
-
-      const aksiTd = document.createElement("td");
-      aksiTd.className = "px-2 py-1 border";
-      const btnEdit = document.createElement("button");
-      btnEdit.textContent = "Edit";
-      btnEdit.className = "bg-yellow-400 text-black px-2 py-1 rounded text-xs hover:bg-yellow-500";
-      btnEdit.setAttribute("data-index", fullData.indexOf(row));
-      btnEdit.onclick = function () {
-        const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
-        bukaModalEdit(rowIndex, row);
-      };
-      aksiTd.appendChild(btnEdit);
-      tr.appendChild(aksiTd);
-
-      tableBody.appendChild(tr);
-    });
-  }
 
   //bukaModal
   window.bukaModal = function () {
@@ -350,3 +361,18 @@ function isoToInputDate(isoStr) {
       });
   });
 };
+
+  function nextPage() {
+  const totalPages = Math.ceil((fullData.length - 1) / rowsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderTable(fullData);
+  }
+}
+
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    renderTable(fullData);
+  }
+}
