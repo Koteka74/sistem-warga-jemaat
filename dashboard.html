@@ -54,25 +54,21 @@
   
   <!-- Modal Tambah Data -->
 <!-- Modal Tambah Data -->
-<div id="modalTambah" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
-  <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 shadow relative">
-    <h2 class="text-xl font-semibold mb-4">Tambah Data Jemaat</h2>
-    <form id="formTambah" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <input type="text" name="kode" placeholder="Kode Anggota" required class="border px-3 py-2 rounded" />
-      <input type="text" name="nama" placeholder="Nama Lengkap" required class="border px-3 py-2 rounded" />
-      <select name="gender" required class="border px-3 py-2 rounded">
-        <option value="">-- Jenis Kelamin --</option>
-        <option value="Laki-laki">Laki-laki</option>
-        <option value="Perempuan">Perempuan</option>
-      </select>
-      <!-- Tambahkan input lain di sini sesuai kolom Sheet -->
-      <div class="col-span-full flex gap-4 justify-end mt-4">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
-        <button type="button" onclick="tutupModal()" class="text-gray-600 hover:underline">Batal</button>
-      </div>
-    </form>
+<div id="modalTambah" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 overflow-auto">
+  <div class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] p-6 shadow overflow-y-auto">
+      <h2 class="text-xl font-semibold mb-4">Tambah Data Jemaat</h2>
+      <form id="formTambah" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div id="tambahFields" class="col-span-full grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        <div class="col-span-full flex gap-4 justify-end mt-4">
+          <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+          <button type="button" onclick="tutupModal()" class="text-gray-600 hover:underline">Batal</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
+
 
 
 <!-- Modal Edit Dinamis -->
