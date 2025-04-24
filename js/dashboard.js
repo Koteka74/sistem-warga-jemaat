@@ -9,27 +9,20 @@ window.onload = function () {
       renderTable(fullData);
     });
 
+  //formTambah
   document.getElementById("formTambah").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const kode = this.kode.value.trim();
-  const nama = this.nama.value.trim();
-  const gender = this.gender.value;
+  const inputs = this.querySelectorAll("input[name^='field_'], select[name^='field_']");
+  const data = Array.from(inputs).map(input => input.value.trim());
 
-  if (!kode || !nama || !gender) {
-    alert("Semua kolom wajib diisi.");
-    return;
-  }
-
-  const data = [kode, nama, gender];
   const dataStr = encodeURIComponent(JSON.stringify(data));
-
   const addUrl = `https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=addData&data=${dataStr}`;
 
   fetch(addUrl)
     .then(res => res.text())
     .then(msg => {
-      console.log("Respon:", msg);  // 🧪 Debug
+      console.log("Respon:", msg);
       alert(msg);
       tutupModal();
       location.reload();
@@ -39,6 +32,7 @@ window.onload = function () {
       alert("Gagal menyimpan data.");
     });
 });
+
 
   document.getElementById("searchInput").addEventListener("input", function () {
     const keyword = this.value.toLowerCase();
@@ -112,9 +106,62 @@ window.onload = function () {
     });
   }
 
-  window.bukaModal = function () {
-    document.getElementById("modalTambah").classList.remove("hidden");
+  function bukaModal() {
+  const form = document.getElementById("formTambah");
+  const fieldsDiv = document.getElementById("tambahFields");
+  fieldsDiv.innerHTML = '';
+
+  const headers = fullData[0];
+
+  const dropdownFields = {
+    "Jenis Kelamin": ["Laki-laki", "Perempuan"],
+    "Agama": ["Kristen", "Katolik", "Islam", "Hindu", "Budha", "Lainnya"],
+    "Status Baptis": ["Sudah", "Belum"],
+    "Status Sidi": ["Sudah", "Belum"],
+    "Status Nikah": ["Sudah", "Belum"],
+    "Golongan Darah": ["A", "B", "AB", "O"]
   };
+
+  headers.forEach((header, i) => {
+    const label = document.createElement("label");
+    label.className = "text-sm font-medium";
+    label.textContent = header;
+
+    let input;
+
+    if (dropdownFields[header]) {
+      input = document.createElement("select");
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+
+      const optDefault = document.createElement("option");
+      optDefault.textContent = "-- Pilih --";
+      optDefault.disabled = true;
+      optDefault.selected = true;
+      input.appendChild(optDefault);
+
+      dropdownFields[header].forEach(optVal => {
+        const opt = document.createElement("option");
+        opt.value = optVal;
+        opt.textContent = optVal;
+        input.appendChild(opt);
+      });
+
+    } else {
+      input = document.createElement("input");
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+    fieldsDiv.appendChild(wrapper);
+  });
+
+  document.getElementById("modalTambah").classList.remove("hidden");
+}
+
 
   window.tutupModal = function () {
     document.getElementById("modalTambah").classList.add("hidden");
