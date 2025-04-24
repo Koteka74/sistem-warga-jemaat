@@ -42,6 +42,12 @@
         </thead>
         <tbody id="dataTable"></tbody>
       </table>
+      <!-- Kontrol Pagination -->
+      <div id="paginationControls" class="mt-4 flex gap-4 items-center justify-center">
+        <button onclick="prevPage()" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Sebelumnya</button>
+        <span id="pageInfo" class="text-sm text-gray-600"></span>
+        <button onclick="nextPage()" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Selanjutnya</button>
+      </div>
     </div>
   </main>
 
