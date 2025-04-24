@@ -106,7 +106,7 @@ window.onload = function () {
     });
   }
 
-  function bukaModal() {
+  window.bukaModal = function () {
   const form = document.getElementById("formTambah");
   const fieldsDiv = document.getElementById("tambahFields");
   fieldsDiv.innerHTML = '';
