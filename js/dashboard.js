@@ -125,21 +125,20 @@ function isoToInputDate(isoStr) {
     rowsToDisplay.forEach((row, i) => {
       const tr = document.createElement("tr");
 
-      row.forEach(cell => {
+      row.forEach((cell, j) => {
         const td = document.createElement("td");
-        td.className = "px-2 py-1 border";
-        let displayValue = cell;
 
-        // Jika kolom tanggal, format dari ISO ke dd/mm/yyyy
+        let displayValue = cell;
         const header = headers[j];
         if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
           displayValue = formatTanggal(cell);
         }
 
         td.textContent = displayValue;
-
+        td.className = "px-2 py-1 border";
         tr.appendChild(td);
       });
+
 
       const aksiTd = document.createElement("td");
       aksiTd.className = "px-2 py-1 border";
