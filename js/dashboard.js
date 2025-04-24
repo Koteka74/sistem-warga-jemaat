@@ -1,6 +1,7 @@
+let fullData = [];
 window.onload = function () {
   const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
-  let fullData = [];
+  
   let currentPage = 1;
   const rowsPerPage = 10;
 
