@@ -98,7 +98,11 @@ window.onload = function () {
       const btnEdit = document.createElement("button");
       btnEdit.textContent = "Edit";
       btnEdit.className = "bg-yellow-400 text-black px-2 py-1 rounded text-xs hover:bg-yellow-500";
-      btnEdit.onclick = () => bukaModalEdit(i + 2, row); // +2 karena header + 1-indexed
+      btnEdit.setAttribute("data-index", fullData.indexOf(row));
+      btnEdit.onclick = function () {
+        const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
+        bukaModalEdit(rowIndex, row);
+      };
       aksiTd.appendChild(btnEdit);
       tr.appendChild(aksiTd);
 
