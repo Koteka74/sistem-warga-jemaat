@@ -2,6 +2,25 @@ window.onload = function () {
   const url = 'https://script.google.com/macros/s/AKfycbzKfFVn04fod7EJgBULdad_0Eksza7hm9wt3UeEQW7q0Uir5Mpem1dHuwJTALztEty9Sg/exec?action=getData';
   let fullData = [];
 
+  // Format tanggal dari ISO ke dd/mm/yyyy
+function formatTanggal(isoStr) {
+  if (!isoStr || !isoStr.includes("T")) return isoStr; // bukan ISO
+
+  const date = new Date(isoStr);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+// Format ISO ke yyyy-mm-dd (untuk input type="date")
+function isoToInputDate(isoStr) {
+  if (!isoStr || !isoStr.includes("T")) return "";
+  const date = new Date(isoStr);
+  return date.toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
   fetch(url)
     .then(res => res.json())
     .then(data => {
@@ -109,7 +128,16 @@ window.onload = function () {
       row.forEach(cell => {
         const td = document.createElement("td");
         td.className = "px-2 py-1 border";
-        td.textContent = cell;
+        let displayValue = cell;
+
+        // Jika kolom tanggal, format dari ISO ke dd/mm/yyyy
+        const header = headers[j];
+        if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+          displayValue = formatTanggal(cell);
+        }
+
+        td.textContent = displayValue;
+
         tr.appendChild(td);
       });
 
@@ -264,7 +292,7 @@ window.onload = function () {
       input.type = "date";
       input.className = "w-full border px-3 py-2 rounded";
       input.name = `field_${i}`;
-      input.value = value;
+      input.value = isoToInputDate(value); // ✅ konversi ISO ke yyyy-mm-dd
     } else {
       input = document.createElement("input");
       input.className = "w-full border px-3 py-2 rounded";
