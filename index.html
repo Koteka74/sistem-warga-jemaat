@@ -21,18 +21,25 @@
       const username = this.username.value.trim();
       const password = this.password.value.trim();
 
-      fetch(`${loginUrl}?action=login&username=${username}&password=${password}`)
-        .then(res => res.text())
-        .then(text => {
-          const result = JSON.parse(text);
-          if (result.success) {
-            localStorage.setItem("username", username);
-            localStorage.setItem("role", result.role);
-            window.location.href = "dashboard.html";
-          } else {
-            alert("Login gagal. Periksa username dan password.");
-          }
-        });
+      fetch(loginUrl, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded",
+  },
+  body: `action=login&username=${username}&password=${password}`
+})
+  .then(res => res.text())
+  .then(text => {
+    const result = JSON.parse(text);
+    if (result.success) {
+      localStorage.setItem("username", username);
+      localStorage.setItem("role", result.role);
+      window.location.href = "dashboard.html";
+    } else {
+      alert("Login gagal. Periksa username dan password.");
+    }
+  });
+
     });
   </script>
 </body>
