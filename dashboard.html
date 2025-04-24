@@ -51,38 +51,46 @@
     <p>Alamat : Kompleks Pendidikan Kristen Kotaraja Dalam</p>
     <p>Tahun 2025</p>
   </footer>
+  
   <!-- Modal Tambah Data -->
-<div id="modalTambah" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-  <div class="bg-white p-6 rounded shadow w-full max-w-lg">
-    <h2 class="text-xl font-bold mb-4">Tambah Data Jemaat</h2>
-    <form id="formTambah" class="space-y-3">
-      <input type="text" name="kode" placeholder="Kode Anggota" class="w-full border px-3 py-2 rounded" required />
-      <input type="text" name="nama" placeholder="Nama Lengkap" class="w-full border px-3 py-2 rounded" required />
-      <select name="gender" class="w-full border px-3 py-2 rounded">
-        <option value="">-- Pilih Jenis Kelamin --</option>
+<!-- Modal Tambah Data -->
+<div id="modalTambah" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 shadow relative">
+    <h2 class="text-xl font-semibold mb-4">Tambah Data Jemaat</h2>
+    <form id="formTambah" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <input type="text" name="kode" placeholder="Kode Anggota" required class="border px-3 py-2 rounded" />
+      <input type="text" name="nama" placeholder="Nama Lengkap" required class="border px-3 py-2 rounded" />
+      <select name="gender" required class="border px-3 py-2 rounded">
+        <option value="">-- Jenis Kelamin --</option>
         <option value="Laki-laki">Laki-laki</option>
         <option value="Perempuan">Perempuan</option>
       </select>
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
-      <button type="button" onclick="tutupModal()" class="ml-2 text-sm text-gray-600">Batal</button>
-    </form>
-  </div>
-</div>
-
-<!-- Modal Edit Dinamis -->
-<div id="modalEdit" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-  <div class="bg-white p-6 rounded shadow w-full max-w-4xl overflow-y-auto max-h-[90vh]">
-    <h2 class="text-xl font-bold mb-4">Edit Data Jemaat</h2>
-    <form id="formEdit" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <input type="hidden" name="rowIndex" />
-      <div id="editFields"></div>
-      <div class="col-span-full flex gap-3 mt-4">
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan Perubahan</button>
-        <button type="button" onclick="tutupModalEdit()" class="text-sm text-gray-600">Batal</button>
+      <!-- Tambahkan input lain di sini sesuai kolom Sheet -->
+      <div class="col-span-full flex gap-4 justify-end mt-4">
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
+        <button type="button" onclick="tutupModal()" class="text-gray-600 hover:underline">Batal</button>
       </div>
     </form>
   </div>
 </div>
+
+
+<!-- Modal Edit Dinamis -->
+<!-- Modal Edit Data -->
+<div id="modalEdit" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+  <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-y-auto p-6 shadow relative">
+    <h2 class="text-xl font-semibold mb-4">Edit Data Jemaat</h2>
+    <form id="formEdit" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <input type="hidden" name="rowIndex" />
+      <div id="editFields"></div>
+      <div class="col-span-full flex gap-4 justify-end mt-4">
+        <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Simpan</button>
+        <button type="button" onclick="tutupModalEdit()" class="text-gray-600 hover:underline">Batal</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 
 </body>
 </html>
