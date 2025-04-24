@@ -14,13 +14,18 @@ window.onload = function () {
   e.preventDefault();
   const headers = fullData[0];
 
-  const inputs = this.querySelectorAll("input[name^='field_'], select[name^='field_']");
+  //const inputs = this.querySelectorAll("input[name^='field_'], select[name^='field_']");
   const data = [];
 
   for (let i = 0; i < headers.length; i++) {
     const input = this.querySelector(`[name="field_${i}"]`);
     let val = input ? input.value.trim() : "";
 
+    // Kosongkan "-- Pilih --"
+    if (val === "-- Pilih --") {
+      val = "";
+    }
+    
     // Format tanggal ke dd/mm/yyyy sebelum dikirim
     if (["Tanggal Lahir", "Tanggal Nikah"].includes(headers[i]) && val.includes("-")) {
       const parts = val.split("-");
@@ -125,6 +130,7 @@ window.onload = function () {
     });
   }
 
+  //bukaModal
   window.bukaModal = function () {
   const form = document.getElementById("formTambah");
   const fieldsDiv = document.getElementById("tambahFields");
@@ -134,7 +140,7 @@ window.onload = function () {
 
   const dropdownFields = {
     "Jenis Kelamin": ["Laki-laki", "Perempuan"],
-    "Agama": ["Kristen", "Katolik", "Islam", "Hindu", "Budha", "Lainnya"],
+    "Agama": ["Islam", "Kristen", "Katolik", "Hindu", "Budha"],
     "Status Baptis": ["Sudah", "Belum"],
     "Status Sidi": ["Sudah", "Belum"],
     "Status Nikah": ["Sudah", "Belum"],
@@ -163,8 +169,9 @@ window.onload = function () {
       input.name = `field_${i}`;
 
       const optDefault = document.createElement("option");
+      optDefault.value = "";
       optDefault.textContent = "-- Pilih --";
-      optDefault.disabled = true;
+      //optDefault.disabled = true;
       optDefault.selected = true;
       input.appendChild(optDefault);
 
@@ -175,6 +182,11 @@ window.onload = function () {
         input.appendChild(opt);
       });
 
+    } else if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+      input = document.createElement("input");
+      input.type = "date";
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
     } else {
       input = document.createElement("input");
       input.className = "w-full border px-3 py-2 rounded";
