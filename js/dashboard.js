@@ -548,7 +548,7 @@ function filterDataByRayon(data, rayon) {
   const header = data[0];
   const filtered = data.filter((row, index) => {
     if (index === 0) return true;
-    return row[22] === rayon; // Kolom 'Rayon' (index ke-22)
+    return row[21] === rayon; // Kolom 'Rayon' (index ke-22)
   });
 
   return filtered;
@@ -566,5 +566,5 @@ function tampilkanSemuaStatistik(data) {
   buatStatistik(data, 13, "Pendidikan", "bar");
   buatStatistik(data, 15, "Pekerjaan", "bar");
   buatStatistik(data, 20, "Intra", "bar");
-  buatStatistik(data, 21, "Wilayah / Rayon", "bar");
+  buatStatistik(data, 21, "Rayon", "bar");
 }
