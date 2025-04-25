@@ -200,15 +200,15 @@ window.onload = function () {
       document.getElementById("totalJemaat").textContent = fullData.length - 1;
 
       // Panggil statistik berdasarkan kolom
-      buatStatistik(fullData, 21, "Rayon", "bar");
-      buatStatistik(fullData, 2, "Jenis Kelamin");
-      buatStatistik(fullData, 5, "Golongan Darah");
-      buatStatistik(fullData, 7, "Status Baptis");
-      buatStatistik(fullData, 8, "Status Sidi");
-      buatStatistik(fullData, 9, "Status Nikah");
-      buatStatistik(fullData, 13, "Pendidikan", "bar");
-      buatStatistik(fullData, 15, "Pekerjaan", "bar");
-      buatStatistik(fullData, 20, "Intra", "bar");
+      //buatStatistik(fullData, 21, "Rayon", "bar");
+      //buatStatistik(fullData, 2, "Jenis Kelamin");
+      //buatStatistik(fullData, 5, "Golongan Darah");
+      //buatStatistik(fullData, 7, "Status Baptis");
+      //buatStatistik(fullData, 8, "Status Sidi");
+      //buatStatistik(fullData, 9, "Status Nikah");
+      //buatStatistik(fullData, 13, "Pendidikan", "bar");
+      //buatStatistik(fullData, 15, "Pekerjaan", "bar");
+      //buatStatistik(fullData, 20, "Intra", "bar");
 
     });
   
