@@ -152,6 +152,10 @@ function logout() {
 window.onload = function () {
   const role = localStorage.getItem("role");
   const username = localStorage.getItem("username");
+  const label = document.getElementById("usernameLabel");
+  if (username && label) {
+    label.textContent = `Halo, ${username}`;
+  }
 
   if (!role || !username) {
     alert("Silakan login terlebih dahulu.");
@@ -245,14 +249,7 @@ window.onload = function () {
   });
 
   
-  // Tampilkan nama pengguna di header
-  document.addEventListener("DOMContentLoaded", function () {
-    const username = localStorage.getItem("username");
-    const label = document.getElementById("usernameLabel");
-    if (username && label) {
-      label.textContent = `Halo, ${username}`;
-    }
-  });
+ 
 
   // Export ke Excel
   function exportToExcel() {
