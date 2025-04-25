@@ -245,7 +245,27 @@ window.onload = function () {
   });
 
   
+  // Tampilkan nama pengguna di header
+  document.addEventListener("DOMContentLoaded", function () {
+    const username = localStorage.getItem("username");
+    const label = document.getElementById("usernameLabel");
+    if (username && label) {
+      label.textContent = `Halo, ${username}`;
+    }
+  });
 
+  // Export ke Excel
+  function exportToExcel() {
+    const headers = fullData[0];
+    const rows = fullData.slice(1);
+
+    const worksheetData = [headers, ...rows];
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data Jemaat");
+    XLSX.writeFile(workbook, "Data_Jemaat.xlsx");
+  }
 
   //bukaModal
   window.bukaModal = function () {
