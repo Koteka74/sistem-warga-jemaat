@@ -179,12 +179,18 @@ window.onload = function () {
       }
 
       renderTable(fullData);
+      hitungStatistikUtama(fullData);
+      tampilkanSemuaStatistik(fullData);
       
       const dropdownRayon = document.getElementById("filterRayon");
 
       dropdownRayon.addEventListener("change", function () {
         const pilihan = this.value;
         const dataTersaring = filterDataByRayon(fullData, pilihan);
+        console.log("Rayon terpilih:", pilihan);
+        console.log("Jumlah data hasil filter:", dataTersaring.length);
+        console.log("Contoh data:", dataTersaring[1]);
+
         hitungStatistikUtama(dataTersaring);
         tampilkanSemuaStatistik(dataTersaring);
       });
@@ -482,6 +488,7 @@ window.onload = function () {
       });
   });
 };
+
 function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
   const container = document.getElementById("statistikJemaat");
   const countMap = {};
@@ -546,13 +553,21 @@ function filterDataByRayon(data, rayon) {
   if (rayon === "Semua") return data;
 
   const header = data[0];
+  const rayonIndex = header.indexOf("Rayon");
+
+  if (rayonIndex === -1) {
+    console.warn("Kolom 'Rayon' tidak ditemukan!");
+    return data;
+  }
+
   const filtered = data.filter((row, index) => {
     if (index === 0) return true;
-    return row[21] === rayon; // Kolom 'Rayon' (index ke-22)
+    return row[rayonIndex] === rayon;
   });
 
   return filtered;
 }
+
 
 function tampilkanSemuaStatistik(data) {
   document.getElementById("statistikJemaat").innerHTML = "";
@@ -568,3 +583,10 @@ function tampilkanSemuaStatistik(data) {
   buatStatistik(data, 20, "Intra", "bar");
   buatStatistik(data, 21, "Rayon", "bar");
 }
+
+document.getElementById("filterRayon").addEventListener("change", function () {
+  const pilihan = this.value;
+  const dataTersaring = filterDataByRayon(fullData, pilihan);
+  hitungStatistikUtama(dataTersaring);
+  tampilkanSemuaStatistik(dataTersaring);
+});
