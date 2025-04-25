@@ -22,14 +22,16 @@
     </div>
   </div>
 
-  <!-- Kanan: Tombol Logout (icon) -->
-  <button onclick="logout()" title="Logout"
-    class="hover:bg-blue-600 p-2 rounded-full transition-colors">
-    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-9V4" />
-    </svg>
-  </button>
+  <!-- Kanan: Nama user + Logout -->
+  <div class="flex items-center gap-4">
+    <span id="usernameLabel" class="text-sm font-medium"></span>
+    <button onclick="logout()" title="Logout" class="hover:bg-blue-600 p-2 rounded-full transition-colors">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-9V4" />
+      </svg>
+    </button>
+  </div>
 </header>
 
 
@@ -50,6 +52,14 @@
         <option value="9999">Semua</option>
       </select>
     </div>
+
+     <!-- Tombol Export ke Excel -->
+    <div class="flex justify-end px-4 mt-2 mb-4">
+      <button onclick="exportToExcel()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 shadow">
+        Export ke Excel
+      </button>
+    </div>
+
     <div class="overflow-x-auto bg-white shadow rounded">
       <table class="min-w-full text-xs">
         <thead class="bg-blue-200 text-left">
@@ -111,7 +121,8 @@
 </div>
 
 
-
+<!-- Export ke Excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 </body>
 </html>
