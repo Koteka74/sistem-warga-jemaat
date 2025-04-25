@@ -45,6 +45,38 @@
     </div>
   </div>
 
+  <!-- Statistik Utama -->
+  <div class="px-4 mt-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Total Jemaat -->
+      <div class="bg-white p-4 rounded shadow text-center">
+        <p class="text-gray-500 text-sm">Jumlah Total Jemaat</p>
+        <h2 id="totalJemaat" class="text-2xl font-bold text-blue-700">0</h2>
+      </div>
+
+      <!-- Jumlah Keluarga -->
+      <div class="bg-white p-4 rounded shadow text-center">
+        <p class="text-gray-500 text-sm">Jumlah Keluarga</p>
+        <h2 id="totalKeluarga" class="text-2xl font-bold text-green-600">0</h2>
+      </div>
+    </div>
+
+    <!-- Filter Rayon -->
+    <div class="mt-4 text-right">
+      <label for="filterRayon" class="mr-2 text-sm font-medium text-gray-700">Tampilkan Berdasarkan:</label>
+      <select id="filterRayon" class="border px-3 py-1 rounded text-sm">
+        <option value="Semua">Semua Rayon</option>
+        <option value="Rayon I">Rayon I</option>
+        <option value="Rayon II">Rayon II</option>
+        <option value="Rayon III">Rayon III</option>
+        <option value="Rayon IV">Rayon IV</option>
+        <option value="Rayon V">Rayon V</option>
+        <option value="Rayon VI">Rayon VI</option>
+      </select>
+    </div>
+  </div>
+
+ 
   <!-- Statistik Grafik -->
   <div id="statistikJemaat" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-4 mt-6"></div>
 
