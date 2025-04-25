@@ -589,4 +589,8 @@ document.getElementById("filterRayon").addEventListener("change", function () {
   const dataTersaring = filterDataByRayon(fullData, pilihan);
   hitungStatistikUtama(dataTersaring);
   tampilkanSemuaStatistik(dataTersaring);
+  renderTable(dataTersaring); // 🔥 Tambahan ini agar tabel ikut terfilter
+  if (dataTersaring.length <= 1) {
+  alert(`Tidak ada data jemaat untuk ${pilihan}`);
+  }
 });
