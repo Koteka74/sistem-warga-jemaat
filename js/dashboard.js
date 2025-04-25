@@ -179,12 +179,22 @@ window.onload = function () {
       }
 
       renderTable(fullData);
+      
+      const dropdownRayon = document.getElementById("filterRayon");
 
+      dropdownRayon.addEventListener("change", function () {
+        const pilihan = this.value;
+        const dataTersaring = filterDataByRayon(fullData, pilihan);
+        hitungStatistikUtama(dataTersaring);
+        tampilkanSemuaStatistik(dataTersaring);
+      });
+
+      
       // Menampilkan statistik
       document.getElementById("totalJemaat").textContent = fullData.length - 1;
 
       // Panggil statistik berdasarkan kolom
-      buatStatistik(fullData, 21, "Wilayah / Rayon", "bar");
+      buatStatistik(fullData, 21, "Rayon", "bar");
       buatStatistik(fullData, 2, "Jenis Kelamin");
       buatStatistik(fullData, 5, "Golongan Darah");
       buatStatistik(fullData, 7, "Status Baptis");
@@ -518,4 +528,43 @@ function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
       } : {}
     }
   });
+}
+
+
+function hitungStatistikUtama(data) {
+  const rows = data.slice(1);
+  const total = rows.length;
+  const kepalaKeluarga = rows.filter(row =>
+    row.includes("Suami") || row.includes("Kepala Keluarga")
+  ).length;
+
+  document.getElementById("totalJemaat").textContent = total;
+  document.getElementById("totalKeluarga").textContent = kepalaKeluarga;
+}
+
+function filterDataByRayon(data, rayon) {
+  if (rayon === "Semua") return data;
+
+  const header = data[0];
+  const filtered = data.filter((row, index) => {
+    if (index === 0) return true;
+    return row[22] === rayon; // Kolom 'Rayon' (index ke-22)
+  });
+
+  return filtered;
+}
+
+function tampilkanSemuaStatistik(data) {
+  document.getElementById("statistikJemaat").innerHTML = "";
+
+  // Statistik Grafik
+  buatStatistik(data, 2, "Jenis Kelamin");
+  buatStatistik(data, 5, "Golongan Darah");
+  buatStatistik(data, 7, "Status Baptis");
+  buatStatistik(data, 8, "Status Sidi");
+  buatStatistik(data, 9, "Status Nikah");
+  buatStatistik(data, 13, "Pendidikan", "bar");
+  buatStatistik(data, 15, "Pekerjaan", "bar");
+  buatStatistik(data, 20, "Intra", "bar");
+  buatStatistik(data, 21, "Wilayah / Rayon", "bar");
 }
