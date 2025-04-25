@@ -1,7 +1,6 @@
 const url = 'https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=getData';
 
 let fullData = [];
-let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
 let currentRayon = "Semua";
 let currentPage = 1;
