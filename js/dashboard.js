@@ -4,7 +4,7 @@ let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
 let currentRayon = "Semua";
 let currentPage = 1;
-const rowsPerPage = 10;
+let rowsPerPage = 10;
 
 // Fungsi bantu format tanggal ISO ke dd/mm/yyyy
 function formatTanggal(isoStr) {
@@ -34,7 +34,7 @@ function renderTable(data) {
   const headers = data[0];
   const rows = data.slice(1);
 
-  // Header kolom
+  // Buat header
   headers.forEach(header => {
     const th = document.createElement("th");
     th.className = "px-2 py-1 border";
@@ -42,26 +42,27 @@ function renderTable(data) {
     headerRow.appendChild(th);
   });
 
-  // Tambahkan kolom Aksi
   const thAksi = document.createElement("th");
   thAksi.className = "px-2 py-1 border";
   thAksi.textContent = "Aksi";
   headerRow.appendChild(thAksi);
 
-  // Baris data
-  rows.forEach(row => {
+  // PAGINATION
+  const start = (currentPage - 1) * rowsPerPage;
+  const rowsToDisplay = rows.slice(start, start + rowsPerPage);
+
+  rowsToDisplay.forEach(row => {
     const tr = document.createElement("tr");
 
     row.forEach((cell, j) => {
       const td = document.createElement("td");
       td.className = "px-2 py-1 border";
 
-      // Format tanggal untuk kolom tertentu (misalnya tanggal lahir / nikah)
+      // Format tanggal jika cocok kolom
       if (headers[j].toLowerCase().includes("tanggal") && cell) {
         const tanggal = new Date(cell);
         if (!isNaN(tanggal)) {
-          const formatted = tanggal.toLocaleDateString("id-ID");
-          td.textContent = formatted;
+          td.textContent = tanggal.toLocaleDateString("id-ID");
         } else {
           td.textContent = cell;
         }
@@ -72,19 +73,21 @@ function renderTable(data) {
       tr.appendChild(td);
     });
 
-    // Cari indeks asli untuk edit/hapus
-    const rowIndex = fullData.findIndex(d =>
-      JSON.stringify(d) === JSON.stringify(row)
-    );
-
     const tdAksi = document.createElement("td");
     tdAksi.className = "px-2 py-1 border text-center";
 
+    // Cari index asli dari fullData
+    const rowIndex = fullData.findIndex(r =>
+      JSON.stringify(r) === JSON.stringify(row)
+    );
+
+    // Tombol edit
     const btnEdit = document.createElement("button");
     btnEdit.textContent = "✏️";
     btnEdit.className = "mr-2 text-blue-600";
     btnEdit.onclick = () => bukaModalEdit(row, rowIndex);
 
+    // Tombol hapus
     const btnHapus = document.createElement("button");
     btnHapus.textContent = "🗑️";
     btnHapus.className = "text-red-600";
@@ -97,13 +100,15 @@ function renderTable(data) {
     tdAksi.appendChild(btnEdit);
     tdAksi.appendChild(btnHapus);
     tr.appendChild(tdAksi);
-
     tableBody.appendChild(tr);
   });
-}
+
+  // Update info halaman
   const pageInfo = document.getElementById("pageInfo");
   const totalPages = Math.ceil(rows.length / rowsPerPage);
   pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
+}
+
 
 
 // Pagination
