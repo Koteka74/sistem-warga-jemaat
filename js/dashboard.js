@@ -100,12 +100,10 @@ function renderTable(data) {
 
     tableBody.appendChild(tr);
   });
-}
-
-
   const pageInfo = document.getElementById("pageInfo");
   const totalPages = Math.ceil(rows.length / rowsPerPage);
   pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
+}
 
 
 
