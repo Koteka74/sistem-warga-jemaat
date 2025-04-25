@@ -106,7 +106,7 @@ function renderTable(data) {
   const pageInfo = document.getElementById("pageInfo");
   const totalPages = Math.ceil(rows.length / rowsPerPage);
   pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
-};
+
 
 
 // Pagination
