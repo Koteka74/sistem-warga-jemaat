@@ -322,7 +322,7 @@ window.onload = function () {
   // ========================
   // ====== FITUR EDIT ======
   // ========================
-  function bukaModalEdit(rowIndex, rowData) {
+  window.bukaModalEdit = function (rowIndex, rowData) {
   const form = document.getElementById("formEdit");
   const fieldsDiv = document.getElementById("editFields");
 
