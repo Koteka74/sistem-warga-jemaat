@@ -35,6 +35,21 @@
 </header>
 
 
+<div class="mt-6">
+  <!-- DI SINI KITA TAMBAHKAN -->
+  <!-- Ringkasan: Total Jemaat -->
+  <div class="px-4 mt-6">
+    <div class="bg-white p-4 rounded shadow text-center">
+      <p class="text-gray-500 text-sm">Jumlah Total Jemaat</p>
+      <h2 id="totalJemaat" class="text-2xl font-bold text-blue-700">0</h2>
+    </div>
+  </div>
+
+  <!-- Statistik Grafik -->
+  <div id="statistikJemaat" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-4 mt-6"></div>
+
+</div>
+
   
 
   <!-- Konten -->
@@ -84,6 +99,9 @@
   <script src="js/dashboard.js"></script>
   <!-- Export ke Excel -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
   <footer class="bg-gray-200 text-center text-sm text-gray-700 py-4 mt-8">
     <p class="font-semibold">PHMJ GKI Diaspora Kotaraja</p>
