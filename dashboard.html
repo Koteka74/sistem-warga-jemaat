@@ -41,24 +41,31 @@
   <main class="p-6">
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
       <input type="text" id="searchInput" placeholder="Cari nama jemaat..." class="px-3 py-2 border rounded w-full md:w-1/2" />
-      <button onclick="bukaModal()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">+ Tambah Data</button>
+      <button onclick="bukaModal()" class="bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700">+ Tambah Data</button>
     </div>
-    <div class="mb-4">
-      <label for="rowsPerPage" class="text-sm mr-2">Tampilkan</label>
-      <select id="rowsPerPage" class="px-2 py-1 border rounded text-sm">
-        <option value="10">10 Baris</option>
-        <option value="20">20 Baris</option>
-        <option value="50">50 Baris</option>
-        <option value="9999">Semua</option>
-      </select>
-    </div>
+    <div class="flex justify-between items-center flex-wrap px-4 mt-4 gap-2">
+  <!-- Kiri: Tampilkan Baris -->
+  <div class="flex items-center gap-2">
+    <label for="rowsPerPage" class="text-sm">Tampilkan</label>
+    <select id="rowsPerPage" class="border px-2 py-1 text-sm rounded">
+      <option value="10">10</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
+    </select>
+    <span class="text-sm">baris</span>
+  </div>
 
-     <!-- Tombol Export ke Excel -->
-    <div class="flex justify-end px-4 mt-2 mb-4">
-      <button onclick="exportToExcel()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 shadow">
-        Export ke Excel
-      </button>
-    </div>
+  <!-- Kanan: Tombol -->
+  <div class="flex gap-2">
+    <button onclick="exportToExcel()" class="bg-blue-600 text-white px-3 py-1.5 text-sm rounded hover:bg-blue-700 shadow">
+      Export Excel
+    </button>
+    <button id="btnTambah" onclick="bukaModal()" class="bg-green-600 text-white px-3 py-1.5 text-sm rounded hover:bg-green-700 shadow">
+      + Tambah Data
+    </button>
+  </div>
+</div>
+
 
     <div class="overflow-x-auto bg-white shadow rounded">
       <table class="min-w-full text-xs">
