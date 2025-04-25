@@ -179,6 +179,21 @@ window.onload = function () {
       }
 
       renderTable(fullData);
+
+      // Menampilkan statistik
+      document.getElementById("totalJemaat").textContent = fullData.length - 1;
+
+      // Panggil statistik berdasarkan kolom
+      buatStatistik(fullData, 21, "Wilayah / Rayon", "bar");
+      buatStatistik(fullData, 2, "Jenis Kelamin");
+      buatStatistik(fullData, 5, "Golongan Darah");
+      buatStatistik(fullData, 7, "Status Baptis");
+      buatStatistik(fullData, 8, "Status Sidi");
+      buatStatistik(fullData, 9, "Status Nikah");
+      buatStatistik(fullData, 13, "Pendidikan", "bar");
+      buatStatistik(fullData, 15, "Pekerjaan", "bar");
+      buatStatistik(fullData, 20, "Intra", "bar");
+
     });
   
  
@@ -457,3 +472,50 @@ window.onload = function () {
       });
   });
 };
+function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
+  const container = document.getElementById("statistikJemaat");
+  const countMap = {};
+
+  data.slice(1).forEach(row => {
+    const key = row[kolomIndex] || "Tidak Diisi";
+    countMap[key] = (countMap[key] || 0) + 1;
+  });
+
+  const labels = Object.keys(countMap);
+  const values = Object.values(countMap);
+  const colors = labels.map(() => `hsl(${Math.random() * 360}, 70%, 60%)`);
+
+  const div = document.createElement("div");
+  div.className = "bg-white p-4 rounded shadow text-center";
+
+  const title = document.createElement("p");
+  title.className = "text-gray-600 font-medium mb-2";
+  title.textContent = judul;
+
+  const canvas = document.createElement("canvas");
+
+  div.appendChild(title);
+  div.appendChild(canvas);
+  container.appendChild(div);
+
+  new Chart(canvas, {
+    type: tipe,
+    data: {
+      labels: labels,
+      datasets: [{
+        data: values,
+        backgroundColor: colors
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom' },
+        title: { display: false }
+      },
+      scales: tipe === 'bar' ? {
+        y: { beginAtZero: true }
+      } : {}
+    }
+  });
+}
