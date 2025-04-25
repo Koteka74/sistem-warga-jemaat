@@ -1,6 +1,9 @@
 const url = 'https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=getData';
 
 let fullData = [];
+let fullData = [];
+let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
+let currentRayon = "Semua";
 let currentPage = 1;
 const rowsPerPage = 10;
 
@@ -22,7 +25,7 @@ function isoToInputDate(isoStr) {
 }
 
 // Render tabel utama
-window.renderTable = function (data) {
+function renderTable(data) {
   const headerRow = document.getElementById("tableHeader");
   const tableBody = document.getElementById("dataTable");
 
@@ -32,13 +35,7 @@ window.renderTable = function (data) {
   const headers = data[0];
   const rows = data.slice(1);
 
-  // Tambah kolom "Aksi"
-  const thAksi = document.createElement("th");
-  thAksi.className = "px-2 py-1 border";
-  thAksi.textContent = "Aksi";
-  headerRow.appendChild(thAksi);
-
-  // Header lainnya
+  // Header kolom
   headers.forEach(header => {
     const th = document.createElement("th");
     th.className = "px-2 py-1 border";
@@ -46,71 +43,66 @@ window.renderTable = function (data) {
     headerRow.appendChild(th);
   });
 
-  const start = (currentPage - 1) * rowsPerPage;
-  const end = start + rowsPerPage;
-  const rowsToDisplay = rows.slice(start, end);
+  // Tambahkan kolom Aksi
+  const thAksi = document.createElement("th");
+  thAksi.className = "px-2 py-1 border";
+  thAksi.textContent = "Aksi";
+  headerRow.appendChild(thAksi);
 
-  rowsToDisplay.forEach(row => {
+  // Baris data
+  rows.forEach(row => {
     const tr = document.createElement("tr");
 
-    // === Kolom Aksi (Edit + Hapus) ===
-    const tdAction = document.createElement("td");
-
-    // Tombol Edit
-    const btnEdit = document.createElement("button");
-    btnEdit.textContent = "Edit";
-    btnEdit.className = "text-blue-600 underline mr-2";
-    btnEdit.setAttribute("data-index", fullData.indexOf(row));
-    btnEdit.onclick = function () {
-      const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
-      bukaModalEdit(rowIndex, row);
-    };
-    tdAction.appendChild(btnEdit);
-
-    // Tombol Hapus
-    const btnHapus = document.createElement("button");
-    btnHapus.textContent = "Hapus";
-    btnHapus.className = "text-red-600 underline";
-    btnHapus.setAttribute("data-index", fullData.indexOf(row));
-    btnHapus.onclick = function () {
-      const rowIndex = parseInt(this.getAttribute("data-index")) + 1;
-
-      if (confirm("Apakah kamu yakin ingin menghapus data ini?")) {
-        const deleteUrl = `https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=deleteData&row=${rowIndex}`;
-        fetch(deleteUrl)
-          .then(res => res.text())
-          .then(msg => {
-            alert(msg);
-            location.reload();
-          })
-          .catch(err => {
-            alert("Gagal menghapus data.");
-            console.error(err);
-          });
-      }
-    };
-    tdAction.appendChild(btnHapus);
-
-    tdAction.className = "px-2 py-1 border";
-    tr.appendChild(tdAction);
-
-    // === Data row ===
     row.forEach((cell, j) => {
       const td = document.createElement("td");
-      const header = headers[j];
+      td.className = "px-2 py-1 border";
 
-      let displayValue = cell;
-      if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
-        displayValue = formatTanggal(cell);
+      // Format tanggal untuk kolom tertentu (misalnya tanggal lahir / nikah)
+      if (headers[j].toLowerCase().includes("tanggal") && cell) {
+        const tanggal = new Date(cell);
+        if (!isNaN(tanggal)) {
+          const formatted = tanggal.toLocaleDateString("id-ID");
+          td.textContent = formatted;
+        } else {
+          td.textContent = cell;
+        }
+      } else {
+        td.textContent = cell;
       }
 
-      td.textContent = displayValue;
-      td.className = "px-2 py-1 border";
       tr.appendChild(td);
     });
 
+    // Cari indeks asli untuk edit/hapus
+    const rowIndex = fullData.findIndex(d =>
+      JSON.stringify(d) === JSON.stringify(row)
+    );
+
+    const tdAksi = document.createElement("td");
+    tdAksi.className = "px-2 py-1 border text-center";
+
+    const btnEdit = document.createElement("button");
+    btnEdit.textContent = "✏️";
+    btnEdit.className = "mr-2 text-blue-600";
+    btnEdit.onclick = () => bukaModalEdit(row, rowIndex);
+
+    const btnHapus = document.createElement("button");
+    btnHapus.textContent = "🗑️";
+    btnHapus.className = "text-red-600";
+    btnHapus.onclick = () => {
+      if (confirm("Yakin ingin menghapus data ini?")) {
+        hapusData(rowIndex);
+      }
+    };
+
+    tdAksi.appendChild(btnEdit);
+    tdAksi.appendChild(btnHapus);
+    tr.appendChild(tdAksi);
+
     tableBody.appendChild(tr);
   });
+}
+
 
   const pageInfo = document.getElementById("pageInfo");
   const totalPages = Math.ceil(rows.length / rowsPerPage);
@@ -260,15 +252,18 @@ window.onload = function () {
 
   document.getElementById("searchInput").addEventListener("input", function () {
     const keyword = this.value.toLowerCase();
-    const filtered = [fullData[0]];
-    for (let i = 1; i < fullData.length; i++) {
-      const row = fullData[i];
+    const header = filteredData[0];
+    const result = [header];
+
+    for (let i = 1; i < filteredData.length; i++) {
+      const row = filteredData[i];
       const nama = row[1]?.toLowerCase() || "";
       if (nama.includes(keyword)) {
-        filtered.push(row);
+        result.push(row);
       }
     }
-    renderTable(filtered);
+
+    renderTable(result);
   });
 
   document.getElementById("rowsPerPage").addEventListener("change", () => {
@@ -585,11 +580,12 @@ function tampilkanSemuaStatistik(data) {
 }
 
 document.getElementById("filterRayon").addEventListener("change", function () {
-  const pilihan = this.value;
-  const dataTersaring = filterDataByRayon(fullData, pilihan);
-  hitungStatistikUtama(dataTersaring);
-  tampilkanSemuaStatistik(dataTersaring);
-  renderTable(dataTersaring); // 🔥 Tambahan ini agar tabel ikut terfilter
+  currentRayon = this.value;
+  filteredData = filterDataByRayon(fullData, currentRayon);
+
+  hitungStatistikUtama(filteredData);
+  tampilkanSemuaStatistik(filteredData);
+  renderTable(filteredData);
   if (dataTersaring.length <= 1) {
   alert(`Tidak ada data jemaat untuk ${pilihan}`);
   }
