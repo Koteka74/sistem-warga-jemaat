@@ -142,6 +142,11 @@ fetch(url)
     renderTable(fullData);
   });
 
+//Logout
+function logout() {
+  localStorage.clear();
+  window.location.href = "index.html";
+}
 
 
 window.onload = function () {
