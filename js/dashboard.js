@@ -252,7 +252,7 @@ window.onload = function () {
  
 
   // Export ke Excel
-  function exportToExcel() {
+  window.exportToExcel = function () {
     const headers = fullData[0];
     const rows = fullData.slice(1);
 
