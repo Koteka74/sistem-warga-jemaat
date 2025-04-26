@@ -24,14 +24,14 @@ function isoToInputDate(value) {
     const mmm = parts[1];
     const yyyy = parts[2];
 
-    const bulanIndonesia = {
+    const bulanPendek = {
       Jan: "01", Feb: "02", Mar: "03",
       Apr: "04", Mei: "05", Jun: "06",
       Jul: "07", Agu: "08", Sep: "09",
       Okt: "10", Nov: "11", Des: "12"
     };
 
-    const mm = bulanIndonesia[mmm] || "01";
+    const mm = bulanPendek[mmm] || "01";
     return `${yyyy}-${mm}-${dd}`;
   }
 
