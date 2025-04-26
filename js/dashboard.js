@@ -17,7 +17,10 @@ function formatTanggal(isoStr) {
 }
 
 // Format ISO ke YYYY-MM-DD untuk input[type="date"]
+// Fungsi Konversi Tanggal untuk Isi Modal Edit
 function isoToInputDate(value) {
+  if (!value) return "";
+
   const parts = value.split('/');
   if (parts.length === 3) {
     const dd = parts[0];
@@ -27,7 +30,7 @@ function isoToInputDate(value) {
     const bulanPendek = {
       Jan: "01", Feb: "02", Mar: "03",
       Apr: "04", Mei: "05", Jun: "06",
-      Jul: "07", Agu: "08", Sep: "09",
+      Jul: "07", Agt: "08", Sep: "09",
       Okt: "10", Nov: "11", Des: "12"
     };
 
@@ -35,7 +38,7 @@ function isoToInputDate(value) {
     return `${yyyy}-${mm}-${dd}`;
   }
 
-  // fallback jika tidak sesuai format
+  // fallback jika format aneh
   const d = new Date(value);
   if (isNaN(d)) return "";
   const yyyy = d.getFullYear();
@@ -463,6 +466,49 @@ window.onload = function () {
   document.getElementById("modalEdit").classList.remove("hidden");
 }
 
+  //SIMPAN EDIT
+  window.simpanEdit = function () {
+  const form = document.getElementById("formEdit");
+  const rowIndex = form.rowIndex.value;
+  const inputs = form.querySelectorAll("input, select");
+
+  const data = [];
+
+  inputs.forEach(input => {
+    let value = input.value.trim();
+
+    // Format tanggal sebelum dikirim
+    if (input.type === "date" && value) {
+      const d = new Date(value);
+      if (!isNaN(d)) {
+        const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+        const tanggal = String(d.getDate()).padStart(2, '0');
+        const bulan = bulanPendek[d.getMonth()];
+        const tahun = d.getFullYear();
+        value = `${tanggal}/${bulan}/${tahun}`;
+      }
+    }
+
+    data.push(value);
+  });
+
+  const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=updateData&row=' + rowIndex + '&data=' + encodeURIComponent(JSON.stringify(data));
+
+  fetch(url, {
+    method: 'GET',
+    mode: 'no-cors' // ✅ untuk hindari CORS error
+  })
+    .then(() => {
+      alert("Data berhasil diupdate");
+      tutupModalEdit();
+      location.reload();
+    })
+    .catch(err => {
+      console.error("Fetch error:", err);
+      alert("Terjadi kesalahan saat mengirim data.");
+    });
+}
+
 
   //TUtup ModalEdit
   window.tutupModalEdit = function () {
@@ -492,10 +538,7 @@ window.onload = function () {
 
     const updateUrl = `https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
-    fetch(updateUrl), {
-      method: 'GET',
-      mode: 'no-cors' // ✅ bypass CORS
-    })
+    fetch(updateUrl)
       .then(res => res.text())
       .then(msg => {
         alert(msg);
@@ -634,7 +677,7 @@ function formatTanggalIndonesia(tanggalStr) {
 }
 
 
-
+//Filter RAYON
 document.getElementById("filterRayon").addEventListener("change", function () {
   currentRayon = this.value;
   filteredData = filterDataByRayon(fullData, currentRayon);
