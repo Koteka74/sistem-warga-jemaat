@@ -165,7 +165,7 @@ window.onload = function () {
     .then(res => res.json())
     .then(data => {
       fullData = data;
-
+      filteredData = data; // ✅ ini penting agar pencarian bekerja
       if (role === "jemaat") {
         // Anggap username disimpan di kolom "Kode Anggota" (kolom ke-0)
         fullData = [data[0], ...data.filter(row => row[0] === username)];
@@ -252,20 +252,24 @@ window.onload = function () {
 
 
   document.getElementById("searchInput").addEventListener("input", function () {
-    const keyword = this.value.toLowerCase();
-    const header = filteredData[0];
-    const result = [header];
+  const keyword = this.value.toLowerCase();
 
-    for (let i = 1; i < filteredData.length; i++) {
-      const row = filteredData[i];
-      const nama = row[1]?.toLowerCase() || "";
-      if (nama.includes(keyword)) {
-        result.push(row);
-      }
+  if (!filteredData || filteredData.length === 0) return;
+
+  const header = filteredData[0];
+  const result = [header];
+
+  for (let i = 1; i < filteredData.length; i++) {
+    const row = filteredData[i];
+    const nama = row[1]?.toLowerCase() || "";
+    if (nama.includes(keyword)) {
+      result.push(row);
     }
+  }
 
-    renderTable(result);
-  });
+  renderTable(result);
+});
+
 
   document.getElementById("rowsPerPage").addEventListener("change", () => {
     fetch(url)
