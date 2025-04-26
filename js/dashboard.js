@@ -514,42 +514,6 @@ window.onload = function () {
   window.tutupModalEdit = function () {
     document.getElementById("modalEdit").classList.add("hidden");
   };
-
-  document.getElementById("formEdit").addEventListener("submit", function (e) {
-    e.preventDefault();
-    const rowIndex = this.rowIndex.value;
-    const headers = fullData[0];
-
-    // Ambil semua field berdasarkan urutan field_0, field_1, dst.
-    const data = [];
-    
-    for (let i = 0; i < headers.length; i++) {
-     const input = this.querySelector(`[name="field_${i}"]`);
-     let val = input ? input.value.trim() : "";
-
-     // Konversi ke dd/mm/yyyy jika input type date (val = yyyy-mm-dd)
-     if (["Tanggal Lahir", "Tanggal Nikah"].includes(headers[i]) && val.includes("-")) {
-       const parts = val.split("-");
-       val = `${parts[2]}/${parts[1]}/${parts[0]}`; // dd/mm/yyyy
-     }
-
-     data.push(val);
-   }
-
-    const updateUrl = `https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
-
-    fetch(updateUrl)
-      .then(res => res.text())
-      .then(msg => {
-        alert(msg);
-        tutupModalEdit();
-        location.reload();
-      })
-      .catch(err => {
-        console.error("Fetch error:", err);
-        alert("Gagal mengupdate data.");
-      });
-  });
 };
 
 function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
