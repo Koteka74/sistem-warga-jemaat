@@ -470,7 +470,7 @@ window.onload = function () {
   window.simpanEdit = function () {
   const form = document.getElementById("formEdit");
   const rowIndex = form.rowIndex.value;
-  const inputs = form.querySelectorAll("input, select");
+  const inputs = form.querySelectorAll("#editFields input, #editFields select");
 
   const data = [];
 
