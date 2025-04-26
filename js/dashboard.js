@@ -493,6 +493,9 @@ window.onload = function () {
     const updateUrl = `https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
     fetch(updateUrl)
+      method: 'GET',
+      mode: 'no-cors' // ✅ bypass CORS
+    })
       .then(res => res.text())
       .then(msg => {
         alert(msg);
