@@ -226,48 +226,55 @@ window.onload = function () {
     });
   
  
-  //formTambah
-  document.getElementById("formTambah").addEventListener("submit", function (e) {
+  //formTambah / Tambah Data
+  // Handle form tambah data
+document.getElementById("formTambah").addEventListener("submit", function (e) {
   e.preventDefault();
-  const headers = fullData[0];
 
-  //const inputs = this.querySelectorAll("input[name^='field_'], select[name^='field_']");
+  const kode = this.kode.value.trim();
+  const nama = this.nama.value.trim();
+  const gender = this.gender.value;
+  const tempatLahir = this.tempatLahir.value.trim();
+  const tanggalLahir = this.tanggalLahir.value;
+  // Tambahkan field lainnya sesuai kebutuhan...
+
   const data = [];
 
-  for (let i = 0; i < headers.length; i++) {
-    const input = this.querySelector(`[name="field_${i}"]`);
-    let val = input ? input.value.trim() : "";
+  // Loop semua input di formTambah
+  const inputs = this.querySelectorAll("input, select");
 
-    // Kosongkan "-- Pilih --"
-    if (val === "-- Pilih --") {
-      val = "";
+  inputs.forEach(input => {
+    let value = input.value.trim();
+
+    // Format tanggal jika input type date
+    if (input.type === "date" && value) {
+      const d = new Date(value);
+      if (!isNaN(d)) {
+        const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+        const tanggal = String(d.getDate()).padStart(2, '0');
+        const bulan = bulanPendek[d.getMonth()];
+        const tahun = d.getFullYear();
+        value = `${tanggal}/${bulan}/${tahun}`;
+      }
     }
-    
-    // Format tanggal ke dd/mm/yyyy sebelum dikirim
-    if (["Tanggal Lahir", "Tanggal Nikah"].includes(headers[i]) && val.includes("-")) {
-      const parts = val.split("-");
-      val = `${parts[2]}/${parts[1]}/${parts[0]}`; // dd/mm/yyyy
-    }
 
-    data.push(val);
-  }
+    data.push(value);
+  });
 
-  const dataStr = encodeURIComponent(JSON.stringify(data));
-  const addUrl = `https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=addData&data=${dataStr}`;
+  fetch("https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: "action=addData&data=" + encodeURIComponent(JSON.stringify(data))
+  });
 
-  fetch(addUrl)
-    .then(res => res.text())
-    .then(msg => {
-      console.log("Respon:", msg);
-      alert(msg);
-      tutupModal();
-      location.reload();
-    })
-    .catch(err => {
-      console.error("Fetch error:", err);
-      alert("Gagal menyimpan data.");
-    });
+  alert("Data berhasil ditambahkan!");
+  tutupModal();
+  location.reload();
 });
+
 
 
 
@@ -466,18 +473,18 @@ window.onload = function () {
   document.getElementById("modalEdit").classList.remove("hidden");
 }
 
-  //SIMPAN EDIT
+  //SIMPAN EDIT DATA
   window.simpanEdit = function () {
-  const form = document.getElementById("formEdit");
-  const rowIndex = form.rowIndex.value;
-  const inputs = form.querySelectorAll("#editFields input, #editFields select");
+    const form = document.getElementById("formEdit");
+    const rowIndex = form.rowIndex.value;
+    const inputs = form.querySelectorAll("#editFields input, #editFields select");
 
-  const data = [];
+    const data = [];
 
-  inputs.forEach(input => {
-    let value = input.value.trim();
+    inputs.forEach(input => {
+      let value = input.value.trim();
 
-    // Format tanggal ke dd/MMM/yyyy sebelum dikirim
+    // Format tanggal untuk input date
     if (input.type === "date" && value) {
       const d = new Date(value);
       if (!isNaN(d)) {
@@ -492,16 +499,16 @@ window.onload = function () {
     data.push(value);
   });
 
-  const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=updateData&row=' + rowIndex + '&data=' + encodeURIComponent(JSON.stringify(data));
-
-  // Mulai fetch
-  fetch(url, {
-    method: 'GET',
-    mode: 'no-cors'
+  fetch("https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
   });
 
-  // Karena pakai no-cors, kita langsung tampilkan alert
-  alert("Data berhasil diupdate");
+  alert("Data berhasil diupdate!");
   tutupModalEdit();
   location.reload();
 }
