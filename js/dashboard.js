@@ -85,7 +85,7 @@ function renderTable(data) {
     const btnEdit = document.createElement("button");
     btnEdit.textContent = "✏️";
     btnEdit.className = "mr-2 text-blue-600";
-    btnEdit.onclick = () => bukaModalEdit(row, rowIndex);
+    btnEdit.onclick = () => bukaModalEdit(rowIndex, row);
 
     // Tombol hapus
     const btnHapus = document.createElement("button");
@@ -533,6 +533,21 @@ function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
   });
 }
 
+//Hapus Data
+function hapusData(rowIndex) {
+  const url = 'https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=deleteData&row=' + rowIndex;
+
+  fetch(url)
+    .then(res => res.text())
+    .then(msg => {
+      alert(msg);
+      location.reload();
+    })
+    .catch(err => {
+      console.error("Error saat menghapus:", err);
+      alert("Gagal menghapus data.");
+    });
+}
 
 function hitungStatistikUtama(data) {
   const rows = data.slice(1);
