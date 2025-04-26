@@ -538,15 +538,17 @@ function hapusData(rowIndex) {
   const url = 'https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=deleteData&row=' + rowIndex;
 
   fetch(url)
-    .then(res => res.text())
-    .then(msg => {
-      alert(msg);
-      location.reload();
-    })
+    method: 'GET',
+    mode: 'no-cors' // ⛑️ ini membuat fetch tidak diblokir CORS
+  })
+  .then(res => {
+    alert("Data berhasil dihapus");
+    location.reload();
+  })
     .catch(err => {
       console.error("Error saat menghapus:", err);
       alert("Gagal menghapus data.");
-    });
+  });
 }
 
 function hitungStatistikUtama(data) {
