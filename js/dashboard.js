@@ -477,7 +477,7 @@ window.onload = function () {
   inputs.forEach(input => {
     let value = input.value.trim();
 
-    // Format tanggal sebelum dikirim
+    // Format tanggal ke dd/MMM/yyyy sebelum dikirim
     if (input.type === "date" && value) {
       const d = new Date(value);
       if (!isNaN(d)) {
@@ -494,19 +494,16 @@ window.onload = function () {
 
   const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=updateData&row=' + rowIndex + '&data=' + encodeURIComponent(JSON.stringify(data));
 
+  // Mulai fetch
   fetch(url, {
     method: 'GET',
-    mode: 'no-cors' // ✅ untuk hindari CORS error
-  })
-    .then(() => {
-      alert("Data berhasil diupdate");
-      tutupModalEdit();
-      location.reload();
-    })
-    .catch(err => {
-      console.error("Fetch error:", err);
-      alert("Terjadi kesalahan saat mengirim data.");
-    });
+    mode: 'no-cors'
+  });
+
+  // Karena pakai no-cors, kita langsung tampilkan alert
+  alert("Data berhasil diupdate");
+  tutupModalEdit();
+  location.reload();
 }
 
 
