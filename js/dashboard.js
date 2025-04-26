@@ -1,4 +1,4 @@
-const url = 'https://script.google.com/macros/s/AKfycbyJ2GmeDwmWW1Sstso3n0kr4Nvjap5dQX7O_Eu18zi0EAP5irtj4FgjtKUthTvOnSSrWA/exec?action=getData';
+const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=getData';
 
 let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
@@ -18,16 +18,29 @@ function formatTanggal(isoStr) {
 
 // Format ISO ke YYYY-MM-DD untuk input[type="date"]
 function isoToInputDate(value) {
-  if (!value) return "";
+  const parts = value.split('/');
+  if (parts.length === 3) {
+    const dd = parts[0];
+    const mmm = parts[1];
+    const yyyy = parts[2];
 
-  // Jika nilai sudah dalam format dd/mmm/yyyy → ubah ke format input date
-  const date = new Date(value);
-  if (isNaN(date)) return "";
+    const bulanIndonesia = {
+      Jan: "01", Feb: "02", Mar: "03",
+      Apr: "04", Mei: "05", Jun: "06",
+      Jul: "07", Agu: "08", Sep: "09",
+      Okt: "10", Nov: "11", Des: "12"
+    };
 
-  const yyyy = date.getFullYear();
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  const dd = String(date.getDate()).padStart(2, '0');
+    const mm = bulanIndonesia[mmm] || "01";
+    return `${yyyy}-${mm}-${dd}`;
+  }
 
+  // fallback jika tidak sesuai format
+  const d = new Date(value);
+  if (isNaN(d)) return "";
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
   return `${yyyy}-${mm}-${dd}`;
 }
 
@@ -69,12 +82,7 @@ function renderTable(data) {
 
       // Format tanggal jika cocok kolom
       if (headers[j].toLowerCase().includes("tanggal") && cell) {
-        const tanggal = new Date(cell);
-        if (!isNaN(tanggal)) {
-          td.textContent = tanggal.toLocaleDateString("id-ID");
-        } else {
-          td.textContent = cell;
-        }
+        td.textContent = formatTanggalIndonesia(cell);
       } else {
         td.textContent = cell;
       }
@@ -242,7 +250,7 @@ window.onload = function () {
   }
 
   const dataStr = encodeURIComponent(JSON.stringify(data));
-  const addUrl = `https://script.google.com/macros/s/AKfycbyJ2GmeDwmWW1Sstso3n0kr4Nvjap5dQX7O_Eu18zi0EAP5irtj4FgjtKUthTvOnSSrWA/exec?action=addData&data=${dataStr}`;
+  const addUrl = `https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=addData&data=${dataStr}`;
 
   fetch(addUrl)
     .then(res => res.text())
@@ -482,7 +490,7 @@ window.onload = function () {
      data.push(val);
    }
 
-    const updateUrl = `https://script.google.com/macros/s/AKfycbyJ2GmeDwmWW1Sstso3n0kr4Nvjap5dQX7O_Eu18zi0EAP5irtj4FgjtKUthTvOnSSrWA/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
+    const updateUrl = `https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
     fetch(updateUrl)
       .then(res => res.text())
@@ -548,7 +556,7 @@ function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
 
 //Hapus Data
 function hapusData(rowIndex) {
-  const url = 'https://script.google.com/macros/s/AKfycbyJ2GmeDwmWW1Sstso3n0kr4Nvjap5dQX7O_Eu18zi0EAP5irtj4FgjtKUthTvOnSSrWA/exec?action=deleteData&row=' + rowIndex;
+  const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=deleteData&row=' + rowIndex;
 
   fetch(url, {
     method: 'GET',
@@ -610,6 +618,19 @@ function tampilkanSemuaStatistik(data) {
   buatStatistik(data, 20, "Intra", "bar");
   buatStatistik(data, 21, "Rayon", "bar");
 }
+
+//Format tanggal Indonesia
+function formatTanggalIndonesia(tanggalStr) {
+  if (!tanggalStr) return "";
+
+  const date = new Date(tanggalStr);
+  if (isNaN(date)) return tanggalStr;
+
+  const options = { day: '2-digit', month: 'short', year: 'numeric' };
+  return date.toLocaleDateString('id-ID', options); // ✅ Indonesia
+}
+
+
 
 document.getElementById("filterRayon").addEventListener("change", function () {
   currentRayon = this.value;
