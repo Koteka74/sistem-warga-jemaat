@@ -1,4 +1,4 @@
-const url = 'https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=getData';
+const url = 'https://script.google.com/macros/s/AKfycby-cHCD5vBIZ_LqzyH9ednNnqkZZyQLGiDE0EcRASvaJwN-P1xd9eNe3Ec6i2EPf8YCeg/exec?action=getData';
 
 let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
@@ -233,7 +233,7 @@ window.onload = function () {
   }
 
   const dataStr = encodeURIComponent(JSON.stringify(data));
-  const addUrl = `https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=addData&data=${dataStr}`;
+  const addUrl = `https://script.google.com/macros/s/AKfycby-cHCD5vBIZ_LqzyH9ednNnqkZZyQLGiDE0EcRASvaJwN-P1xd9eNe3Ec6i2EPf8YCeg/exec?action=addData&data=${dataStr}`;
 
   fetch(addUrl)
     .then(res => res.text())
@@ -473,7 +473,7 @@ window.onload = function () {
      data.push(val);
    }
 
-    const updateUrl = `https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
+    const updateUrl = `https://script.google.com/macros/s/AKfycby-cHCD5vBIZ_LqzyH9ednNnqkZZyQLGiDE0EcRASvaJwN-P1xd9eNe3Ec6i2EPf8YCeg/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
     fetch(updateUrl)
       .then(res => res.text())
@@ -539,7 +539,7 @@ function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
 
 //Hapus Data
 function hapusData(rowIndex) {
-  const url = 'https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=deleteData&row=' + rowIndex;
+  const url = 'https://script.google.com/macros/s/AKfycby-cHCD5vBIZ_LqzyH9ednNnqkZZyQLGiDE0EcRASvaJwN-P1xd9eNe3Ec6i2EPf8YCeg/exec?action=deleteData&row=' + rowIndex;
 
   fetch(url, {
     method: 'GET',
