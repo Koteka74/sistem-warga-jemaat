@@ -1,4 +1,4 @@
-const url = 'https://script.google.com/macros/s/AKfycby-cHCD5vBIZ_LqzyH9ednNnqkZZyQLGiDE0EcRASvaJwN-P1xd9eNe3Ec6i2EPf8YCeg/exec?action=getData';
+const url = 'https://script.google.com/macros/s/AKfycbyJ2GmeDwmWW1Sstso3n0kr4Nvjap5dQX7O_Eu18zi0EAP5irtj4FgjtKUthTvOnSSrWA/exec?action=getData';
 
 let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
@@ -17,11 +17,20 @@ function formatTanggal(isoStr) {
 }
 
 // Format ISO ke YYYY-MM-DD untuk input[type="date"]
-function isoToInputDate(isoStr) {
-  if (!isoStr || !isoStr.includes("T")) return "";
-  const date = new Date(isoStr);
-  return date.toISOString().slice(0, 10);
+function isoToInputDate(value) {
+  if (!value) return "";
+
+  // Jika nilai sudah dalam format dd/mmm/yyyy → ubah ke format input date
+  const date = new Date(value);
+  if (isNaN(date)) return "";
+
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+
+  return `${yyyy}-${mm}-${dd}`;
 }
+
 
 // Render tabel utama
 function renderTable(data) {
@@ -233,7 +242,7 @@ window.onload = function () {
   }
 
   const dataStr = encodeURIComponent(JSON.stringify(data));
-  const addUrl = `https://script.google.com/macros/s/AKfycby-cHCD5vBIZ_LqzyH9ednNnqkZZyQLGiDE0EcRASvaJwN-P1xd9eNe3Ec6i2EPf8YCeg/exec?action=addData&data=${dataStr}`;
+  const addUrl = `https://script.google.com/macros/s/AKfycbyJ2GmeDwmWW1Sstso3n0kr4Nvjap5dQX7O_Eu18zi0EAP5irtj4FgjtKUthTvOnSSrWA/exec?action=addData&data=${dataStr}`;
 
   fetch(addUrl)
     .then(res => res.text())
@@ -473,7 +482,7 @@ window.onload = function () {
      data.push(val);
    }
 
-    const updateUrl = `https://script.google.com/macros/s/AKfycby-cHCD5vBIZ_LqzyH9ednNnqkZZyQLGiDE0EcRASvaJwN-P1xd9eNe3Ec6i2EPf8YCeg/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
+    const updateUrl = `https://script.google.com/macros/s/AKfycbyJ2GmeDwmWW1Sstso3n0kr4Nvjap5dQX7O_Eu18zi0EAP5irtj4FgjtKUthTvOnSSrWA/exec?action=updateData&row=${rowIndex}&data=${encodeURIComponent(JSON.stringify(data))}`;
 
     fetch(updateUrl)
       .then(res => res.text())
@@ -539,7 +548,7 @@ function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
 
 //Hapus Data
 function hapusData(rowIndex) {
-  const url = 'https://script.google.com/macros/s/AKfycby-cHCD5vBIZ_LqzyH9ednNnqkZZyQLGiDE0EcRASvaJwN-P1xd9eNe3Ec6i2EPf8YCeg/exec?action=deleteData&row=' + rowIndex;
+  const url = 'https://script.google.com/macros/s/AKfycbyJ2GmeDwmWW1Sstso3n0kr4Nvjap5dQX7O_Eu18zi0EAP5irtj4FgjtKUthTvOnSSrWA/exec?action=deleteData&row=' + rowIndex;
 
   fetch(url, {
     method: 'GET',
