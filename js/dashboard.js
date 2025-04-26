@@ -537,19 +537,20 @@ function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
 function hapusData(rowIndex) {
   const url = 'https://script.google.com/macros/s/AKfycbwr48rbRBUF2ldaurXsybOQp4afkDALILMAbitf8-Sn5RjCsy6KcCTXxQJIBVv4f4ibPQ/exec?action=deleteData&row=' + rowIndex;
 
-  fetch(url)
+  fetch(url, {
     method: 'GET',
-    mode: 'no-cors' // ⛑️ ini membuat fetch tidak diblokir CORS
+    mode: 'no-cors'
   })
-  .then(res => {
-    alert("Data berhasil dihapus");
-    location.reload();
-  })
+    .then(() => {
+      alert("Data berhasil dihapus");
+      location.reload();
+    })
     .catch(err => {
       console.error("Error saat menghapus:", err);
       alert("Gagal menghapus data.");
-  });
+    });
 }
+
 
 function hitungStatistikUtama(data) {
   const rows = data.slice(1);
@@ -604,7 +605,7 @@ document.getElementById("filterRayon").addEventListener("change", function () {
   hitungStatistikUtama(filteredData);
   tampilkanSemuaStatistik(filteredData);
   renderTable(filteredData);
-  if (dataTersaring.length <= 1) {
-  alert(`Tidak ada data jemaat untuk ${pilihan}`);
+  if (filteredData.length <= 1) {
+  alert(`Tidak ada data jemaat untuk ${currentRayon}`);
   }
 });
