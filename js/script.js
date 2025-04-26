@@ -4,7 +4,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  const url = 'https://script.google.com/macros/s/AKfycbyJ2GmeDwmWW1Sstso3n0kr4Nvjap5dQX7O_Eu18zi0EAP5irtj4FgjtKUthTvOnSSrWA/exec'; // Ganti ini
+  const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec'; // Ganti ini
 
   fetch(url, {
     method: 'POST',
