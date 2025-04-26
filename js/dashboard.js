@@ -1,4 +1,5 @@
 const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=getData';
+const scriptURL = "https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec";
 
 let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
@@ -211,18 +212,6 @@ window.onload = function () {
       
       // Menampilkan statistik
       document.getElementById("totalJemaat").textContent = fullData.length - 1;
-
-      // Panggil statistik berdasarkan kolom
-      //buatStatistik(fullData, 21, "Rayon", "bar");
-      //buatStatistik(fullData, 2, "Jenis Kelamin");
-      //buatStatistik(fullData, 5, "Golongan Darah");
-      //buatStatistik(fullData, 7, "Status Baptis");
-      //buatStatistik(fullData, 8, "Status Sidi");
-      //buatStatistik(fullData, 9, "Status Nikah");
-      //buatStatistik(fullData, 13, "Pendidikan", "bar");
-      //buatStatistik(fullData, 15, "Pekerjaan", "bar");
-      //buatStatistik(fullData, 20, "Intra", "bar");
-
     });
   
  
@@ -231,22 +220,12 @@ window.onload = function () {
 document.getElementById("formTambah").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  const kode = this.kode.value.trim();
-  const nama = this.nama.value.trim();
-  const gender = this.gender.value;
-  const tempatLahir = this.tempatLahir.value.trim();
-  const tanggalLahir = this.tanggalLahir.value;
-  // Tambahkan field lainnya sesuai kebutuhan...
-
-  const data = [];
-
-  // Loop semua input di formTambah
   const inputs = this.querySelectorAll("input, select");
+  const data = [];
 
   inputs.forEach(input => {
     let value = input.value.trim();
 
-    // Format tanggal jika input type date
     if (input.type === "date" && value) {
       const d = new Date(value);
       if (!isNaN(d)) {
@@ -261,7 +240,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
     data.push(value);
   });
 
-  fetch("https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec", {
+  fetch(scriptURL, {
     method: "POST",
     mode: "no-cors",
     headers: {
@@ -275,9 +254,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
   location.reload();
 });
 
-
-
-
+  //CARI NAMA
   document.getElementById("searchInput").addEventListener("input", function () {
   const keyword = this.value.toLowerCase();
 
@@ -478,40 +455,39 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
     const form = document.getElementById("formEdit");
     const rowIndex = form.rowIndex.value;
     const inputs = form.querySelectorAll("#editFields input, #editFields select");
-
+  
     const data = [];
-
+  
     inputs.forEach(input => {
       let value = input.value.trim();
 
-    // Format tanggal untuk input date
-    if (input.type === "date" && value) {
-      const d = new Date(value);
-      if (!isNaN(d)) {
-        const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
-        const tanggal = String(d.getDate()).padStart(2, '0');
-        const bulan = bulanPendek[d.getMonth()];
-        const tahun = d.getFullYear();
-        value = `${tanggal}/${bulan}/${tahun}`;
+      if (input.type === "date" && value) {
+        const d = new Date(value);
+        if (!isNaN(d)) {
+          const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+          const tanggal = String(d.getDate()).padStart(2, '0');
+          const bulan = bulanPendek[d.getMonth()];
+          const tahun = d.getFullYear();
+          value = `${tanggal}/${bulan}/${tahun}`;
+        }
       }
-    }
 
-    data.push(value);
-  });
+      data.push(value);
+    });
 
-  fetch("https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
-    },
-    body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
-  });
+    fetch(scriptURL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
+    });
 
-  alert("Data berhasil diupdate!");
-  tutupModalEdit();
-  location.reload();
-}
+    alert("Data berhasil diupdate!");
+    tutupModalEdit();
+    location.reload();
+  }
 
 
   //TUtup ModalEdit
