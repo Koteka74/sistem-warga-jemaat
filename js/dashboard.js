@@ -164,6 +164,7 @@ function logout() {
 
 
 window.onload = function () {
+  resetIdleTimer(); // Auto logout timer reset
   const role = localStorage.getItem("role");
   const username = localStorage.getItem("username");
   const label = document.getElementById("usernameLabel");
@@ -663,7 +664,6 @@ setInterval(timerIncrement, 60000); // 60.000 ms = 1 menit
 
 
 // Deteksi aktivitas
-window.onload = resetIdleTimer;
 window.onmousemove = resetIdleTimer;
 window.onmousedown = resetIdleTimer;
 window.onclick = resetIdleTimer;
