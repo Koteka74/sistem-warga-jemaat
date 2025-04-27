@@ -243,6 +243,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
 
   showSpinner();
   fetch(scriptURL, {
+    hideSpinner();
     method: "POST",
     mode: "no-cors",
     headers: {
@@ -482,6 +483,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
 
     showSpinner();
     fetch(scriptURL, {
+      hideSpinner();
       method: "POST",
       mode: "no-cors",
       headers: {
