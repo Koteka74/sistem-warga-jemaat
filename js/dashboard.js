@@ -57,8 +57,12 @@ function renderTable(data) {
   headerRow.innerHTML = '';
   tableBody.innerHTML = '';
 
-  const headers = data[0];
-  const rows = data.slice(1);
+  const headers = dataArray[0];
+  const rows = dataArray.slice(1);
+
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const rowsToDisplay = rows.slice(start, end);
 
   // Buat header
   headers.forEach(header => {
@@ -77,9 +81,9 @@ function renderTable(data) {
   const start = (currentPage - 1) * rowsPerPage;
   const rowsToDisplay = rows.slice(start, start + rowsPerPage);
 
+  //Buat Baris
   rowsToDisplay.forEach(row => {
     const tr = document.createElement("tr");
-
     row.forEach((cell, j) => {
       const td = document.createElement("td");
       td.className = "px-2 py-1 border";
@@ -134,17 +138,18 @@ function renderTable(data) {
 
 // Pagination
 window.nextPage = function () {
+  const rows = filteredData.slice(1); // tanpa header
   const totalPages = Math.ceil((fullData.length - 1) / rowsPerPage);
   if (currentPage < totalPages) {
     currentPage++;
-    renderTable(fullData);
+    renderTable(filteredData);
   }
 };
 
 window.prevPage = function () {
   if (currentPage > 1) {
     currentPage--;
-    renderTable(fullData);
+    renderTable(filteredData);
   }
 };
 
