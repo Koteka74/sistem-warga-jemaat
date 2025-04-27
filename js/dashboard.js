@@ -240,6 +240,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
     data.push(value);
   });
 
+  showSpinner();
   fetch(scriptURL, {
     method: "POST",
     mode: "no-cors",
@@ -252,7 +253,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
   // ✅ Reset semua field
   this.reset();
   
-  alert("Data berhasil ditambahkan!");
+  showToast("Data berhasil ditambahkan!");
   tutupModal();
   location.reload();
 });
@@ -478,6 +479,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
       data.push(value);
     });
 
+    showSpinner();
     fetch(scriptURL, {
       method: "POST",
       mode: "no-cors",
@@ -487,7 +489,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
       body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
     });
 
-    alert("Data berhasil diupdate!");
+    showToast("Data berhasil diupdate!");
     tutupModalEdit();
     location.reload();
   }
@@ -556,7 +558,7 @@ function hapusData(rowIndex) {
     mode: 'no-cors'
   })
     .then(() => {
-      alert("Data berhasil dihapus");
+      showToast("Data berhasil dihapus");
       location.reload();
     })
     .catch(err => {
@@ -655,8 +657,10 @@ function resetIdleTimer() {
   idleTime = 0;
 }
 
+
 // Hitung waktu idle tiap 1 menit
 setInterval(timerIncrement, 60000); // 60.000 ms = 1 menit
+
 
 // Deteksi aktivitas
 window.onload = resetIdleTimer;
@@ -665,3 +669,26 @@ window.onmousedown = resetIdleTimer;
 window.onclick = resetIdleTimer;
 window.onscroll = resetIdleTimer;
 window.onkeypress = resetIdleTimer;
+
+
+//Toast Notification
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.remove("hidden");
+  toast.classList.add("animate-fadeIn");
+
+  setTimeout(() => {
+    toast.classList.add("hidden");
+  }, 3000);
+}
+
+
+//Loading Spinner
+function showSpinner() {
+  document.getElementById("spinner").classList.remove("hidden");
+}
+
+function hideSpinner() {
+  document.getElementById("spinner").classList.add("hidden");
+}
