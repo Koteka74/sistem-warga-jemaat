@@ -241,9 +241,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
     data.push(value);
   });
 
-  showSpinner();
   fetch(scriptURL, {
-    hideSpinner();
     method: "POST",
     mode: "no-cors",
     headers: {
@@ -251,10 +249,10 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
     },
     body: "action=addData&data=" + encodeURIComponent(JSON.stringify(data))
   });
-
+  showSpinner();
   // ✅ Reset semua field
   this.reset();
-  
+  hideSpinner();
   showToast("Data berhasil ditambahkan!");
   tutupModal();
   location.reload();
@@ -481,9 +479,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
       data.push(value);
     });
 
-    showSpinner();
     fetch(scriptURL, {
-      hideSpinner();
       method: "POST",
       mode: "no-cors",
       headers: {
@@ -491,7 +487,8 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
       },
       body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
     });
-
+    showSpinner();
+    hideSpinner();
     showToast("Data berhasil diupdate!");
     tutupModalEdit();
     location.reload();
