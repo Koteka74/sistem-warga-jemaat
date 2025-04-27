@@ -249,6 +249,9 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
     body: "action=addData&data=" + encodeURIComponent(JSON.stringify(data))
   });
 
+  // ✅ Reset semua field
+  this.reset();
+  
   alert("Data berhasil ditambahkan!");
   tutupModal();
   location.reload();
@@ -633,3 +636,32 @@ document.getElementById("filterRayon").addEventListener("change", function () {
   alert(`Tidak ada data jemaat untuk ${currentRayon}`);
   }
 });
+
+
+
+// Auto Logout jika tidak aktif selama 15 menit
+let idleTime = 0;
+
+function timerIncrement() {
+  idleTime += 1;
+  if (idleTime >= 15) { // 15 menit
+    alert("Sesi Anda telah berakhir. Anda akan logout otomatis.");
+    logout(); // Pakai fungsi logout() yang sudah kamu buat
+  }
+}
+
+// Reset timer kalau ada aktivitas
+function resetIdleTimer() {
+  idleTime = 0;
+}
+
+// Hitung waktu idle tiap 1 menit
+setInterval(timerIncrement, 60000); // 60.000 ms = 1 menit
+
+// Deteksi aktivitas
+window.onload = resetIdleTimer;
+window.onmousemove = resetIdleTimer;
+window.onmousedown = resetIdleTimer;
+window.onclick = resetIdleTimer;
+window.onscroll = resetIdleTimer;
+window.onkeypress = resetIdleTimer;
