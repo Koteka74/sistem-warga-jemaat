@@ -57,8 +57,8 @@ function renderTable(data) {
   headerRow.innerHTML = '';
   tableBody.innerHTML = '';
 
-  const headers = dataArray[0];
-  const rows = dataArray.slice(1);
+  const headers = data[0];
+  const rows = data.slice(1);
 
   const start = (currentPage - 1) * rowsPerPage;
   const end = start + rowsPerPage;
