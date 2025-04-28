@@ -1,6 +1,124 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Informasi Warga Jemaat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    @media print {
+      .no-print, header, #searchSection, .pagination {
+        display: none !important;
+      }
+      table {
+        width: 100%;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-blue-700 text-white p-4 flex justify-between items-center shadow">
+    <div class="flex items-center gap-4">
+      <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhX9jX67zIfE0cZLQFf-NrGmiaHKzcSowRWKhSf8Q1ZmMCz7LPICneJpxotKpNUp6UlZIcvI5IisGEY7e_LrYE0IEctWPjzd5G-n8oEFtziafLuqLWiqXgbDA4_mcyUG_JQHae8VWbfpaLqJoSzB5cRFCiOUni5zs90jL2wCCELiNDe5s0H1EQ5k3I2B_g/s1600/Logo_GKITP.png" alt="Logo GKI" class="w-10 h-10">
+      <div>
+        <p class="text-sm uppercase tracking-wider">Dashboard</p>
+        <h1 class="text-lg font-bold leading-tight">Sistem Informasi Warga Jemaat</h1>
+        <p class="text-xs">GKI Diaspora Kotaraja</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <span id="usernameLabel" class="text-sm font-medium"></span>
+      <button onclick="logout()" class="hover:bg-blue-600 p-2 rounded-full transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1m0-9V4" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Section Search + Control -->
+  <section id="searchSection" class="flex flex-wrap gap-2 p-4 bg-white shadow">
+    <input type="text" id="searchInput" placeholder="Cari nama jemaat..." class="px-3 py-2 border rounded w-60">
+    <select id="rowsPerPage" class="px-2 py-2 border rounded">
+      <option value="10">Tampilkan 10</option>
+      <option value="20">Tampilkan 20</option>
+      <option value="50">Tampilkan 50</option>
+    </select>
+    <button onclick="bukaModal()" class="no-print bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700">+ Tambah Data</button>
+    <button onclick="exportToExcel()" class="no-print bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600">Export Excel</button>
+  </section>
+
+  <!-- Section Tabel Data -->
+  <main class="flex-1 overflow-x-auto p-4">
+    <table class="min-w-full bg-white border shadow">
+      <thead class="bg-gray-200">
+        <tr id="tableHeader"></tr>
+      </thead>
+      <tbody id="dataTable"></tbody>
+    </table>
+
+    <div class="pagination flex justify-center items-center gap-4 mt-4 no-print">
+      <button onclick="prevPage()" class="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400">Sebelumnya</button>
+      <span id="pageInfo" class="text-sm"></span>
+      <button onclick="nextPage()" class="bg-gray-300 px-3 py-1 rounded hover:bg-gray-400">Selanjutnya</button>
+    </div>
+  </main>
+
+  <!-- Modal Tambah Data -->
+  <div id="modalTambah" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-96 overflow-y-auto max-h-[90vh]">
+      <h2 class="text-xl mb-4 font-semibold">Tambah Data Jemaat</h2>
+      <form id="formTambah" class="space-y-2">
+        <!-- Isi form tambah data (generate lewat JS atau HTML manual) -->
+        <div class="flex flex-col gap-2" id="formFieldsTambah"></div>
+
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" onclick="tutupModal()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+          <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Edit Data -->
+  <div id="modalEdit" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-6 w-96 overflow-y-auto max-h-[90vh]">
+      <h2 class="text-xl mb-4 font-semibold">Edit Data Jemaat</h2>
+      <form id="formEdit" class="space-y-2">
+        <input type="hidden" name="rowIndex">
+        <div class="flex flex-col gap-2" id="editFields"></div>
+
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" onclick="tutupModalEdit()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Batal</button>
+          <button type="submit" onclick="simpanEdit()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed top-4 right-4 bg-blue-600 text-white px-4 py-2 rounded shadow-lg hidden z-50"></div>
+
+  <!-- Spinner Loading -->
+  <div id="spinner" class="fixed inset-0 bg-black bg-opacity-30 hidden justify-center items-center z-50">
+    <div class="border-4 border-white border-t-blue-600 rounded-full w-12 h-12 animate-spin"></div>
+  </div>
+
+  <!-- Script Dashboard -->
+  <script src="dashboard.js"></script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dashboard - Data Jemaat</title>
