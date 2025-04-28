@@ -78,8 +78,8 @@ function renderTable(data) {
   headerRow.appendChild(thAksi);
 
   // PAGINATION
-  const start = (currentPage - 1) * rowsPerPage;
-  const rowsToDisplay = rows.slice(start, start + rowsPerPage);
+  //const start = (currentPage - 1) * rowsPerPage;
+  //const rowsToDisplay = rows.slice(start, start + rowsPerPage);
 
   //Buat Baris
   rowsToDisplay.forEach(row => {
