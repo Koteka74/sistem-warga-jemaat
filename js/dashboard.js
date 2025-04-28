@@ -1,4 +1,3 @@
-// ====== Konfigurasi URL Web Apps Script ======
 const scriptURL = "https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec";
 const url = scriptURL + "?action=getData";
 
