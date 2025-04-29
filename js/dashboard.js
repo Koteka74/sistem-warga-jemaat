@@ -61,6 +61,79 @@ function isoToInputDate(value) {
   return `${yyyy}-${mm}-${dd}`;
 }
 
+// ========================
+// ====== FITUR EDIT ======
+// ========================
+window.bukaModalEdit = function (rowIndex, rowData) {
+  const form = document.getElementById("formEdit");
+  const fieldsDiv = document.getElementById("editFields");
+
+  form.rowIndex.value = rowIndex;
+  fieldsDiv.innerHTML = '';
+
+  const headers = fullData[0];
+
+  const dropdownFields = {
+    "Jenis Kelamin": ["Laki-laki", "Perempuan"],
+    "Agama": ["Kristen", "Katolik", "Islam", "Hindu", "Budha", "Lainnya"],
+    "Status Baptis": ["Sudah", "Belum"],
+    "Status Sidi": ["Sudah", "Belum"],
+    "Status Nikah": ["Sudah", "Belum"],
+    "Golongan Darah": ["A", "B", "AB", "O"]
+  };
+
+  headers.forEach((header, i) => {
+    const value = rowData[i] || "";
+
+    const label = document.createElement("label");
+    label.className = "text-sm font-medium";
+    label.textContent = header;
+
+    let input;
+
+    if (dropdownFields[header]) {
+      input = document.createElement("select");
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.textContent = "-- Pilih --";
+      if (value === "") {
+        defaultOption.selected = true;
+      }
+      input.appendChild(defaultOption);
+
+      dropdownFields[header].forEach(optionText => {
+        const opt = document.createElement("option");
+        opt.value = optionText;
+        opt.textContent = optionText;
+        if (optionText === value) {
+          opt.selected = true;
+        }
+        input.appendChild(opt); // ✅ tidak error karena pasti <option>
+      });
+    } else if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+      input = document.createElement("input");
+      input.type = "date";
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+      input.value = isoToInputDate(value); // ✅ konversi ISO ke yyyy-mm-dd
+    } else {
+      input = document.createElement("input");
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+      input.value = value;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+    fieldsDiv.appendChild(wrapper);
+  });
+
+  document.getElementById("modalEdit").classList.remove("hidden");
+}
 
 // Render tabel utama
 function renderTable(data) {
@@ -123,7 +196,7 @@ function renderTable(data) {
     const btnEdit = document.createElement("button");
     btnEdit.textContent = "✏️";
     btnEdit.className = "mr-2 text-blue-600";
-    btnEdit.onclick = () => window.bukaModalEdit(rowIndex, row);
+    btnEdit.onclick = () => bukaModalEdit(rowIndex, row);
 
     // Tombol hapus
     const btnHapus = document.createElement("button");
@@ -397,80 +470,7 @@ window.onload = function () {
       document.getElementById("modalTambah").classList.add("hidden");
     };
 
-    // ========================
-    // ====== FITUR EDIT ======
-    // ========================
-    window.bukaModalEdit = function (rowIndex, rowData) {
-      const form = document.getElementById("formEdit");
-      const fieldsDiv = document.getElementById("editFields");
-
-      form.rowIndex.value = rowIndex;
-      fieldsDiv.innerHTML = '';
-
-      const headers = fullData[0];
-
-      const dropdownFields = {
-        "Jenis Kelamin": ["Laki-laki", "Perempuan"],
-        "Agama": ["Kristen", "Katolik", "Islam", "Hindu", "Budha", "Lainnya"],
-        "Status Baptis": ["Sudah", "Belum"],
-        "Status Sidi": ["Sudah", "Belum"],
-        "Status Nikah": ["Sudah", "Belum"],
-        "Golongan Darah": ["A", "B", "AB", "O"]
-      };
-
-      headers.forEach((header, i) => {
-        const value = rowData[i] || "";
-
-        const label = document.createElement("label");
-        label.className = "text-sm font-medium";
-        label.textContent = header;
-
-        let input;
-
-        if (dropdownFields[header]) {
-          input = document.createElement("select");
-          input.className = "w-full border px-3 py-2 rounded";
-          input.name = `field_${i}`;
-
-          const defaultOption = document.createElement("option");
-          defaultOption.value = "";
-          defaultOption.textContent = "-- Pilih --";
-          if (value === "") {
-            defaultOption.selected = true;
-          }
-          input.appendChild(defaultOption);
-
-          dropdownFields[header].forEach(optionText => {
-            const opt = document.createElement("option");
-            opt.value = optionText;
-            opt.textContent = optionText;
-            if (optionText === value) {
-              opt.selected = true;
-            }
-            input.appendChild(opt); // ✅ tidak error karena pasti <option>
-          });
-        } else if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
-          input = document.createElement("input");
-          input.type = "date";
-          input.className = "w-full border px-3 py-2 rounded";
-          input.name = `field_${i}`;
-          input.value = isoToInputDate(value); // ✅ konversi ISO ke yyyy-mm-dd
-        } else {
-          input = document.createElement("input");
-          input.className = "w-full border px-3 py-2 rounded";
-          input.name = `field_${i}`;
-          input.value = value;
-        }
-
-        const wrapper = document.createElement("div");
-        wrapper.appendChild(label);
-        wrapper.appendChild(input);
-        fieldsDiv.appendChild(wrapper);
-      });
-
-      document.getElementById("modalEdit").classList.remove("hidden");
-    }
-
+    
     //SIMPAN EDIT DATA
     window.simpanEdit = function () {
       const form = document.getElementById("formEdit");
