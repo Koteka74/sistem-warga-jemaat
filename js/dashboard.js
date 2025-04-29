@@ -511,7 +511,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
     document.getElementById("modalEdit").classList.add("hidden");
   };
 });
-
+};
 
   
 function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
