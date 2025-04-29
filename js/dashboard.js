@@ -246,22 +246,30 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
     data.push(value);
   });
 
-  fetch(scriptURL, {
+  fetch("/api/add", {
     method: "POST",
-    mode: "no-cors",
+    //mode: "no-cors",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
+      //"Content-Type": "application/x-www-form-urlencoded"
+      "Content-Type": "application/json"
     },
-    body: "action=addData&data=" + encodeURIComponent(JSON.stringify(data))
+    body: "JSON.stringify({
+      data: JSON.stringify(data) // data harus dikirim sebagai string JSON
+    })
+  })
+
+  .then(res => res.text())
+  .then(msg => {
+    // ✅ Reset semua field
+    this.reset();
+    showToast("Data berhasil ditambahkan!");
+    tutupModal();
+    location.reload();
+  })
+  .catch(err => {
+    console.error("Error tambah data:", err);
+    alert("Gagal menambahkan data.");
   });
-  showSpinner();
-  // ✅ Reset semua field
-  this.reset();
-  hideSpinner();
-  showToast("Data berhasil ditambahkan!");
-  tutupModal();
-  location.reload();
-});
 
   //CARI NAMA
   document.getElementById("searchInput").addEventListener("input", function () {
