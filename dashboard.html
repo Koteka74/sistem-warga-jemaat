@@ -99,7 +99,7 @@
   <main class="p-6">
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-4">
       <input type="text" id="searchInput" placeholder="Cari nama jemaat..." class="px-3 py-2 border rounded w-full md:w-1/2" />
-      <button class="no-print" onclick="bukaModal()" class="bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700">+ Tambah Data</button>
+      <button class="no-print bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700" onclick="bukaModal()">+ Tambah Data</button>
     </div>
     <div class="flex justify-between items-center flex-wrap px-4 mt-4 gap-2">
   <!-- Kiri: Tampilkan Baris -->
@@ -115,7 +115,7 @@
 
   <!-- Kanan: Tombol -->
   <div class="flex gap-2">
-    <button class="no-print" onclick="exportToExcel()" class="bg-blue-600 text-white px-3 py-1.5 text-sm rounded hover:bg-blue-700 shadow">
+    <button class="no-print bg-blue-600 text-white px-3 py-1.5 text-sm rounded hover:bg-blue-700 shadow" onclick="exportToExcel()">
       Export Excel
     </button>
    
