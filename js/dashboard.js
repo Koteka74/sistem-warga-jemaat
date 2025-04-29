@@ -123,7 +123,7 @@ function renderTable(data) {
     const btnEdit = document.createElement("button");
     btnEdit.textContent = "✏️";
     btnEdit.className = "mr-2 text-blue-600";
-    btnEdit.onclick = () => bukaModalEdit(rowIndex, row);
+    btnEdit.onclick = () => window.bukaModalEdit(rowIndex, row);
 
     // Tombol hapus
     const btnHapus = document.createElement("button");
