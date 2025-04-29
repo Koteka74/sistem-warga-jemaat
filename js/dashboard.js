@@ -510,7 +510,6 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
   window.tutupModalEdit = function () {
     document.getElementById("modalEdit").classList.add("hidden");
   };
-});
 };
 
   
