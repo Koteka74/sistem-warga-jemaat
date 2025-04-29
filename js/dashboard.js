@@ -694,4 +694,4 @@ window.onload = function () {
   function hideSpinner() {
     document.getElementById("spinner").classList.add("hidden");
   }
-}
+};
