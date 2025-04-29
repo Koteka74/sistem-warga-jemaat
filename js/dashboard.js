@@ -6,7 +6,19 @@ let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
 let currentRayon = "Semua";
 let currentPage = 1;
 let rowsPerPage = 10;
+// Auto Logout jika tidak aktif selama 15 menit
 let idleTime = 0;
+
+//Format tanggal Indonesia
+function formatTanggalIndonesia(tanggalStr) {
+  if (!tanggalStr) return "";
+
+  const date = new Date(tanggalStr);
+  if (isNaN(date)) return tanggalStr;
+
+  const options = { day: '2-digit', month: 'short', year: 'numeric' };
+  return date.toLocaleDateString('id-ID', options); // ✅ Indonesia
+}
 
 // Fungsi bantu format tanggal ISO ke dd/mm/yyyy
 function formatTanggal(isoStr) {
@@ -618,18 +630,6 @@ window.onload = function () {
     buatStatistik(data, 21, "Rayon", "bar");
   }
 
-  //Format tanggal Indonesia
-  function formatTanggalIndonesia(tanggalStr) {
-    if (!tanggalStr) return "";
-
-    const date = new Date(tanggalStr);
-    if (isNaN(date)) return tanggalStr;
-
-    const options = { day: '2-digit', month: 'short', year: 'numeric' };
-    return date.toLocaleDateString('id-ID', options); // ✅ Indonesia
-  }
-
-
   //Filter RAYON
   document.getElementById("filterRayon").addEventListener("change", function () {
     currentRayon = this.value;
@@ -643,9 +643,6 @@ window.onload = function () {
     }
   });
 
-
-
-  
 
   function timerIncrement() {
     idleTime += 1;
@@ -694,4 +691,4 @@ window.onload = function () {
   function hideSpinner() {
     document.getElementById("spinner").classList.add("hidden");
   }
-};
+}
