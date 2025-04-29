@@ -506,14 +506,14 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
     tutupModalEdit();
     location.reload();
   }
-
-
   //TUtup ModalEdit
   window.tutupModalEdit = function () {
     document.getElementById("modalEdit").classList.add("hidden");
   };
-};
+});
 
+
+  
 function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
   const container = document.getElementById("statistikJemaat");
   const countMap = {};
