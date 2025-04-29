@@ -6,6 +6,7 @@ let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
 let currentRayon = "Semua";
 let currentPage = 1;
 let rowsPerPage = 10;
+let idleTime = 0;
 
 // Fungsi bantu format tanggal ISO ke dd/mm/yyyy
 function formatTanggal(isoStr) {
@@ -644,8 +645,7 @@ window.onload = function () {
 
 
 
-  // Auto Logout jika tidak aktif selama 15 menit
-  let idleTime = 0;
+  
 
   function timerIncrement() {
     idleTime += 1;
