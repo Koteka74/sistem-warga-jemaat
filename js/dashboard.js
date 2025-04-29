@@ -253,7 +253,7 @@ document.getElementById("formTambah").addEventListener("submit", function (e) {
       //"Content-Type": "application/x-www-form-urlencoded"
       "Content-Type": "application/json"
     },
-    body: "JSON.stringify({
+    body: JSON.stringify({
       data: JSON.stringify(data) // data harus dikirim sebagai string JSON
     })
   })
