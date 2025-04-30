@@ -324,20 +324,21 @@ function renderTable(data) {
   //const rowsToDisplay = rows.slice(start, start + rowsPerPage);
 
   //Buat Baris
-  rowsToDisplay.forEach(row => {
+  rowsToDisplay.forEach((row, rowIndex) => {
     const tr = document.createElement("tr");
+    
     row.forEach((cell, j) => {
       const td = document.createElement("td");
-      td.className = "px-2 py-1 border";
+      td.className = "px-2 py-1 border text-xs";
 
-      // Format tanggal jika cocok kolom
-      const header = headers[colIndex]?.trim().toLowerCase();
+      const header = headers[j]?.trim().toLowerCase();
 
       if (["tanggal lahir", "tanggal nikah"].includes(header)) {
         td.textContent = formatTanggalIndonesia(cell);
       } else {
         td.textContent = cell;
       }
+
       tr.appendChild(td);
     });
 
