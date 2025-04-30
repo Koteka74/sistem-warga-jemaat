@@ -247,6 +247,25 @@ window.tutupModalEdit = function () {
   document.getElementById("modalEdit").classList.add("hidden");
 };
 
+//Hapus Data
+function hapusData(rowIndex) {
+  const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=deleteData&row=' + rowIndex;
+
+  fetch(url, {
+    method: 'GET',
+    mode: 'no-cors'
+  })
+  .then(() => {
+    showToast("Data berhasil dihapus");
+    location.reload();
+  })
+  .catch(err => {
+    console.error("Error saat menghapus:", err);
+    alert("Gagal menghapus data.");
+  });
+}
+
+
 // Render tabel utama
 function renderTable(data) {
   const headerRow = document.getElementById("tableHeader");
@@ -564,25 +583,7 @@ window.onload = function () {
     });
   } 
 
-  //Hapus Data
-  function hapusData(rowIndex) {
-    const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=deleteData&row=' + rowIndex;
-
-    fetch(url, {
-      method: 'GET',
-      mode: 'no-cors'
-    })
-    .then(() => {
-      showToast("Data berhasil dihapus");
-      location.reload();
-    })
-    .catch(err => {
-      console.error("Error saat menghapus:", err);
-      alert("Gagal menghapus data.");
-    });
-  }
-
-
+  
   function hitungStatistikUtama(data) {
     const rows = data.slice(1);
     const total = rows.length;
