@@ -505,6 +505,15 @@ window.onload = function () {
       alert("Gagal menambahkan data.");
     });
 
+    document.getElementById("rowsPerPage").addEventListener("change", () => {
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          renderTable(data);
+        });
+    });
+
+  
     //CARI NAMA
     document.getElementById("searchInput").addEventListener("input", function () {
       const keyword = this.value.toLowerCase();
@@ -524,18 +533,6 @@ window.onload = function () {
 
       renderTable(result);
     });
-
-
-    document.getElementById("rowsPerPage").addEventListener("change", () => {
-      fetch(url)
-        .then(res => res.json())
-        .then(data => {
-          renderTable(data);
-        });
-    });
-
-  
- 
 
     // Export ke Excel
     window.exportToExcel = function () {
