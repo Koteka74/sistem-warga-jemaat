@@ -319,7 +319,8 @@ function renderTable(data) {
       td.className = "px-2 py-1 border";
 
       // Format tanggal jika cocok kolom
-      if (headers[j].toLowerCase().includes("tanggal") && cell) {
+      const header = data[0][j];
+      if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
         td.textContent = formatTanggalIndonesia(cell);
       } else {
         td.textContent = cell;
