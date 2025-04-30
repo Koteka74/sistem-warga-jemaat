@@ -518,13 +518,18 @@ window.onload = function () {
     document.getElementById("searchInput").addEventListener("input", function () {
       const keyword = this.value.toLowerCase();
 
-      if (!filteredData || filteredData.length === 0) return;
+      //CARI NAMA
+    document.getElementById("searchInput").addEventListener("input", function () {
+      const keyword = this.value.toLowerCase();
+      const dataToSearch = (filteredData && filteredData.length > 0) ? filteredData : fullData;
 
-      const header = filteredData[0];
+      if (!dataToSearch || dataToSearch.length === 0) return;
+
+      const header = dataToSearch[0];
       const result = [header];
 
-     for (let i = 1; i < filteredData.length; i++) {
-        const row = filteredData[i];
+      for (let i = 1; i < dataToSearch.length; i++) {
+        const row = dataToSearch[i];
         const nama = row[1]?.toLowerCase() || "";
         if (nama.includes(keyword)) {
           result.push(row);
