@@ -238,6 +238,15 @@ window.simpanEdit = function () {
   location.reload();
 }
 
+window.tutupModal = function () {
+  document.getElementById("modalTambah").classList.add("hidden");
+};
+
+//TUtup ModalEdit
+window.tutupModalEdit = function () {
+  document.getElementById("modalEdit").classList.add("hidden");
+};
+
 // Render tabel utama
 function renderTable(data) {
   const headerRow = document.getElementById("tableHeader");
@@ -504,15 +513,6 @@ window.onload = function () {
       XLSX.utils.book_append_sheet(workbook, worksheet, "Data Jemaat");
       XLSX.writeFile(workbook, "Data_Jemaat.xlsx");
     }
-
-    window.tutupModal = function () {
-      document.getElementById("modalTambah").classList.add("hidden");
-    };
-
-    //TUtup ModalEdit
-    window.tutupModalEdit = function () {
-      document.getElementById("modalEdit").classList.add("hidden");
-    };
   })
 
   
