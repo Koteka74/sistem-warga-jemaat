@@ -13,12 +13,35 @@ let idleTime = 0;
 function formatTanggalIndonesia(tanggalStr) {
   if (!tanggalStr) return "";
 
-  const date = new Date(tanggalStr);
-  if (isNaN(date)) return tanggalStr;
+  const bulanMap = {
+    Januari: "01", Februari: "02", Maret: "03", April: "04", Mei: "05",
+    Juni: "06", Juli: "07", Agustus: "08", September: "09",
+    Oktober: "10", November: "11", Desember: "12"
+  };
 
-  const options = { day: '2-digit', month: 'short', year: 'numeric' };
-  return date.toLocaleDateString('id-ID', options); // ✅ Indonesia
+  const [dd, bulanText, yyyy] = tanggalStr.split("/");
+  const bulan = bulanMap[bulanText];
+  if (!bulan) return tanggalStr;
+
+  return `${dd}/${bulanText}/${yyyy}`;
 }
+
+function isoToInputDate(tanggalIndo) {
+  if (!tanggalIndo || !tanggalIndo.includes("/")) return "";
+
+  const bulanMap = {
+    Januari: "01", Februari: "02", Maret: "03", April: "04", Mei: "05",
+    Juni: "06", Juli: "07", Agustus: "08", September: "09",
+    Oktober: "10", November: "11", Desember: "12"
+  };
+
+  const [dd, bulanText, yyyy] = tanggalIndo.split("/");
+  const mm = bulanMap[bulanText];
+  if (!mm) return "";
+
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 
 // Fungsi bantu format tanggal ISO ke dd/mm/yyyy
 function formatTanggal(isoStr) {
@@ -32,34 +55,19 @@ function formatTanggal(isoStr) {
 
 // Format ISO ke YYYY-MM-DD untuk input[type="date"]
 // Fungsi Konversi Tanggal untuk Isi Modal Edit
-function isoToInputDate(value) {
-  if (!value) return "";
+function inputDateToISO(dateStr) {
+  if (!dateStr) return "";
 
-  const parts = value.split('/');
-  if (parts.length === 3) {
-    const dd = parts[0];
-    const mmm = parts[1];
-    const yyyy = parts[2];
+  const bulanMap = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
 
-    const bulanPendek = {
-      Jan: "01", Feb: "02", Mar: "03",
-      Apr: "04", Mei: "05", Jun: "06",
-      Jul: "07", Agt: "08", Sep: "09",
-      Okt: "10", Nov: "11", Des: "12"
-    };
-
-    const mm = bulanPendek[mmm] || "01";
-    return `${yyyy}-${mm}-${dd}`;
-  }
-
-  // fallback jika format aneh
-  const d = new Date(value);
-  if (isNaN(d)) return "";
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return `${yyyy}-${mm}-${dd}`;
+  const [yyyy, mm, dd] = dateStr.split("-");
+  const bulan = bulanMap[parseInt(mm) - 1];
+  return `${dd}/${bulan}/${yyyy}`;
 }
+
 
 // ========================
 // ====== FITUR EDIT ======
@@ -379,14 +387,14 @@ fetch(url)
     renderTable(fullData);
   });
 
-  //Logout
-  function logout() {
+//Logout
+function logout() {
     localStorage.clear();
     window.location.href = "index.html";
-  }
+}
 
-  // 🔔 Fungsi toast modern
-  function showToast(pesan, warna = 'bg-green-600') {
+// 🔔 Fungsi toast modern
+function showToast(pesan, warna = 'bg-green-600') {
     const toast = document.createElement("div");
     toast.className = `fixed top-4 right-4 px-4 py-2 rounded text-white shadow-lg z-50 ${warna}`;
     toast.textContent = pesan;
@@ -396,7 +404,7 @@ fetch(url)
     setTimeout(() => {
       toast.remove();
     }, 3000);
-  }
+}
 
 
 window.onload = function () {
