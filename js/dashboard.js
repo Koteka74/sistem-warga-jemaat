@@ -388,6 +388,19 @@ function logout() {
   window.location.href = "index.html";
 }
 
+// 🔔 Fungsi toast modern
+function showToast(pesan, warna = 'bg-green-600') {
+  const toast = document.createElement("div");
+  toast.className = `fixed top-4 right-4 px-4 py-2 rounded text-white shadow-lg z-50 ${warna}`;
+  toast.textContent = pesan;
+
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
 
 window.onload = function () {
   resetIdleTimer(); // Auto logout timer reset
@@ -674,20 +687,7 @@ window.onload = function () {
   window.onkeypress = resetIdleTimer;
 
 
-  //Toast Notification
-  function showToast(message) {
-    const toast = document.getElementById("toast");
-    toast.textContent = message;
-    toast.classList.remove("hidden");
-    toast.classList.add("animate-fadeIn");
-
-    setTimeout(() => {
-      toast.classList.add("hidden");
-    }, 3000);
-  }
-
-
-  //Loading Spinner
+    //Loading Spinner
   function showSpinner() {
     document.getElementById("spinner").classList.remove("hidden");
   }
