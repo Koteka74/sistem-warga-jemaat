@@ -10,22 +10,34 @@ let rowsPerPage = 10;
 let idleTime = 0;
 
 //Format tanggal Indonesia
-function formatTanggalIndonesia(tanggalStr) {
-  if (!tanggalStr || !tanggalStr.includes("/")) return tanggalStr;
+function formatTanggalIndonesia(tanggal) {
+  if (!tanggal) return "";
 
-  const [dd, bulanNama, yyyy] = tanggalStr.split("/");
+  const bulanMap = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
 
-  const bulanPendek = {
-    Januari: "Jan", Februari: "Feb", Maret: "Mar", April: "Apr", Mei: "Mei",
-    Juni: "Jun", Juli: "Jul", Agustus: "Agt", September: "Sep",
-    Oktober: "Okt", November: "Nov", Desember: "Des"
-  };
+  let d;
 
-  const bulan = bulanPendek[bulanNama];
-  if (!bulan) return tanggalStr;
+  // Jika Date object, gunakan langsung
+  if (Object.prototype.toString.call(tanggal) === "[object Date]") {
+    d = tanggal;
+  } else if (typeof tanggal === "string" && tanggal.includes("T")) {
+    d = new Date(tanggal); // ISO string
+  } else {
+    return tanggal; // string biasa: abaikan
+  }
 
-  return `${dd}/${bulan}/${yyyy}`;
+  if (isNaN(d)) return tanggal;
+
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = bulanMap[d.getMonth()];
+  const yyyy = d.getFullYear();
+
+  return `${dd}/${mm}/${yyyy}`;
 }
+
 
 
 function isoToInputDate(tanggalIndo) {
@@ -319,14 +331,13 @@ function renderTable(data) {
       td.className = "px-2 py-1 border";
 
       // Format tanggal jika cocok kolom
-      const header = data[0][j];
-      if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
-        console.log("Formatkan:", cell); // Tambahkan ini
+      const header = headers[colIndex]?.trim().toLowerCase();
+
+      if (["tanggal lahir", "tanggal nikah"].includes(header)) {
         td.textContent = formatTanggalIndonesia(cell);
       } else {
         td.textContent = cell;
       }
-
       tr.appendChild(td);
     });
 
