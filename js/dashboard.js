@@ -513,12 +513,8 @@ window.onload = function () {
         });
     });
 
-  
+    
     //CARI NAMA
-    document.getElementById("searchInput").addEventListener("input", function () {
-      const keyword = this.value.toLowerCase();
-
-      //CARI NAMA
     document.getElementById("searchInput").addEventListener("input", function () {
       const keyword = this.value.toLowerCase();
       const dataToSearch = (filteredData && filteredData.length > 0) ? filteredData : fullData;
