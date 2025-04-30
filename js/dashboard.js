@@ -135,6 +135,109 @@ window.bukaModalEdit = function (rowIndex, rowData) {
   document.getElementById("modalEdit").classList.remove("hidden");
 }
 
+//bukaModal
+window.bukaModal = function () {
+  const form = document.getElementById("formTambah");
+  const fieldsDiv = document.getElementById("tambahFields");
+  fieldsDiv.innerHTML = '';
+
+  const headers = fullData[0];
+
+  const dropdownFields = {
+    "Jenis Kelamin": ["Laki-laki", "Perempuan"],
+    "Agama": ["Islam", "Kristen", "Katolik", "Hindu", "Budha"],
+    "Status Baptis": ["Sudah", "Belum"],
+    "Status Sidi": ["Sudah", "Belum"],
+    "Status Nikah": ["Sudah", "Belum"],
+    "Golongan Darah": ["A", "B", "AB", "O"]
+  };
+
+  headers.forEach((header, i) => {
+    const label = document.createElement("label");
+    label.className = "text-sm font-medium";
+    label.textContent = header;
+
+    let input;
+
+    if (dropdownFields[header]) {
+      input = document.createElement("select");
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+
+      const optDefault = document.createElement("option");
+      optDefault.value = "";
+      optDefault.textContent = "-- Pilih --";
+      //optDefault.disabled = true;
+      optDefault.selected = true;
+      input.appendChild(optDefault);
+
+      dropdownFields[header].forEach(optVal => {
+        const opt = document.createElement("option");
+        opt.value = optVal;
+        opt.textContent = optVal;
+        input.appendChild(opt);
+      });
+
+    } else if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+      input = document.createElement("input");
+      input.type = "date";
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+    } else {
+      input = document.createElement("input");
+      input.className = "w-full border px-3 py-2 rounded";
+      input.name = `field_${i}`;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+    fieldsDiv.appendChild(wrapper);
+  });
+
+  document.getElementById("modalTambah").classList.remove("hidden");
+}
+
+//SIMPAN EDIT DATA
+window.simpanEdit = function () {
+  const form = document.getElementById("formEdit");
+  const rowIndex = form.rowIndex.value;
+  const inputs = form.querySelectorAll("#editFields input, #editFields select");
+
+  const data = [];
+
+  inputs.forEach(input => {
+    let value = input.value.trim();
+
+    if (input.type === "date" && value) {
+      const d = new Date(value);
+      if (!isNaN(d)) {
+        const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+        const tanggal = String(d.getDate()).padStart(2, '0');
+        const bulan = bulanPendek[d.getMonth()];
+        const tahun = d.getFullYear();
+        value = `${tanggal}/${bulan}/${tahun}`;
+      }
+    }
+
+    data.push(value);
+  });
+
+  fetch(scriptURL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
+  });
+  showSpinner();
+  hideSpinner();
+  showToast("Data berhasil diupdate!");
+  tutupModalEdit();
+  location.reload();
+}
+
 // Render tabel utama
 function renderTable(data) {
   const headerRow = document.getElementById("tableHeader");
@@ -402,114 +505,10 @@ window.onload = function () {
       XLSX.writeFile(workbook, "Data_Jemaat.xlsx");
     }
 
-    //bukaModal
-    window.bukaModal = function () {
-      const form = document.getElementById("formTambah");
-      const fieldsDiv = document.getElementById("tambahFields");
-      fieldsDiv.innerHTML = '';
-
-      const headers = fullData[0];
-
-      const dropdownFields = {
-        "Jenis Kelamin": ["Laki-laki", "Perempuan"],
-        "Agama": ["Islam", "Kristen", "Katolik", "Hindu", "Budha"],
-        "Status Baptis": ["Sudah", "Belum"],
-        "Status Sidi": ["Sudah", "Belum"],
-        "Status Nikah": ["Sudah", "Belum"],
-        "Golongan Darah": ["A", "B", "AB", "O"]
-      };
-
-      headers.forEach((header, i) => {
-        const label = document.createElement("label");
-        label.className = "text-sm font-medium";
-        label.textContent = header;
-
-        let input;
-
-        if (dropdownFields[header]) {
-          input = document.createElement("select");
-          input.className = "w-full border px-3 py-2 rounded";
-          input.name = `field_${i}`;
-
-          const optDefault = document.createElement("option");
-          optDefault.value = "";
-          optDefault.textContent = "-- Pilih --";
-          //optDefault.disabled = true;
-          optDefault.selected = true;
-          input.appendChild(optDefault);
-
-          dropdownFields[header].forEach(optVal => {
-            const opt = document.createElement("option");
-            opt.value = optVal;
-            opt.textContent = optVal;
-            input.appendChild(opt);
-          });
-
-        } else if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
-          input = document.createElement("input");
-          input.type = "date";
-          input.className = "w-full border px-3 py-2 rounded";
-          input.name = `field_${i}`;
-        } else {
-          input = document.createElement("input");
-          input.className = "w-full border px-3 py-2 rounded";
-          input.name = `field_${i}`;
-        }
-
-        const wrapper = document.createElement("div");
-        wrapper.appendChild(label);
-        wrapper.appendChild(input);
-        fieldsDiv.appendChild(wrapper);
-      });
-
-      document.getElementById("modalTambah").classList.remove("hidden");
-    }
-
-
     window.tutupModal = function () {
       document.getElementById("modalTambah").classList.add("hidden");
     };
 
-    
-    //SIMPAN EDIT DATA
-    window.simpanEdit = function () {
-      const form = document.getElementById("formEdit");
-      const rowIndex = form.rowIndex.value;
-      const inputs = form.querySelectorAll("#editFields input, #editFields select");
-  
-      const data = [];
-  
-      inputs.forEach(input => {
-        let value = input.value.trim();
-
-        if (input.type === "date" && value) {
-          const d = new Date(value);
-          if (!isNaN(d)) {
-            const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
-            const tanggal = String(d.getDate()).padStart(2, '0');
-            const bulan = bulanPendek[d.getMonth()];
-            const tahun = d.getFullYear();
-            value = `${tanggal}/${bulan}/${tahun}`;
-          }
-        }
-
-        data.push(value);
-      });
-
-      fetch(scriptURL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
-      });
-      showSpinner();
-      hideSpinner();
-      showToast("Data berhasil diupdate!");
-      tutupModalEdit();
-      location.reload();
-    }
     //TUtup ModalEdit
     window.tutupModalEdit = function () {
       document.getElementById("modalEdit").classList.add("hidden");
