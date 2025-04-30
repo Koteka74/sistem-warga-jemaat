@@ -307,7 +307,7 @@ function renderTable(data) {
   const rowsToDisplay = rows.slice(start, end);
 
   // Buat header
-  headers.forEach(header => {
+  headers.forEach((header, colIndex) => {
     const th = document.createElement("th");
     th.className = "px-2 py-1 border";
     th.textContent = header;
