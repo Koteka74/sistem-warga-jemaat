@@ -11,20 +11,22 @@ let idleTime = 0;
 
 //Format tanggal Indonesia
 function formatTanggalIndonesia(tanggalStr) {
-  if (!tanggalStr) return "";
+  if (!tanggalStr || !tanggalStr.includes("/")) return tanggalStr;
 
-  const bulanMap = {
-    Januari: "01", Februari: "02", Maret: "03", April: "04", Mei: "05",
-    Juni: "06", Juli: "07", Agustus: "08", September: "09",
-    Oktober: "10", November: "11", Desember: "12"
+  const [dd, bulanNama, yyyy] = tanggalStr.split("/");
+
+  const bulanPendek = {
+    Januari: "Jan", Februari: "Feb", Maret: "Mar", April: "Apr", Mei: "Mei",
+    Juni: "Jun", Juli: "Jul", Agustus: "Agt", September: "Sep",
+    Oktober: "Okt", November: "Nov", Desember: "Des"
   };
 
-  const [dd, bulanText, yyyy] = tanggalStr.split("/");
-  const bulan = bulanMap[bulanText];
+  const bulan = bulanPendek[bulanNama];
   if (!bulan) return tanggalStr;
 
-  return `${dd}/${bulanText}/${yyyy}`;
+  return `${dd}/${bulan}/${yyyy}`;
 }
+
 
 function isoToInputDate(tanggalIndo) {
   if (!tanggalIndo || !tanggalIndo.includes("/")) return "";
