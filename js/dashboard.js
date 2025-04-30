@@ -321,6 +321,7 @@ function renderTable(data) {
       // Format tanggal jika cocok kolom
       const header = data[0][j];
       if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+        console.log("Formatkan:", cell); // Tambahkan ini
         td.textContent = formatTanggalIndonesia(cell);
       } else {
         td.textContent = cell;
