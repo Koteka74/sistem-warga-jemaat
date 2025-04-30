@@ -302,6 +302,12 @@ function renderTable(data) {
   const headers = data[0];
   const rows = data.slice(1);
 
+  // Tambahkan kolom header "Aksi" paling awal
+  const thAksi = document.createElement("th");
+  thAksi.className = "px-2 py-1 border text-xs";
+  thAksi.textContent = "Aksi";
+  headerRow.appendChild(thAksi);
+  
   // Buat header
   headers.forEach(header => {
     const th = document.createElement("th");
