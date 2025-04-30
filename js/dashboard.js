@@ -251,12 +251,16 @@ window.tutupModalEdit = function () {
 function hapusData(rowIndex) {
   const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=deleteData&row=' + rowIndex;
 
-  fetch(url, {
-    method: 'GET',
-    mode: 'no-cors'
+  fetch("/api/delete", {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ row: rowIndex })
   })
-  .then(() => {
-    showToast("Data berhasil dihapus");
+  .then(res => res.text())
+  .then(msg => {
+    showToast(msg || "Data berhasil dihapus");
     location.reload();
   })
   .catch(err => {
