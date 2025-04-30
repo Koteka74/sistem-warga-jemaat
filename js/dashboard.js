@@ -302,31 +302,21 @@ function renderTable(data) {
   const headers = data[0];
   const rows = data.slice(1);
 
-  const start = (currentPage - 1) * rowsPerPage;
-  const end = start + rowsPerPage;
-  const rowsToDisplay = rows.slice(start, end);
-
   // Buat header
-  headers.forEach((header, colIndex) => {
+  headers.forEach(header => {
     const th = document.createElement("th");
-    th.className = "px-2 py-1 border";
+    th.className = "px-2 py-1 border text-xs";
     th.textContent = header;
     headerRow.appendChild(th);
   });
 
-  const thAksi = document.createElement("th");
-  thAksi.className = "px-2 py-1 border";
-  thAksi.textContent = "Aksi";
-  headerRow.appendChild(thAksi);
+  // Tampilkan baris (pagination)
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const rowsToDisplay = rows.slice(startIndex, startIndex + rowsPerPage);
 
-  // PAGINATION
-  //const start = (currentPage - 1) * rowsPerPage;
-  //const rowsToDisplay = rows.slice(start, start + rowsPerPage);
-
-  //Buat Baris
   rowsToDisplay.forEach((row, rowIndex) => {
     const tr = document.createElement("tr");
-    
+
     row.forEach((cell, j) => {
       const td = document.createElement("td");
       td.className = "px-2 py-1 border text-xs";
@@ -342,41 +332,39 @@ function renderTable(data) {
       tr.appendChild(td);
     });
 
+    // ✅ Gunakan index asli dari fullData untuk keperluan hapus/edit
+    const indexAsli = fullData.findIndex(r => JSON.stringify(r) === JSON.stringify(row));
+
     const tdAksi = document.createElement("td");
     tdAksi.className = "px-2 py-1 border text-center";
 
-    // Cari index asli dari fullData
-    const rowIndex = fullData.findIndex(r =>
-      JSON.stringify(r) === JSON.stringify(row)
-    );
-
-    // Tombol edit
     const btnEdit = document.createElement("button");
-    btnEdit.textContent = "✏️";
-    btnEdit.className = "mr-2 text-blue-600";
-    btnEdit.onclick = () => bukaModalEdit(rowIndex, row);
+    btnEdit.textContent = "✎";
+    btnEdit.className = "text-blue-600 text-xs mr-2";
+    btnEdit.onclick = () => bukaModalEdit(indexAsli, row);
 
-    // Tombol hapus
     const btnHapus = document.createElement("button");
     btnHapus.textContent = "🗑️";
-    btnHapus.className = "text-red-600";
+    btnHapus.className = "text-red-600 text-xs";
     btnHapus.onclick = () => {
       if (confirm("Yakin ingin menghapus data ini?")) {
-        hapusData(rowIndex);
+        hapusData(indexAsli);
       }
     };
 
     tdAksi.appendChild(btnEdit);
     tdAksi.appendChild(btnHapus);
-    tr.appendChild(tdAksi);
+    tr.insertBefore(tdAksi, tr.firstChild); // aksi di sisi kiri
+
     tableBody.appendChild(tr);
   });
 
-  // Update info halaman
+  // Update page info
   const pageInfo = document.getElementById("pageInfo");
   const totalPages = Math.ceil(rows.length / rowsPerPage);
   pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
 }
+
 
 // Pagination
 window.nextPage = function () {
