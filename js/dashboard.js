@@ -212,7 +212,7 @@ window.simpanEdit = function () {
     if (input.type === "date" && value) {
       const d = new Date(value);
       if (!isNaN(d)) {
-        const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+        const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Des"];
         const tanggal = String(d.getDate()).padStart(2, '0');
         const bulan = bulanPendek[d.getMonth()];
         const tahun = d.getFullYear();
@@ -268,7 +268,6 @@ function hapusData(rowIndex) {
     alert("Gagal menghapus data.");
   });
 }
-
 
 // Render tabel utama
 function renderTable(data) {
@@ -355,8 +354,6 @@ function renderTable(data) {
   pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
 }
 
-
-
 // Pagination
 window.nextPage = function () {
   const rows = filteredData.slice(1); // tanpa header
@@ -382,24 +379,24 @@ fetch(url)
     renderTable(fullData);
   });
 
-//Logout
-function logout() {
-  localStorage.clear();
-  window.location.href = "index.html";
-}
+  //Logout
+  function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
+  }
 
-// 🔔 Fungsi toast modern
-function showToast(pesan, warna = 'bg-green-600') {
-  const toast = document.createElement("div");
-  toast.className = `fixed top-4 right-4 px-4 py-2 rounded text-white shadow-lg z-50 ${warna}`;
-  toast.textContent = pesan;
+  // 🔔 Fungsi toast modern
+  function showToast(pesan, warna = 'bg-green-600') {
+    const toast = document.createElement("div");
+    toast.className = `fixed top-4 right-4 px-4 py-2 rounded text-white shadow-lg z-50 ${warna}`;
+    toast.textContent = pesan;
 
-  document.body.appendChild(toast);
+    document.body.appendChild(toast);
 
-  setTimeout(() => {
-    toast.remove();
-  }, 3000);
-}
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  }
 
 
 window.onload = function () {
@@ -448,13 +445,45 @@ window.onload = function () {
         hitungStatistikUtama(dataTersaring);
         tampilkanSemuaStatistik(dataTersaring);
       });
-
-      
+     
       // Menampilkan statistik
       document.getElementById("totalJemaat").textContent = fullData.length - 1;
     });
   
- 
+  //CARI NAMA
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const keyword = this.value.toLowerCase();
+    const dataToSearch = (filteredData && filteredData.length > 0) ? filteredData : fullData;
+
+    if (!dataToSearch || dataToSearch.length === 0) return;
+
+    const header = dataToSearch[0];
+    const result = [header];
+
+    for (let i = 1; i < dataToSearch.length; i++) {
+      const row = dataToSearch[i];
+      const nama = row[1]?.toLowerCase() || "";
+      if (nama.includes(keyword)) {
+        result.push(row);
+      }
+    }
+
+    renderTable(result);
+  });
+
+  // Export ke Excel
+  window.exportToExcel = function () {
+    const headers = fullData[0];
+    const rows = fullData.slice(1);
+
+    const worksheetData = [headers, ...rows];
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Data Jemaat");
+    XLSX.writeFile(workbook, "Data_Jemaat.xlsx");
+  }
+
   //formTambah / Tambah Data
   // Handle form tambah data
   document.getElementById("formTambah").addEventListener("submit", function (e) {
@@ -512,43 +541,9 @@ window.onload = function () {
           renderTable(data);
         });
     });
-
     
-    //CARI NAMA
-    document.getElementById("searchInput").addEventListener("input", function () {
-      const keyword = this.value.toLowerCase();
-      const dataToSearch = (filteredData && filteredData.length > 0) ? filteredData : fullData;
-
-      if (!dataToSearch || dataToSearch.length === 0) return;
-
-      const header = dataToSearch[0];
-      const result = [header];
-
-      for (let i = 1; i < dataToSearch.length; i++) {
-        const row = dataToSearch[i];
-        const nama = row[1]?.toLowerCase() || "";
-        if (nama.includes(keyword)) {
-          result.push(row);
-        }
-      }
-
-      renderTable(result);
-    });
-
-    // Export ke Excel
-    window.exportToExcel = function () {
-      const headers = fullData[0];
-      const rows = fullData.slice(1);
-
-      const worksheetData = [headers, ...rows];
-      const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
-      const workbook = XLSX.utils.book_new();
-
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Data Jemaat");
-      XLSX.writeFile(workbook, "Data_Jemaat.xlsx");
-    }
   })
-
+  
   
   function buatStatistik(data, kolomIndex, judul, tipe = 'pie') {
     const container = document.getElementById("statistikJemaat");
