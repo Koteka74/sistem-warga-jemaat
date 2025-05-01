@@ -530,6 +530,8 @@ window.onload = function () {
       data.push(value);
     });
 
+    showSpinner();
+    
     fetch("/api/add", {
       method: "POST",
       //mode: "no-cors",
@@ -546,6 +548,7 @@ window.onload = function () {
     .then(msg => {
       // ✅ Reset semua field
       this.reset();
+      hideSpinner();
       showToast("Data berhasil ditambahkan!");
       tutupModal();
       location.reload();
