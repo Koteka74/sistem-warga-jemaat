@@ -539,9 +539,7 @@ window.onload = function () {
         //"Content-Type": "application/x-www-form-urlencoded"
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        data: data // data harus dikirim sebagai string JSON
-      })
+      body: JSON.stringify({ data: data })  // ✅ langsung array
     })
 
     .then(res => res.text())
