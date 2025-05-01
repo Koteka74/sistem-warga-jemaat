@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const scriptURL = "https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbykT3JLLiUMSTvQhSQ9mlsXvLz9frUY1gmS-1FxJ1dUxkdYeqmOxqC0bYPGCEywddjywg/exec";
 
   if (req.method !== "POST") {
     return res.status(405).end("Method Not Allowed");
