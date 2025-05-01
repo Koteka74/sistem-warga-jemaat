@@ -253,7 +253,7 @@ window.simpanEdit = function () {
       "Content-Type": "application/x-www-form-urlencoded"
     },
     body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
-  });
+  })
   .then(() => {
     showSpinner();
     hideSpinner();
