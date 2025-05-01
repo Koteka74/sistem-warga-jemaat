@@ -7,7 +7,7 @@ export default async function handler(req, res) {
 
   const params = new URLSearchParams();
   params.append("action", "addData");
-  params.append("data", req.body.data); // JSON string
+  params.append("data", JSON.stringify(req.body.data));  // ✅ perbaikan penting
 
   try {
     const response = await fetch(scriptURL, {
