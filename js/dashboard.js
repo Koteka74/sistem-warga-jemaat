@@ -1,5 +1,5 @@
-const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=getData';
-const scriptURL = "https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec";
+const url = 'https://script.google.com/macros/s/AKfycbykT3JLLiUMSTvQhSQ9mlsXvLz9frUY1gmS-1FxJ1dUxkdYeqmOxqC0bYPGCEywddjywg/exec?action=getData';
+const scriptURL = "https://script.google.com/macros/s/AKfycbykT3JLLiUMSTvQhSQ9mlsXvLz9frUY1gmS-1FxJ1dUxkdYeqmOxqC0bYPGCEywddjywg/exec";
 
 let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
@@ -271,7 +271,7 @@ window.tutupModalEdit = function () {
 
 //Hapus Data
 function hapusData(rowIndex) {
-  const url = 'https://script.google.com/macros/s/AKfycbzef9OMJex-OQyZxV_9G_QyFyRgeF5OMocpwySw5gCHngaUySeB1LvArUeXqL16gewuLQ/exec?action=deleteData&row=' + rowIndex;
+  const url = 'https://script.google.com/macros/s/AKfycbykT3JLLiUMSTvQhSQ9mlsXvLz9frUY1gmS-1FxJ1dUxkdYeqmOxqC0bYPGCEywddjywg/exec?action=deleteData&row=' + rowIndex;
 
   fetch("/api/delete", {
     method: 'POST',
