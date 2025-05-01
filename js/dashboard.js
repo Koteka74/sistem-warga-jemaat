@@ -254,11 +254,13 @@ window.simpanEdit = function () {
     },
     body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
   });
-  showSpinner();
-  hideSpinner();
-  showToast("Data berhasil diupdate!");
-  tutupModalEdit();
-  location.reload();
+  .then(() => {
+    showSpinner();
+    hideSpinner();
+    showToast("Data berhasil diupdate!");
+    tutupModalEdit();
+    location.reload();
+  });
 }
 
 window.tutupModal = function () {
