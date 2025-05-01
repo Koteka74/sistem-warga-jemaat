@@ -538,7 +538,7 @@ window.onload = function () {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        data: JSON.stringify(data) // data harus dikirim sebagai string JSON
+        data: data // data harus dikirim sebagai string JSON
       })
     })
 
