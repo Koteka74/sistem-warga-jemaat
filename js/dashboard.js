@@ -277,20 +277,27 @@ window.simpanEdit = function () {
     data.push(value);
   });
   showSpinner();
-  fetch(scriptURL, {
+  fetch("/api/update", {
     method: "POST",
-    mode: "no-cors",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded"
+      "Content-Type": "application/json"
     },
-    body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
+    body: JSON.stringify({
+      row: rowIndex,
+      data: data
+    })
   })
-  .then(() => {
-    
+  .then(res => res.text())
+  .then(msg => {
     hideSpinner();
     showToast("Data berhasil diupdate!");
     tutupModalEdit();
     location.reload();
+  })
+  .catch(err => {
+    console.error("Gagal update:", err);
+    hideSpinner();
+    alert("Gagal menyimpan perubahan.");
   });
 }
 
