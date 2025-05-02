@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).send("Metode tidak diizinkan");
   }
 
-  const scriptURL = "https://script.google.com/macros/s/AKfycbwGpROpuTba3s6dQt_J9koGSgfulUHfL-4w5Sabj36GtThdHCW4pnizu3gbopTFPcFDAg/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec";
 
   const params = new URLSearchParams();
   params.append("action", "addData");
