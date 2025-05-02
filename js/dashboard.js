@@ -38,6 +38,20 @@ function formatTanggalIndonesia(tanggal) {
   return `${dd}/${mm}/${yyyy}`;
 }
 
+function tanggalIndonesiaKeInput(tanggal) {
+  if (!tanggal) return "";
+
+  const [dd, mmm, yyyy] = tanggal.split("/");
+
+  const bulanMap = {
+    Jan: "01", Feb: "02", Mar: "03", Apr: "04", Mei: "05", Jun: "06",
+    Jul: "07", Agu: "08", Sep: "09", Okt: "10", Nov: "11", Des: "12"
+  };
+
+  const bulan = bulanMap[mmm] || "01";
+  return `${yyyy}-${bulan}-${dd.padStart(2, '0')}`;
+}
+
 
 //Fungsi Konversi Tanggal
 function isoToInputDate(tanggalIndo) {
@@ -45,7 +59,7 @@ function isoToInputDate(tanggalIndo) {
 
   const bulanMap = {
     Jan: "01", Feb: "02", Mar: "03", Apr: "04", Mei: "05", Jun: "06",
-    Jul: "07", Agt: "08", Sep: "09", Okt: "10", Nov: "11", Des: "12",
+    Jul: "07", Agu: "08", Sep: "09", Okt: "10", Nov: "11", Des: "12",
     Januari: "01", Februari: "02", Maret: "03", April: "04", Juni: "06",
     Juli: "07", Agustus: "08", September: "09", Oktober: "10", November: "11", Desember: "12"
   };
@@ -146,7 +160,11 @@ window.bukaModalEdit = function (rowIndex, rowData) {
       input = document.createElement("input");
       input.className = "w-full border px-3 py-2 rounded";
       input.name = `field_${i}`;
-      input.value = value;
+      if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
+        input.value = tanggalIndonesiaKeInput(value);
+      } else {
+        input.value = value;
+      }
     }
 
     const wrapper = document.createElement("div");
