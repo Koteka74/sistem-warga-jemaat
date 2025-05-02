@@ -283,10 +283,10 @@ window.simpanEdit = function () {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      row: rowIndex,
-      data: data
-    })
+    body: JSON.stringify({ data: data })
+      //row: rowIndex,
+      //data: data
+    //})
   })
   .then(res => res.text())
   .then(msg => {
