@@ -1,5 +1,5 @@
-const url = 'https://script.google.com/macros/s/AKfycbwGpROpuTba3s6dQt_J9koGSgfulUHfL-4w5Sabj36GtThdHCW4pnizu3gbopTFPcFDAg/exec?action=getData';
-const scriptURL = "https://script.google.com/macros/s/AKfycbwGpROpuTba3s6dQt_J9koGSgfulUHfL-4w5Sabj36GtThdHCW4pnizu3gbopTFPcFDAg/exec";
+const url = 'https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec?action=getData';
+const scriptURL = "https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec";
 
 let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
@@ -200,10 +200,11 @@ window.bukaModal = function () {
   const dropdownFields = {
     "Jenis Kelamin": ["Laki-laki", "Perempuan"],
     "Agama": ["Islam", "Kristen", "Katolik", "Hindu", "Budha"],
-    "Status Baptis": ["Sudah", "Belum"],
-    "Status Sidi": ["Sudah", "Belum"],
-    "Status Nikah": ["Sudah", "Belum"],
-    "Golongan Darah": ["A", "B", "AB", "O"]
+    "Status Baptis": ["Belum", "Sudah"],
+    "Status Sidi": ["Belum", "Sudah"],
+    "Status Nikah": ["Belum", "Sudah"],
+    "Golongan Darah": ["A", "B", "AB", "O"],
+    "Status Nikah": ["Belum", "Sudah"],
   };
 
   headers.forEach((header, i) => {
@@ -312,7 +313,7 @@ window.tutupModalEdit = function () {
 
 //Hapus Data
 function hapusData(rowIndex) {
-  const url = 'https://script.google.com/macros/s/AKfycbwGpROpuTba3s6dQt_J9koGSgfulUHfL-4w5Sabj36GtThdHCW4pnizu3gbopTFPcFDAg/exec?action=deleteData&row=' + rowIndex;
+  const url = 'https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec?action=deleteData&row=' + rowIndex;
 
   fetch("/api/delete", {
     method: 'POST',
