@@ -741,12 +741,14 @@ window.onload = function () {
   window.onkeypress = resetIdleTimer;
 
 
-    //Loading Spinner
-  function showSpinner() {
-    document.getElementById("spinner").classList.remove("hidden");
-  }
+  
+}
 
-  function hideSpinner() {
-    document.getElementById("spinner").classList.add("hidden");
-  }
+//Loading Spinner
+function showSpinner() {
+  document.getElementById("spinner").classList.remove("hidden");
+}
+
+function hideSpinner() {
+  document.getElementById("spinner").classList.add("hidden");
 }
