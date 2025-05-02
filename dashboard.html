@@ -6,6 +6,16 @@
   <title>Dashboard - Data Jemaat</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
+
+    .loader {
+      border-top-color: #3498db;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
   @media print {
     /* Sembunyikan tombol dan header yang tidak perlu saat print */
     .no-print {
