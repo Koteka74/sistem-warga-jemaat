@@ -52,6 +52,20 @@ function tanggalIndonesiaKeInput(tanggal) {
   return `${yyyy}-${bulan}-${dd.padStart(2, '0')}`;
 }
 
+function convertToInputDate(value) {
+  if (!value) return "";
+
+  // Jika value berupa string seperti "5/1/2024" (mm/dd/yyyy)
+  const d = new Date(value);
+  if (isNaN(d)) return "";
+
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+
+  return `${yyyy}-${mm}-${dd}`;
+}
+
 
 //Fungsi Konversi Tanggal
 function isoToInputDate(tanggalIndo) {
@@ -161,9 +175,9 @@ window.bukaModalEdit = function (rowIndex, rowData) {
       input.className = "w-full border px-3 py-2 rounded";
       input.name = `field_${i}`;
       if (["Tanggal Lahir", "Tanggal Nikah"].includes(header)) {
-        input.value = tanggalIndonesiaKeInput(value);
+        input.value = convertToInputDate(value);
       } else {
-        input.value = value;
+        input.value = value;  
       }
     }
 
