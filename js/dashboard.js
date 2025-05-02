@@ -551,7 +551,7 @@ window.onload = function () {
       if (input.type === "date" && value) {
         const d = new Date(value);
         if (!isNaN(d)) {
-          const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agt", "Sep", "Okt", "Nov", "Des"];
+          const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
           const tanggal = String(d.getDate()).padStart(2, '0');
           const bulan = bulanPendek[d.getMonth()];
           const tahun = d.getFullYear();
