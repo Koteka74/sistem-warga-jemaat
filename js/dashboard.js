@@ -130,10 +130,10 @@ window.bukaModalEdit = function (rowIndex, rowData) {
     "Status Baptis": ["Belum", "Sudah"],
     "Status Sidi": ["Belum", "Sudah"],
     "Status Nikah": ["Belum", "Sudah"],
-    "Golongan Darah": ["A", "B", "AB", "O"]
-    "Intra": ["PKB", "PW", "PAM", "PAR"]
-    "Rayon": ["Rayon I", "Rayon II", "Rayon III", "Rayon IV", "Rayon V", "Rayon VI"]
-    "Status Domisili": ["Tetap", "Tidak Tetap"]
+    "Golongan Darah": ["A", "B", "AB", "O"],
+    "Intra": ["PKB", "PW", "PAM", "PAR"],
+    "Rayon": ["Rayon I", "Rayon II", "Rayon III", "Rayon IV", "Rayon V", "Rayon VI"],
+    "Status Domisili": ["Tetap", "Tidak Tetap"],
   };
 
   headers.forEach((header, i) => {
