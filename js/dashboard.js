@@ -68,7 +68,7 @@ function convertToInputDate(value) {
 
 
 //Fungsi Konversi Tanggal
-function isoToInputDate(tanggalIndo) {
+function isoToInputDate(isoString) {
   if (!isoString) return "";
   const d = new Date(isoString);
   if (isNaN(d)) return "";
