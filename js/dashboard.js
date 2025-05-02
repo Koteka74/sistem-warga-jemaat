@@ -126,16 +126,21 @@ window.bukaModalEdit = function (rowIndex, rowData) {
 
   const dropdownFields = {
     "Jenis Kelamin": ["Laki-laki", "Perempuan"],
-    "Agama": ["Kristen", "Katolik", "Islam", "Hindu", "Budha", "Lainnya"],
-    "Status Baptis": ["Sudah", "Belum"],
-    "Status Sidi": ["Sudah", "Belum"],
-    "Status Nikah": ["Sudah", "Belum"],
+    "Agama": ["Islam", "Kristen", "Katolik", "Hindu", "Budha", "Lainnya"],
+    "Status Baptis": ["Belum", "Sudah"],
+    "Status Sidi": ["Belum", "Sudah"],
+    "Status Nikah": ["Belum", "Sudah"],
     "Golongan Darah": ["A", "B", "AB", "O"]
+    "Intra": ["PKB", "PW", "PAM", "PAR"]
+    "Rayon": ["Rayon I", "Rayon II", "Rayon III", "Rayon IV", "Rayon V", "Rayon VI"]
+    "Status Domisili": ["Tetap", "Tidak Tetap"]
   };
 
   headers.forEach((header, i) => {
     const value = rowData[i] || "";
-
+    
+    console.log("Nilai tanggal untuk header:", header, "→", value); // ✅ tambahkan di sini
+    
     const label = document.createElement("label");
     label.className = "text-sm font-medium";
     label.textContent = header;
@@ -267,7 +272,7 @@ window.simpanEdit = function () {
     if (input.type === "date" && value) {
       const d = new Date(value);
       if (!isNaN(d)) {
-        const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Des"];
+        const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
         const tanggal = String(d.getDate()).padStart(2, '0');
         const bulan = bulanPendek[d.getMonth()];
         const tahun = d.getFullYear();
@@ -277,7 +282,7 @@ window.simpanEdit = function () {
 
     data.push(value);
   });
-
+  showSpinner();
   fetch(scriptURL, {
     method: "POST",
     mode: "no-cors",
@@ -287,7 +292,7 @@ window.simpanEdit = function () {
     body: "action=updateData&row=" + rowIndex + "&data=" + encodeURIComponent(JSON.stringify(data))
   })
   .then(() => {
-    showSpinner();
+    
     hideSpinner();
     showToast("Data berhasil diupdate!");
     tutupModalEdit();
