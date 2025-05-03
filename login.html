@@ -39,9 +39,39 @@
   </div>
 
   <script>
+    const roleSelect = document.getElementById("role");
+    const rayonSelect = document.getElementById("rayon");
+    const namaInput = document.getElementById("nama");
+
+    function updateFieldVisibility() {
+      const role = roleSelect.value;
+
+      if (role === "admin") {
+        rayonSelect.disabled = true;
+        namaInput.disabled = true;
+        rayonSelect.value = "";
+        namaInput.value = "";
+      } else if (role === "rayon") {
+        rayonSelect.disabled = false;
+        namaInput.disabled = true;
+        namaInput.value = "";
+      } else if (role === "jemaat") {
+        rayonSelect.disabled = false;
+        namaInput.disabled = false;
+      } else {
+        rayonSelect.disabled = true;
+        namaInput.disabled = true;
+      }
+    }
+
+    roleSelect.addEventListener("change", updateFieldVisibility);
+
+    // Set kondisi awal saat halaman dimuat
+    updateFieldVisibility();
+    
     document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
-
+      
       const role = document.getElementById("role").value;
       const rayon = document.getElementById("rayon").value;
       const nama = document.getElementById("nama").value;
