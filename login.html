@@ -9,7 +9,7 @@
 <body class="bg-gray-100">
 
   <div class="max-w-md mx-auto mt-20 bg-white p-6 rounded shadow">
-    <h2 class="text-2xl font-bold mb-4 text-center">Login Sistem Informasi Data Warga Jemaat</h2>
+    <h2 class="text-2xl font-bold mb-4 text-center">Login Sistem Informasi Jemaat</h2>
 
     <form id="loginForm">
       <label class="block mb-2 font-medium">Pilih Peran</label>
@@ -32,14 +32,55 @@
       </select>
 
       <label class="block mb-2 font-medium">Nama (khusus Jemaat)</label>
-      <input type="text" name="nama" id="nama" class="w-full mb-4 p-2 border rounded" placeholder="Isi nama Anda jika login sebagai warga jemaat">
+      <input type="text" name="nama" id="nama" class="w-full mb-4 p-2 border rounded" placeholder="Isi nama Anda jika login sebagai jemaat">
 
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">Login</button>
+      <button type="submit" onclick="handleLogin()" class="w-full bg-blue-600 text-white py-2 rounded">Login</button>
     </form>
   </div>
 
   <script>
-    const roleSelect = document.getElementById("role");
+  function handleRoleChange() {
+    const role = document.getElementById("role").value;
+    const rayonField = document.getElementById("rayon");
+    const namaField = document.getElementById("nama");
+
+    if (role === "admin") {
+      rayonField.disabled = true;
+      namaField.disabled = true;
+    } else {
+      rayonField.disabled = false;
+      namaField.disabled = false;
+    }
+  }
+
+  function handleLogin() {
+    const role = document.getElementById("role").value;
+    const rayon = document.getElementById("rayon").value;
+    const nama = document.getElementById("nama").value;
+
+    if (!role) {
+     alert("Silakan pilih peran (role)");
+      return;
+    }
+
+    if (role !== "admin" && (!rayon || !nama)) {
+     alert("Silakan pilih Rayon dan Nama Jemaat");
+     return;
+    }
+
+    // Simpan ke localStorage
+    localStorage.setItem("role", role);
+    if (role !== "admin") {
+      localStorage.setItem("rayon", rayon);
+      localStorage.setItem("nama", nama);
+    }
+
+    // Redirect ke dashboard
+    window.location.href = "dashboard.html";
+  }
+
+
+  const roleSelect = document.getElementById("role");
   const rayonSelect = document.getElementById("rayon");
   const namaInput = document.getElementById("nama");
 
