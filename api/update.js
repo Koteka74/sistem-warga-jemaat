@@ -3,9 +3,9 @@ export default async function handler(req, res) {
     return res.status(405).send("Method Not Allowed");
   }
 
-  const { row, updatedData } = req.body;
+  const { rowIndex, updatedData } = req.body;
 
-  if (!row || typeof updatedData !== 'object') {
+  if (!rowIndex || typeof updatedData !== 'object') {
     return res.status(400).send("Data tidak valid");
   }
 
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
   const params = new URLSearchParams();
   params.append("action", "updateData");
-  params.append("row", row);
+  params.append("row", rowIndex);
   params.append("data", JSON.stringify(updatedData)); // kirim updatedData, bukan 'data'
 
   try {
