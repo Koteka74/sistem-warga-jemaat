@@ -23,24 +23,43 @@ if (!role) {
 
 //Fungsi muatData
 function muatData() {
-  fetch('/api/data')
+  fetch("/api/read")
     .then(res => res.json())
     .then(data => {
-      let filteredData = data;
+      fullData = data;
 
-      if (userRole === "rayon") {
-        filteredData = data.filter(item => item["Rayon"] === userRayon);
-      } else if (userRole === "jemaat") {
-        filteredData = data.filter(item =>
-          item["Rayon"] === userRayon &&
-          item["Nama Lengkap"] === userNama
+      const role = localStorage.getItem("userRole");
+      const userRayon = localStorage.getItem("userRayon");
+      const userNama = localStorage.getItem("userNama");
+      
+
+      // Ambil nama kolom
+      const headers = fullData[0];
+      const dataRows = fullData.slice(1);
+
+      let filteredRows;
+
+      if (role === "Admin") {
+        filteredRows = dataRows;
+      } else if (role === "Majelis") {
+        const rayonIndex = headers.findIndex(h => h.toLowerCase().trim() === "rayon");
+        filteredRows = dataRows.filter(row => row[rayonIndex] === userRayon);
+      } else if (role === "Jemaat") {
+        const namaIndex = headers.findIndex(h => h.toLowerCase().trim() === "nama lengkap");
+        const rayonIndex = headers.findIndex(h => h.toLowerCase().trim() === "rayon");
+
+        filteredRows = dataRows.filter(row =>
+          row[rayonIndex] === userRayon && row[namaIndex].toLowerCase().includes(userNama.toLowerCase())
         );
+      } else {
+        filteredRows = [];
       }
 
-      // Panggil fungsi renderTable atau renderData di sini
+      filteredData = [headers, ...filteredRows];
       renderTable(filteredData);
     });
 }
+
 
 
 //Format tanggal Indonesia
@@ -483,9 +502,13 @@ function renderTable(data) {
     tdAksi.className = "px-2 py-1 border text-center";
 
     const role = localStorage.getItem("userRole");
+    const userRayon = localStorage.getItem("userRayon");
 
-    // Hanya tampilkan tombol edit & hapus jika bukan jemaat
-    if (role !== "jemaat") {
+    const rowRayonIndex = headers.findIndex(h => h.toLowerCase().trim() === "rayon");
+    const rowRayon = row[rowRayonIndex];
+
+    // Admin bisa edit semua, Majelis hanya jika rayon cocok
+    if (role === "Admin" || (role === "Majelis" && rowRayon === userRayon)) {
       const btnEdit = document.createElement("button");
       btnEdit.textContent = "✎";
       btnEdit.className = "text-blue-600 text-xs mr-2";
