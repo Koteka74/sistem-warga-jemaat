@@ -1,6 +1,12 @@
 const url = 'https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec?action=getData';
 const scriptURL = "https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec";
 
+const loginData = JSON.parse(localStorage.getItem("loginData")) || {};
+const userRole = loginData.role;
+const userRayon = loginData.rayon;
+const userNama = loginData.nama;
+
+
 let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
 let currentRayon = "Semua";
@@ -8,6 +14,28 @@ let currentPage = 1;
 let rowsPerPage = 10;
 // Auto Logout jika tidak aktif selama 15 menit
 let idleTime = 0;
+
+//Fungsi muatData
+function muatData() {
+  fetch('/api/data')
+    .then(res => res.json())
+    .then(data => {
+      let filteredData = data;
+
+      if (userRole === "rayon") {
+        filteredData = data.filter(item => item["Rayon"] === userRayon);
+      } else if (userRole === "jemaat") {
+        filteredData = data.filter(item =>
+          item["Rayon"] === userRayon &&
+          item["Nama Lengkap"] === userNama
+        );
+      }
+
+      // Panggil fungsi renderTable atau renderData di sini
+      renderTable(filteredData);
+    });
+}
+
 
 //Format tanggal Indonesia
 function formatTanggalIndonesia(tanggal) {
