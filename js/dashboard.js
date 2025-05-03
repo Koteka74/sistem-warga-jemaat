@@ -446,10 +446,10 @@ function logout() {
 }
 
 // 🔔 Fungsi toast modern
-function showToast(pesan, warna = 'bg-green-600') {
+function showToast(msg, warna = 'bg-green-600') {
     const toast = document.createElement("div");
     toast.className = `fixed top-4 right-4 px-4 py-2 rounded text-white shadow-lg z-50 ${warna}`;
-    toast.textContent = pesan;
+    toast.textContent = msg;
 
     document.body.appendChild(toast);
 
