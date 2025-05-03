@@ -254,59 +254,45 @@ window.bukaModal = function () {
 }
 
 //SIMPAN EDIT DATA
-window.simpanEdit = async function () {
-  showSpinner();
+window.simpanEdit = () => {
+  const rowIndex = document.getElementById('editRowIndex').value;
+  const modalFields = document.querySelectorAll('#modalEdit input, #modalEdit select, #modalEdit textarea');
   
-  const form = document.getElementById("formEdit");
-  const formData = new FormData(form);
-  const rowIndex = formData.get("rowIndex");
-
-  const data = {};
-  form.querySelectorAll("[name^='field_']").forEach(input => {
-    data[input.name] = input.value;
+  const updatedData = {};
+  modalFields.forEach((field, i) => {
+    updatedData[`field_${i}`] = field.value;
   });
 
   console.log("=== DEBUG SIMPAN EDIT ===");
   console.log("Row Index:", rowIndex);
   console.log("Updated Data:", updatedData);
 
-  try {
-    const res = await 
-    fetch("/api/update", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ rowIndex, data })
-    });
+  showSpinner(); // Pastikan fungsi showSpinner sudah didefinisikan
 
-    const raw = await res.text();
-    let result;
-
-    try {
-      result = JSON.parse(raw);
-    } catch (jsonError) {
-      console.error("Bukan JSON:", raw);
-      showToast("Gagal menyimpan data: " + raw, "bg-red-600");
-      hideSpinner();
-      return;
+  fetch('/api/update', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ rowIndex, updatedData }),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
-
-    if (res.ok) {
-      showToast("Data berhasil diperbarui");
-      tutupModalEdit();
-      muatData(); // refresh tampilan
-    } else {
-      showToast(result.error || "Gagal menyimpan data", "bg-red-600");
-    }
-
-  } catch (err) {
-    console.error(err);
-    showToast("Terjadi kesalahan saat menyimpan", "bg-red-600");
-  }
-
-  hideSpinner();
-}
+    return response.json();
+  })
+  .then(data => {
+    hideSpinner(); // Pastikan fungsi hideSpinner juga didefinisikan
+    showToast('Data berhasil diperbarui');
+    location.reload();
+  })
+  .catch(error => {
+    hideSpinner();
+    console.error('Error saat update:', error);
+    showToast('Terjadi kesalahan saat memperbarui data');
+  });
+};
 
 
 window.tutupModal = function () {
