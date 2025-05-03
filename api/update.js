@@ -1,29 +1,30 @@
-import { google } from 'googleapis';
-import { auth } from './auth'; // kredensial Google API
-
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).end("Method not allowed");
+  if (req.method !== "POST") {
+    return res.status(405).send("Method Not Allowed");
+  }
 
-  const { rowIndex, data } = req.body;
-  if (!rowIndex || !data) return res.status(400).json({ error: "Data tidak lengkap" });
+  const { row, updatedData } = req.body;
+
+  if (!row || typeof updatedData !== 'object') {
+    return res.status(400).send("Data tidak valid");
+  }
+
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec";
+
+  const params = new URLSearchParams();
+  params.append("action", "updateData");
+  params.append("row", row);
+  params.append("data", JSON.stringify(updatedData)); // kirim updatedData, bukan 'data'
 
   try {
-    const sheets = google.sheets({ version: 'v4', auth });
-    const values = Object.values(data); // pastikan urutan sesuai header
-
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: process.env.SPREADSHEET_ID,
-      range: `DataJemaat!A${parseInt(rowIndex) + 2}`, // +2 karena header & 0-indexed
-      valueInputOption: "USER_ENTERED",
-      requestBody: {
-        values: [values]
-      }
+    const response = await fetch(`${scriptURL}?${params.toString()}`, {
+      method: "GET", // karena Apps Script tidak support POST langsung dari Next.js
     });
 
-    return res.status(200).json({ success: true });
-
+    const text = await response.text();
+    return res.status(200).send(text);
   } catch (err) {
-    console.error("Update error:", err);
-    return res.status(500).json({ error: "Gagal update ke Google Sheets" });
+    console.error("Gagal update:", err);
+    return res.status(500).send("Gagal menghubungi Apps Script");
   }
 }
