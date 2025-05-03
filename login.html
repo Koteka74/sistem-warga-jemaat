@@ -9,7 +9,7 @@
 <body class="bg-gray-100">
 
   <div class="max-w-md mx-auto mt-20 bg-white p-6 rounded shadow">
-    <h2 class="text-2xl font-bold mb-4 text-center">Login Sistem Informasi Jemaat</h2>
+    <h2 class="text-2xl font-bold mb-4 text-center">Login Sistem Informasi Data Warga Jemaat</h2>
 
     <form id="loginForm">
       <label class="block mb-2 font-medium">Pilih Peran</label>
@@ -32,7 +32,7 @@
       </select>
 
       <label class="block mb-2 font-medium">Nama (khusus Jemaat)</label>
-      <input type="text" name="nama" id="nama" class="w-full mb-4 p-2 border rounded" placeholder="Isi nama Anda jika login sebagai jemaat">
+      <input type="text" name="nama" id="nama" class="w-full mb-4 p-2 border rounded" placeholder="Isi nama Anda jika login sebagai warga jemaat">
 
       <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">Login</button>
     </form>
@@ -40,53 +40,63 @@
 
   <script>
     const roleSelect = document.getElementById("role");
-    const rayonSelect = document.getElementById("rayon");
-    const namaInput = document.getElementById("nama");
+  const rayonSelect = document.getElementById("rayon");
+  const namaInput = document.getElementById("nama");
 
-    function updateFieldVisibility() {
-      const role = roleSelect.value;
+  function updateFieldVisibility() {
+    const role = roleSelect.value;
 
-      if (role === "admin") {
-        rayonSelect.disabled = true;
-        namaInput.disabled = true;
-        rayonSelect.value = "";
-        namaInput.value = "";
-      } else if (role === "rayon") {
-        rayonSelect.disabled = false;
-        namaInput.disabled = true;
-        namaInput.value = "";
-      } else if (role === "jemaat") {
-        rayonSelect.disabled = false;
-        namaInput.disabled = false;
-      } else {
-        rayonSelect.disabled = true;
-        namaInput.disabled = true;
-      }
+    if (role === "admin") {
+      rayonSelect.disabled = true;
+      namaInput.disabled = true;
+      rayonSelect.value = "";
+      namaInput.value = "";
+    } else if (role === "rayon") {
+      rayonSelect.disabled = false;
+      namaInput.disabled = true;
+      namaInput.value = "";
+    } else if (role === "jemaat") {
+      rayonSelect.disabled = false;
+      namaInput.disabled = false;
+    } else {
+      rayonSelect.disabled = true;
+      namaInput.disabled = true;
+    }
+  }
+
+  // Inisialisasi kondisi awal saat halaman dimuat
+  updateFieldVisibility();
+  roleSelect.addEventListener("change", updateFieldVisibility);
+
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const role = roleSelect.value;
+    const rayon = rayonSelect.value;
+    const nama = namaInput.value;
+
+    // Validasi input berdasarkan role
+    if (!role) {
+      alert("Silakan pilih peran.");
+      return;
     }
 
-    roleSelect.addEventListener("change", updateFieldVisibility);
+    if (role === "rayon" && !rayon) {
+      alert("Silakan pilih rayon.");
+      return;
+    }
 
-    // Set kondisi awal saat halaman dimuat
-    updateFieldVisibility();
-    
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      
-      const role = document.getElementById("role").value;
-      const rayon = document.getElementById("rayon").value;
-      const nama = document.getElementById("nama").value;
+    if (role === "jemaat" && (!rayon || !nama)) {
+      alert("Silakan pilih rayon dan isi nama Anda.");
+      return;
+    }
 
-      if (!role || !rayon || (role === "jemaat" && !nama)) {
-        alert("Semua data harus diisi dengan benar.");
-        return;
-      }
+    // Simpan session login
+    localStorage.setItem("loginData", JSON.stringify({ role, rayon, nama }));
 
-      // Simpan session login ke localStorage
-      localStorage.setItem("loginData", JSON.stringify({ role, rayon, nama }));
-
-      // Arahkan ke dashboard
-      window.location.href = "dashboard.html";
-    });
+    // Arahkan ke dashboard
+    window.location.href = "dashboard.html";
+  });
   </script>
 
 </body>
