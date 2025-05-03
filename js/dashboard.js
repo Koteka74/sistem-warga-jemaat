@@ -275,7 +275,17 @@ window.simpanEdit = async function () {
       body: JSON.stringify({ rowIndex, data })
     });
 
-    const result = await res.json();
+    let result;
+    try {
+      result = await res.json();
+    } catch (jsonError) {
+      const text = await res.text();
+      console.error("Bukan JSON:", text);
+      showToast("Gagal menyimpan data: " + text, "bg-red-600");
+      hideSpinner();
+      return;
+    }
+
 
     if (res.ok) {
       showToast("Data berhasil diperbarui");
