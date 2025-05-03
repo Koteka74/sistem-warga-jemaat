@@ -496,8 +496,27 @@ fetch(url)
 //Logout
 function logout() {
     localStorage.clear();
-    window.location.href = "index.html";
+    window.location.href = "login.html";
 }
+
+// Tampilkan info login pengguna
+document.addEventListener("DOMContentLoaded", () => {
+  const role = localStorage.getItem("userRole");
+  const nama = localStorage.getItem("userNama") || "";
+  const rayon = localStorage.getItem("userRayon") || "";
+
+  const display = document.getElementById("userDisplay");
+  if (!display) return;
+
+  if (role === "admin") {
+    display.textContent = "Login sebagai Admin";
+  } else if (role === "rayon") {
+    display.textContent = `Majelis Rayon ${rayon}`;
+  } else if (role === "jemaat") {
+    display.textContent = `Jemaat: ${nama} (Rayon ${rayon})`;
+  }
+});
+
 
 // 🔔 Fungsi toast modern
 function showToast(msg, warna = 'bg-green-600') {
