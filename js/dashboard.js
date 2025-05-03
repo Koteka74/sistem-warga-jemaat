@@ -398,6 +398,42 @@ function renderTable(data) {
   const headers = data[0];
   const rows = data.slice(1);
 
+  let rows = data.slice(1); // ambil semua baris data
+  const headers = data[0];
+
+  // Ambil info login
+  const role = localStorage.getItem("userRole");
+  const namaLogin = localStorage.getItem("userNama");
+  const rayonLogin = localStorage.getItem("userRayon");
+
+  // Identifikasi kolom yang dibutuhkan
+  const idxRayon = headers.findIndex(h => h.trim().toLowerCase() === "rayon");
+  const idxNama = headers.findIndex(h => h.trim().toLowerCase() === "nama");
+  const idxKeluarga = headers.findIndex(h => h.trim().toLowerCase() === "id keluarga");
+
+  // Filter data berdasarkan role
+  if (role === "rayon" && idxRayon >= 0) {
+    rows = rows.filter(row => row[idxRayon]?.trim() === rayonLogin);
+  }
+
+  if (role === "jemaat" && idxRayon >= 0 && idxNama >= 0 && idxKeluarga >= 0) {
+    // Cari ID Keluarga dari jemaat yang login
+    const barisJemaat = rows.find(row =>
+      row[idxRayon]?.trim() === rayonLogin &&
+      row[idxNama]?.trim().toLowerCase() === namaLogin?.toLowerCase()
+    );
+
+    if (barisJemaat) {
+      const idKeluarga = barisJemaat[idxKeluarga];
+      rows = rows.filter(row =>
+        row[idxRayon]?.trim() === rayonLogin &&
+        row[idxKeluarga]?.trim() === idKeluarga
+      );
+    } else {
+      rows = []; // Jika tidak ketemu, tampilkan kosong
+    }
+  }
+
   // Tambahkan kolom header "Aksi" paling awal
   const thAksi = document.createElement("th");
   thAksi.className = "px-2 py-1 border text-xs";
@@ -440,22 +476,30 @@ function renderTable(data) {
     const tdAksi = document.createElement("td");
     tdAksi.className = "px-2 py-1 border text-center";
 
-    const btnEdit = document.createElement("button");
-    btnEdit.textContent = "✎";
-    btnEdit.className = "text-blue-600 text-xs mr-2";
-    btnEdit.onclick = () => bukaModalEdit(indexAsli, row);
+    const role = localStorage.getItem("userRole");
 
-    const btnHapus = document.createElement("button");
-    btnHapus.textContent = "🗑️";
-    btnHapus.className = "text-red-600 text-xs";
-    btnHapus.onclick = () => {
-      if (confirm("Yakin ingin menghapus data ini?")) {
-        hapusData(indexAsli);
-      }
-    };
+    // Hanya tampilkan tombol edit & hapus jika bukan jemaat
+    if (role !== "jemaat") {
+      const btnEdit = document.createElement("button");
+      btnEdit.textContent = "✎";
+      btnEdit.className = "text-blue-600 text-xs mr-2";
+      btnEdit.onclick = () => bukaModalEdit(indexAsli, row);
 
-    tdAksi.appendChild(btnEdit);
-    tdAksi.appendChild(btnHapus);
+      const btnHapus = document.createElement("button");
+      btnHapus.textContent = "🗑️";
+      btnHapus.className = "text-red-600 text-xs";
+      btnHapus.onclick = () => {
+        if (confirm("Yakin ingin menghapus data ini?")) {
+          hapusData(indexAsli);
+        }
+      };
+    
+      tdAksi.appendChild(btnEdit);
+      tdAksi.appendChild(btnHapus);
+    } else {
+      tdAksi.textContent = "-"; // Jemaat hanya lihat tanda strip
+    }
+    
     tr.insertBefore(tdAksi, tr.firstChild); // aksi di sisi kiri
 
     tableBody.appendChild(tr);
