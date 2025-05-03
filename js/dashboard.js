@@ -275,17 +275,17 @@ window.simpanEdit = async function () {
       body: JSON.stringify({ rowIndex, data })
     });
 
+    const raw = await res.text();
     let result;
+
     try {
-      result = await res.json();
+      result = JSON.parse(raw);
     } catch (jsonError) {
-      const text = await res.text();
-      console.error("Bukan JSON:", text);
-      showToast("Gagal menyimpan data: " + text, "bg-red-600");
+      console.error("Bukan JSON:", raw);
+      showToast("Gagal menyimpan data: " + raw, "bg-red-600");
       hideSpinner();
       return;
     }
-
 
     if (res.ok) {
       showToast("Data berhasil diperbarui");
