@@ -254,53 +254,45 @@ window.bukaModal = function () {
 }
 
 //SIMPAN EDIT DATA
-window.simpanEdit = function () {
+window.simpanEdit = async function () {
+  showSpinner();
+  
   const form = document.getElementById("formEdit");
-  const rowIndex = form.rowIndex.value;
-  const inputs = form.querySelectorAll("#editFields input, #editFields select");
+  const formData = new FormData(form);
+  const rowIndex = formData.get("rowIndex");
 
-  const data = [];
+  const data = {};
+  form.querySelectorAll("[name^='field_']").forEach(input => {
+    data[input.name] = input.value;
+  });
 
-  inputs.forEach(input => {
-    let value = input.value.trim();
+  try {
+    const res = await fetch("/api/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ rowIndex, data })
+    });
 
-    if (input.type === "date" && value) {
-      const d = new Date(value);
-      if (!isNaN(d)) {
-        const bulanPendek = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
-        const tanggal = String(d.getDate()).padStart(2, '0');
-        const bulan = bulanPendek[d.getMonth()];
-        const tahun = d.getFullYear();
-        value = `${tanggal}/${bulan}/${tahun}`;
-      }
+    const result = await res.json();
+
+    if (res.ok) {
+      showToast("Data berhasil diperbarui");
+      tutupModalEdit();
+      muatData(); // refresh tampilan
+    } else {
+      showToast(result.error || "Gagal menyimpan data", "bg-red-600");
     }
 
-    data.push(value);
-  });
-  showSpinner();
-  fetch("/api/update", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ data: data })
-      //row: rowIndex,
-      //data: data
-    //})
-  })
-  .then(res => res.text())
-  .then(msg => {
-    hideSpinner();
-    showToast("Data berhasil diupdate!");
-    tutupModalEdit();
-    location.reload();
-  })
-  .catch(err => {
-    console.error("Gagal update:", err);
-    hideSpinner();
-    alert("Gagal menyimpan perubahan.");
-  });
+  } catch (err) {
+    console.error(err);
+    showToast("Terjadi kesalahan saat menyimpan", "bg-red-600");
+  }
+
+  hideSpinner();
 }
+
 
 window.tutupModal = function () {
   document.getElementById("modalTambah").classList.add("hidden");
