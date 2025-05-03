@@ -285,7 +285,7 @@ window.simpanEdit = () => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ rowIndex, updatedData }),
+    body: JSON.stringify({ row: rowIndex, updatedData }),
   })
   .then(response => {
     if (!response.ok) {
