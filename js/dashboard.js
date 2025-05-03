@@ -257,6 +257,17 @@ window.bukaModal = function () {
 window.simpanEdit = () => {
   const rowIndex = document.getElementById('editRowIndex').value;
   const modalFields = document.querySelectorAll('#modalEdit input, #modalEdit select, #modalEdit textarea');
+
+  const inputs = form.querySelectorAll("[name^='field_']");
+  inputs.forEach(input => {
+    if (input && input.name) {
+      data[input.name] = input.value;
+    }
+  });
+
+  console.log("Jumlah input ditemukan:", inputs.length);
+
+  console.log("ISI editFields:", document.getElementById("editFields").innerHTML);
   
   const updatedData = {};
   modalFields.forEach((field, i) => {
