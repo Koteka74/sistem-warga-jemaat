@@ -254,59 +254,73 @@ window.bukaModal = function () {
 }
 
 //SIMPAN EDIT DATA
-window.simpanEdit = () => {
-  const rowIndex = document.querySelector("input[name='rowIndex']").value;
-  const modalFields = document.querySelectorAll('#modalEdit input, #modalEdit select, #modalEdit textarea');
+window.simpanEdit = async () => {
+  showSpinner();
 
-  const inputs = form.querySelectorAll("[name^='field_']");
-  inputs.forEach(input => {
-    if (input && input.name) {
-      data[input.name] = input.value;
-    }
-  });
+  // Ambil row index
+  const rowIndexInput = document.querySelector("input[name='rowIndex']");
+  if (!rowIndexInput) {
+    console.error("Elemen input[name='rowIndex'] tidak ditemukan!");
+    hideSpinner();
+    return;
+  }
+  const rowIndex = rowIndexInput.value;
 
-  console.log("Jumlah input ditemukan:", inputs.length);
+  // Ambil semua field dari modalEdit (input, select, textarea)
+  const fields = document.querySelectorAll('#modalEdit input[name^="field_"], #modalEdit select[name^="field_"], #modalEdit textarea[name^="field_"]');
 
-  //console.log("ISI editFields:", document.getElementById("editFields").innerHTML);
-  console.log("Data Rayon:", data[header.indexOf("Rayon")]);
-  console.log("rowIndex:", rowIndex);
-  console.log("updatedData:", updatedData);
-  
+  // Kumpulkan data ke dalam format updatedData
   const updatedData = {};
-  modalFields.forEach((field, i) => {
-    updatedData[`field_${i}`] = field.value;
+  fields.forEach(field => {
+    if (field.name && field.value !== undefined) {
+      updatedData[field.name] = field.value;
+    }
   });
 
   console.log("=== DEBUG SIMPAN EDIT ===");
   console.log("Row Index:", rowIndex);
   console.log("Updated Data:", updatedData);
 
-  showSpinner(); // Pastikan fungsi showSpinner sudah didefinisikan
+  try {
+    const response = await fetch('/api/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        row: rowIndex,
+        data: Object.values(updatedData)  // Kirim dalam bentuk array
+      })
+    });
 
-  fetch('/api/update', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ row: rowIndex, updatedData }),
-  })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
+    const raw = await response.text();
+    let result;
+
+    try {
+      result = JSON.parse(raw);
+    } catch (jsonErr) {
+      console.error("Response bukan JSON:", raw);
+      showToast("Gagal menyimpan data: " + raw, "bg-red-600");
+      hideSpinner();
+      return;
     }
-    return response.json();
-  })
-  .then(data => {
-    hideSpinner(); // Pastikan fungsi hideSpinner juga didefinisikan
-    showToast('Data berhasil diperbarui');
-    location.reload();
-  })
-  .catch(error => {
-    hideSpinner();
-    console.error('Error saat update:', error);
-    showToast('Terjadi kesalahan saat memperbarui data');
-  });
+
+    if (response.ok) {
+      showToast("Data berhasil diperbarui", "bg-green-600");
+      tutupModalEdit();
+      muatData();
+    } else {
+      showToast(result.error || "Gagal menyimpan data", "bg-red-600");
+    }
+
+  } catch (err) {
+    console.error("Gagal saat simpan:", err);
+    showToast("Terjadi kesalahan saat menyimpan", "bg-red-600");
+  }
+
+  hideSpinner();
 };
+
 
 
 window.tutupModal = function () {
