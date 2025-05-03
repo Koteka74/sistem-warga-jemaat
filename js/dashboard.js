@@ -266,8 +266,13 @@ window.simpanEdit = async function () {
     data[input.name] = input.value;
   });
 
+  console.log("=== DEBUG SIMPAN EDIT ===");
+  console.log("Row Index:", rowIndex);
+  console.log("Updated Data:", updatedData);
+
   try {
-    const res = await fetch("/api/update", {
+    const res = await 
+    fetch("/api/update", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
