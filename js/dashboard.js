@@ -255,7 +255,7 @@ window.bukaModal = function () {
 
 //SIMPAN EDIT DATA
 window.simpanEdit = () => {
-  const rowIndex = document.getElementById('editRowIndex').value;
+  const rowIndex = document.querySelector("input[name='rowIndex']").value;
   const modalFields = document.querySelectorAll('#modalEdit input, #modalEdit select, #modalEdit textarea');
 
   const inputs = form.querySelectorAll("[name^='field_']");
@@ -267,8 +267,10 @@ window.simpanEdit = () => {
 
   console.log("Jumlah input ditemukan:", inputs.length);
 
-  console.log("ISI editFields:", document.getElementById("editFields").innerHTML);
+  //console.log("ISI editFields:", document.getElementById("editFields").innerHTML);
   console.log("Data Rayon:", data[header.indexOf("Rayon")]);
+  console.log("rowIndex:", rowIndex);
+  console.log("updatedData:", updatedData);
   
   const updatedData = {};
   modalFields.forEach((field, i) => {
