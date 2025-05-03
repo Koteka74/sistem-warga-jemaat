@@ -268,6 +268,7 @@ window.simpanEdit = () => {
   console.log("Jumlah input ditemukan:", inputs.length);
 
   console.log("ISI editFields:", document.getElementById("editFields").innerHTML);
+  console.log("Data Rayon:", data[header.indexOf("Rayon")]);
   
   const updatedData = {};
   modalFields.forEach((field, i) => {
