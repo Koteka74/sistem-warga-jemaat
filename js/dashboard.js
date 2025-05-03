@@ -15,6 +15,12 @@ let rowsPerPage = 10;
 // Auto Logout jika tidak aktif selama 15 menit
 let idleTime = 0;
 
+//Validasi Login
+const role = localStorage.getItem("userRole");
+if (!role) {
+  window.location.href = "login.html";
+}
+
 //Fungsi muatData
 function muatData() {
   fetch('/api/data')
