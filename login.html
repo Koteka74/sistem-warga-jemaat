@@ -68,6 +68,29 @@
      return;
     }
 
+    const roleSelect = document.getElementById("role");
+    const rayonGroup = document.getElementById("rayonGroup");
+    const namaGroup = document.getElementById("namaGroup");
+    const adminLoginGroup = document.getElementById("adminLoginGroup");
+
+    function updateFormByRole() {
+      const role = roleSelect.value;
+
+      if (role === "Admin") {
+        rayonGroup.style.display = "none";
+        namaGroup.style.display = "none";
+        adminLoginGroup.style.display = "block";
+      } else {
+        rayonGroup.style.display = "block";
+        namaGroup.style.display = "block";
+        adminLoginGroup.style.display = "none";
+      }
+    }
+
+    roleSelect.addEventListener("change", updateFormByRole);
+
+    // jalankan saat pertama kali load
+    updateFormByRole();
     // Simpan ke localStorage
     localStorage.setItem("role", role);
     if (role !== "admin") {
