@@ -1,30 +1,50 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Login Jemaat</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Sistem Informasi Warga Jemaat</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, select, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 8px;
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
-
-  <div class="max-w-md mx-auto mt-20 bg-white p-6 rounded shadow">
-    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhX9jX67zIfE0cZLQFf-NrGmiaHKzcSowRWKhSf8Q1ZmMCz7LPICneJpxotKpNUp6UlZIcvI5IisGEY7e_LrYE0IEctWPjzd5G-n8oEFtziafLuqLWiqXgbDA4_mcyUG_JQHae8VWbfpaLqJoSzB5cRFCiOUni5zs90jL2wCCELiNDe5s0H1EQ5k3I2B_g/s1600/Logo_GKITP.png" alt="Logo GKI" class="w-20 h-20 mx-auto mb-4">
-    <h1 class="text-2xl font-bold text-blue-700 mb-1">Database Jemaat</h1>
-    <h2 class="text-sm font-semibold text-gray-600 mb-6">GKI Diaspora Kotaraja</h2>
-
-    <form id="loginForm">
-    <label class="block mb-2 font-medium">Pilih Peran</label>
-    <select name="role" id="role" class="w-full mb-4 p-2 border rounded" required>
+<body>
+  <div class="container">
+    <h2>Login Jemaat</h2>
+    <label for="role">Pilih Peran:</label>
+    <select id="role" onchange="toggleFields()">
       <option value="">-- Pilih Peran --</option>
       <option value="admin">Admin</option>
-      <option value="rayon">Majelis Rayon</option>
+      <option value="majelis">Majelis Rayon</option>
       <option value="jemaat">Jemaat</option>
     </select>
 
-    <div id="rayonGroup">
-      <label class="block mb-2 font-medium">Pilih Rayon</label>
-      <select name="rayon" id="rayon" class="w-full mb-4 p-2 border rounded">
+    <!-- Untuk Admin & Majelis -->
+    <div id="adminFields" style="display: none;">
+      <input type="text" id="username" placeholder="Username">
+      <input type="password" id="password" placeholder="Password">
+    </div>
+
+    <!-- Untuk Jemaat -->
+    <div id="jemaatFields" style="display: none;">
+      <select id="rayon">
         <option value="">-- Pilih Rayon --</option>
         <option value="Rayon I">Rayon I</option>
         <option value="Rayon II">Rayon II</option>
@@ -33,84 +53,93 @@
         <option value="Rayon V">Rayon V</option>
         <option value="Rayon VI">Rayon VI</option>
       </select>
+      <input type="text" id="nama" placeholder="Nama Lengkap">
+      <input type="text" id="ortu" placeholder="Nama Ayah atau Ibu">
     </div>
 
-    <div id="namaGroup">
-      <label class="block mb-2 font-medium">Nama (khusus Jemaat)</label>
-      <input type="text" name="nama" id="nama" class="w-full mb-4 p-2 border rounded" placeholder="Isi nama Anda jika login sebagai jemaat">
-    </div>
-
-    <div id="adminLoginGroup" style="display: none;">
-      <label class="block mb-2 font-medium">Username</label>
-      <input type="text" id="adminUsername" name="adminUsername" class="w-full mb-4 p-2 border rounded">
-      <label class="block mb-2 font-medium">Password</label>
-      <input type="password" id="adminPassword" name="adminPassword" class="w-full mb-4 p-2 border rounded">
-    </div>
-
-    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">Login</button>
-  </form>
-
-
+    <button onclick="handleLogin()">Login</button>
+    <p id="msg" style="color: red;"></p>
+  </div>
 
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const roleSelect = document.getElementById("role");
-    const rayonGroup = document.getElementById("rayonGroup");
-    const namaGroup = document.getElementById("namaGroup");
-    const adminLoginGroup = document.getElementById("adminLoginGroup");
+    function toggleFields() {
+      const role = document.getElementById("role").value;
+      document.getElementById("adminFields").style.display = (role === "admin" || role === "majelis") ? "block" : "none";
+      document.getElementById("jemaatFields").style.display = (role === "jemaat") ? "block" : "none";
+    }
 
-    roleSelect.addEventListener("change", () => {
-      const role = roleSelect.value;
-      if (role === "admin") {
-        rayonGroup.style.display = "none";
-        namaGroup.style.display = "none";
-        adminLoginGroup.style.display = "block";
-      } else {
-        rayonGroup.style.display = "block";
-        namaGroup.style.display = role === "jemaat" ? "block" : "none";
-        adminLoginGroup.style.display = "none";
+    async function handleLogin() {
+      const role = document.getElementById("role").value;
+      const msg = document.getElementById("msg");
+      msg.textContent = "";
+
+      if (!role) {
+        msg.textContent = "Pilih peran terlebih dahulu.";
+        return;
       }
-    });
 
-    document.getElementById("loginForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const role = roleSelect.value;
+      try {
+        if (role === "admin" || role === "majelis") {
+          const username = document.getElementById("username").value.trim();
+          const password = document.getElementById("password").value.trim();
 
-      if (!role) return alert("Silakan pilih peran.");
+          if (!username || !password) {
+            msg.textContent = "Masukkan username dan password.";
+            return;
+          }
 
-      if (role === "admin") {
-        const username = document.getElementById("adminUsername").value.trim();
-        const password = document.getElementById("adminPassword").value.trim();
-        if (!username || !password) return alert("Isi username dan password.");
-
-        try {
-          const res = await fetch('/api/loginAdmin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+          const res = await fetch("/api/loginAdmin", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ role, username, password })
           });
+          const data = await res.json();
 
-          const result = await res.json();
-          if (result.success) {
-            localStorage.setItem("loginData", JSON.stringify({ role: "admin", username }));
+          if (data.success) {
+            const loginData = { role, username };
+            if (role === "majelis") loginData.rayon = data.rayon;
+            localStorage.setItem("loginData", JSON.stringify(loginData));
             window.location.href = "dashboard.html";
           } else {
-            alert("Login admin gagal: " + result.message);
+            msg.textContent = data.message || "Login gagal.";
           }
-        } catch (err) {
-          alert("Gagal terhubung ke server.");
+
+        } else if (role === "jemaat") {
+          const nama = document.getElementById("nama").value.trim();
+          const ortu = document.getElementById("ortu").value.trim();
+          const rayon = document.getElementById("rayon").value.trim();
+
+          if (!nama || !ortu || !rayon) {
+            msg.textContent = "Lengkapi semua kolom.";
+            return;
+          }
+
+          const res = await fetch("/api/loginJemaat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nama, ortu, rayon })
+          });
+          const data = await res.json();
+
+          if (data.success) {
+            const loginData = {
+              role: "jemaat",
+              nama,
+              ortu,
+              rayon,
+              kodeKeluarga: data.kodeKeluarga
+            };
+            localStorage.setItem("loginData", JSON.stringify(loginData));
+            window.location.href = "dashboard.html";
+          } else {
+            msg.textContent = data.message || "Data tidak ditemukan.";
+          }
         }
-      } else {
-        const rayon = document.getElementById("rayon").value;
-        const nama = document.getElementById("nama").value.trim();
-
-        if (role === "rayon" && !rayon) return alert("Silakan pilih rayon.");
-        if (role === "jemaat" && (!rayon || !nama)) return alert("Isi nama dan pilih rayon.");
-
-        localStorage.setItem("loginData", JSON.stringify({ role, rayon, nama }));
-        window.location.href = "dashboard.html";
+      } catch (err) {
+        console.error(err);
+        msg.textContent = "Terjadi kesalahan server.";
       }
-    });
-  });
+    }
   </script>
 </body>
+</html>
