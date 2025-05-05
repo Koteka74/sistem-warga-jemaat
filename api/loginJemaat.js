@@ -5,7 +5,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await fetch(
-      "https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_URL/exec?action=loginJemaat",
+      "https://script.google.com/macros/s/AKfycbw3-XllLxdu01cagX_pCQ_jGnTrCoTsMCbLoS_8l8wYKZGXiyWzEyk_TUSsMKaQvZfxWw/exec?action=loginJemaat",
       {
         method: "POST",
         body: JSON.stringify({ nama, ortu, rayon }),
