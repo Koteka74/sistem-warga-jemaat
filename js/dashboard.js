@@ -16,12 +16,28 @@ let rowsPerPage = 10;
 let idleTime = 0;
 
 //Validasi Login
-document.addEventListener("DOMContentLoaded", () => {
-  const role = localStorage.getItem("userRole");
-  if (!role) {
+document.addEventListener("DOMContentLoaded", function () {
+  const loginData = JSON.parse(localStorage.getItem("loginData"));
+  if (!loginData || !loginData.role) {
+    // Jika belum login atau data tidak lengkap, redirect ke login
     window.location.href = "index.html";
+    return;
   }
+
+  // Tampilkan role dan username di UI (opsional)
+  const infoLogin = document.getElementById("infoLogin");
+  if (infoLogin) {
+    infoLogin.textContent = `Login sebagai: ${loginData.role} (${loginData.username})`;
+  }
+
+  // Simpan sebagai variabel global jika diperlukan
+  window.userRole = loginData.role;
+  window.userName = loginData.username;
+
+  // Mulai fetch data setelah login valid
+  fetchData();
 });
+
 
 
 //Fungsi muatData
@@ -31,7 +47,8 @@ function muatData() {
     .then(data => {
       fullData = data;
 
-      const role = localStorage.getItem("userRole");
+      const loginData = JSON.parse(localStorage.getItem("loginData"));
+      //const role = localStorage.getItem("userRole");
       const userRayon = localStorage.getItem("userRayon");
       const userNama = localStorage.getItem("userNama");
       
