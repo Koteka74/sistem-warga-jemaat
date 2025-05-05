@@ -14,16 +14,17 @@
     <h2 class="text-sm font-semibold text-gray-600 mb-6">GKI Diaspora Kotaraja</h2>
 
     <form id="loginForm">
-      <label class="block mb-2 font-medium">Pilih Peran</label>
-      <select name="role" id="role" class="w-full mb-4 p-2 border rounded" required>
-        <option value="">-- Pilih Peran --</option>
-        <option value="admin">Admin</option>
-        <option value="rayon">Majelis Rayon</option>
-        <option value="jemaat">Jemaat</option>
-      </select>
+    <label class="block mb-2 font-medium">Pilih Peran</label>
+    <select name="role" id="role" class="w-full mb-4 p-2 border rounded" required>
+      <option value="">-- Pilih Peran --</option>
+      <option value="admin">Admin</option>
+      <option value="rayon">Majelis Rayon</option>
+      <option value="jemaat">Jemaat</option>
+    </select>
 
+    <div id="rayonGroup">
       <label class="block mb-2 font-medium">Pilih Rayon</label>
-      <select name="rayon" id="rayon" class="w-full mb-4 p-2 border rounded" required>
+      <select name="rayon" id="rayon" class="w-full mb-4 p-2 border rounded">
         <option value="">-- Pilih Rayon --</option>
         <option value="Rayon I">Rayon I</option>
         <option value="Rayon II">Rayon II</option>
@@ -32,12 +33,23 @@
         <option value="Rayon V">Rayon V</option>
         <option value="Rayon VI">Rayon VI</option>
       </select>
+    </div>
 
+    <div id="namaGroup">
       <label class="block mb-2 font-medium">Nama (khusus Jemaat)</label>
       <input type="text" name="nama" id="nama" class="w-full mb-4 p-2 border rounded" placeholder="Isi nama Anda jika login sebagai jemaat">
+    </div>
 
-      <button type="submit" onclick="handleLogin()" class="w-full bg-blue-600 text-white py-2 rounded">Login</button>
-    </form>
+    <div id="adminLoginGroup" style="display: none;">
+      <label class="block mb-2 font-medium">Username</label>
+      <input type="text" id="adminUsername" name="adminUsername" class="w-full mb-4 p-2 border rounded">
+      <label class="block mb-2 font-medium">Password</label>
+      <input type="password" id="adminPassword" name="adminPassword" class="w-full mb-4 p-2 border rounded">
+    </div>
+
+    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded">Login</button>
+  </form>
+
   </div>
   <!-- Pilih Peran -->
 <select id="role" name="role">
@@ -74,128 +86,64 @@
 </div>
 
   <script>
-  function handleRoleChange() {
-    const role = document.getElementById("role").value;
-    const rayonField = document.getElementById("rayon");
-    const namaField = document.getElementById("nama");
-
-    if (role === "admin") {
-      rayonField.disabled = true;
-      namaField.disabled = true;
-    } else {
-      rayonField.disabled = false;
-      namaField.disabled = false;
-    }
-  }
-
-  function handleLogin() {
-    const role = document.getElementById("role").value;
-    const rayon = document.getElementById("rayon").value;
-    const nama = document.getElementById("nama").value;
-
-    if (!role) {
-     alert("Silakan pilih peran (role)");
-      return;
-    }
-
-    if (role !== "admin" && (!rayon || !nama)) {
-     alert("Silakan pilih Rayon dan Nama Jemaat");
-     return;
-    }
-
+  document.addEventListener("DOMContentLoaded", function () {
     const roleSelect = document.getElementById("role");
     const rayonGroup = document.getElementById("rayonGroup");
     const namaGroup = document.getElementById("namaGroup");
     const adminLoginGroup = document.getElementById("adminLoginGroup");
 
-    function updateFormByRole() {
+    roleSelect.addEventListener("change", () => {
       const role = roleSelect.value;
-
-      if (role === "Admin") {
+      if (role === "admin") {
         rayonGroup.style.display = "none";
         namaGroup.style.display = "none";
         adminLoginGroup.style.display = "block";
       } else {
         rayonGroup.style.display = "block";
-        namaGroup.style.display = "block";
+        namaGroup.style.display = role === "jemaat" ? "block" : "none";
         adminLoginGroup.style.display = "none";
       }
-    }
+    });
 
-    roleSelect.addEventListener("change", updateFormByRole);
+    document.getElementById("loginForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const role = roleSelect.value;
 
-    // jalankan saat pertama kali load
-    updateFormByRole();
-    // Simpan ke localStorage
-    localStorage.setItem("role", role);
-    if (role !== "admin") {
-      localStorage.setItem("rayon", rayon);
-      localStorage.setItem("nama", nama);
-    }
+      if (!role) return alert("Silakan pilih peran.");
 
-    // Redirect ke dashboard
-    window.location.href = "dashboard.html";
-  }
+      if (role === "admin") {
+        const username = document.getElementById("adminUsername").value.trim();
+        const password = document.getElementById("adminPassword").value.trim();
+        if (!username || !password) return alert("Isi username dan password.");
 
+        try {
+          const res = await fetch('/api/loginAdmin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
 
-  const roleSelect = document.getElementById("role");
-  const rayonSelect = document.getElementById("rayon");
-  const namaInput = document.getElementById("nama");
+          const result = await res.json();
+          if (result.success) {
+            localStorage.setItem("loginData", JSON.stringify({ role: "admin", username }));
+            window.location.href = "dashboard.html";
+          } else {
+            alert("Login admin gagal: " + result.message);
+          }
+        } catch (err) {
+          alert("Gagal terhubung ke server.");
+        }
+      } else {
+        const rayon = document.getElementById("rayon").value;
+        const nama = document.getElementById("nama").value.trim();
 
-  function updateFieldVisibility() {
-    const role = roleSelect.value;
+        if (role === "rayon" && !rayon) return alert("Silakan pilih rayon.");
+        if (role === "jemaat" && (!rayon || !nama)) return alert("Isi nama dan pilih rayon.");
 
-    if (role === "admin") {
-      rayonSelect.disabled = true;
-      namaInput.disabled = true;
-      rayonSelect.value = "";
-      namaInput.value = "";
-    } else if (role === "rayon") {
-      rayonSelect.disabled = false;
-      namaInput.disabled = true;
-      namaInput.value = "";
-    } else if (role === "jemaat") {
-      rayonSelect.disabled = false;
-      namaInput.disabled = false;
-    } else {
-      rayonSelect.disabled = true;
-      namaInput.disabled = true;
-    }
-  }
-
-  // Inisialisasi kondisi awal saat halaman dimuat
-  updateFieldVisibility();
-  roleSelect.addEventListener("change", updateFieldVisibility);
-
-  document.getElementById("loginForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const role = roleSelect.value;
-    const rayon = rayonSelect.value;
-    const nama = namaInput.value;
-
-    // Validasi input berdasarkan role
-    if (!role) {
-      alert("Silakan pilih peran.");
-      return;
-    }
-
-    if (role === "rayon" && !rayon) {
-      alert("Silakan pilih rayon.");
-      return;
-    }
-
-    if (role === "jemaat" && (!rayon || !nama)) {
-      alert("Silakan pilih rayon dan isi nama Anda.");
-      return;
-    }
-
-    // Simpan session login
-    localStorage.setItem("loginData", JSON.stringify({ role, rayon, nama }));
-
-    // Arahkan ke dashboard
-    window.location.href = "dashboard.html";
+        localStorage.setItem("loginData", JSON.stringify({ role, rayon, nama }));
+        window.location.href = "dashboard.html";
+      }
+    });
   });
   </script>
-
 </body>
