@@ -16,10 +16,13 @@ let rowsPerPage = 10;
 let idleTime = 0;
 
 //Validasi Login
-const role = localStorage.getItem("userRole");
-if (!role) {
-  window.location.href = "index.html";
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const role = localStorage.getItem("userRole");
+  if (!role) {
+    window.location.href = "index.html";
+  }
+});
+
 
 //Fungsi muatData
 function muatData() {
