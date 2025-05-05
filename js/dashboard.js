@@ -18,7 +18,7 @@ let idleTime = 0;
 //Validasi Login
 const role = localStorage.getItem("userRole");
 if (!role) {
-  window.location.href = "login.html";
+  window.location.href = "index.html";
 }
 
 //Fungsi muatData
