@@ -3,32 +3,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login Sistem Informasi Warga Jemaat</title>
+  <title>Login - Sistem Warga Jemaat</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f3f6f9;
+      margin: 0;
+      padding: 0;
     }
+
     .container {
       max-width: 400px;
       margin: 50px auto;
-      background: white;
       padding: 30px;
+      background: #ffffff;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      text-align: center;
     }
-    input, select, button {
+
+    .logo {
+      max-width: 80px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #2d3e50;
+      margin-bottom: 5px;
+    }
+
+    .sub-title {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 2px;
+    }
+
+    select, input, button {
       width: 100%;
+      padding: 10px;
       margin: 10px 0;
-      padding: 8px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #2b7a78;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #205e5c;
+    }
+
+    #msg {
+      color: red;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Login Jemaat</h2>
-    <label for="role">Pilih Peran:</label>
+    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhX9jX67zIfE0cZLQFf-NrGmiaHKzcSowRWKhSf8Q1ZmMCz7LPICneJpxotKpNUp6UlZIcvI5IisGEY7e_LrYE0IEctWPjzd5G-n8oEFtziafLuqLWiqXgbDA4_mcyUG_JQHae8VWbfpaLqJoSzB5cRFCiOUni5zs90jL2wCCELiNDe5s0H1EQ5k3I2B_g/s1600/Logo_GKITP.png" class="logo" alt="Logo Gereja">
+    <h2>Login</h2>
+    <div class="sub-title">Database Warga Jemaat</div>
+    <div class="sub-title">GKI Diaspora Kotaraja</div>
+
     <select id="role" onchange="toggleFields()">
       <option value="">-- Pilih Peran --</option>
       <option value="admin">Admin</option>
@@ -58,7 +101,7 @@
     </div>
 
     <button onclick="handleLogin()">Login</button>
-    <p id="msg" style="color: red;"></p>
+    <p id="msg"></p>
   </div>
 
   <script>
