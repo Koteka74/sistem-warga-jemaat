@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     return res.status(400).send("Data tidak valid");
   }
 
-  const scriptURL = "https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbw3-XllLxdu01cagX_pCQ_jGnTrCoTsMCbLoS_8l8wYKZGXiyWzEyk_TUSsMKaQvZfxWw/exec";
 
   const params = new URLSearchParams();
   params.append("action", "updateData");
