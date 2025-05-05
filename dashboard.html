@@ -211,10 +211,10 @@
     const role = localStorage.getItem("userRole");
     const rayon = localStorage.getItem("userRayon");
     const nama = localStorage.getItem("userNama");
-
+    console.log("Role ditemukan:", role); // Tambahan debug
     if (!role) {
       // Jika tidak login, arahkan ke halaman login
-      window.location.href = "login.html";
+      window.location.href = "index.html";
     }
   </script>
   <script src="js/dashboard.js"></script>
