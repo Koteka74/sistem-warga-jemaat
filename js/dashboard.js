@@ -1,5 +1,5 @@
-const url = 'https://script.google.com/macros/s/AKfycbw3-XllLxdu01cagX_pCQ_jGnTrCoTsMCbLoS_8l8wYKZGXiyWzEyk_TUSsMKaQvZfxWw/exec?action=getData';
-const scriptURL = "https://script.google.com/macros/s/AKfycbw3-XllLxdu01cagX_pCQ_jGnTrCoTsMCbLoS_8l8wYKZGXiyWzEyk_TUSsMKaQvZfxWw/exec";
+const url = 'https://script.google.com/macros/s/AKfycby9w70psh_Xp_lsCmglN6x7PTxr1-VBo-UvXLknDgmPAmlcXhPzdujO2ExXOKIRAinJSg/exec?action=getData';
+const scriptURL = "https://script.google.com/macros/s/AKfycby9w70psh_Xp_lsCmglN6x7PTxr1-VBo-UvXLknDgmPAmlcXhPzdujO2ExXOKIRAinJSg/exec";
 
 const loginData = JSON.parse(localStorage.getItem("loginData")) || {};
 const userRole = loginData.role;
@@ -412,7 +412,7 @@ window.tutupModalEdit = function () {
 
 //Hapus Data
 function hapusData(rowIndex) {
-  const url = 'https://script.google.com/macros/s/AKfycbw3-XllLxdu01cagX_pCQ_jGnTrCoTsMCbLoS_8l8wYKZGXiyWzEyk_TUSsMKaQvZfxWw/exec?action=deleteData&row=' + rowIndex;
+  const url = 'https://script.google.com/macros/s/AKfycby9w70psh_Xp_lsCmglN6x7PTxr1-VBo-UvXLknDgmPAmlcXhPzdujO2ExXOKIRAinJSg/exec?action=deleteData&row=' + rowIndex;
 
   fetch("/api/delete", {
     method: 'POST',
