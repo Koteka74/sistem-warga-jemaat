@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   }
 
   const sheetURL =
-    "https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec";
+    "https://script.google.com/macros/s/AKfycbw3-XllLxdu01cagX_pCQ_jGnTrCoTsMCbLoS_8l8wYKZGXiyWzEyk_TUSsMKaQvZfxWw/exec";
 
   const params = new URLSearchParams();
   params.append("action", "getAdmin"); // action ini harus cocok dengan yang di Apps Script kamu
