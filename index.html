@@ -9,7 +9,9 @@
 <body class="bg-gray-100">
 
   <div class="max-w-md mx-auto mt-20 bg-white p-6 rounded shadow">
-    <h2 class="text-2xl font-bold mb-4 text-center">Login Sistem Informasi Jemaat</h2>
+    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhX9jX67zIfE0cZLQFf-NrGmiaHKzcSowRWKhSf8Q1ZmMCz7LPICneJpxotKpNUp6UlZIcvI5IisGEY7e_LrYE0IEctWPjzd5G-n8oEFtziafLuqLWiqXgbDA4_mcyUG_JQHae8VWbfpaLqJoSzB5cRFCiOUni5zs90jL2wCCELiNDe5s0H1EQ5k3I2B_g/s1600/Logo_GKITP.png" alt="Logo GKI" class="w-20 h-20 mx-auto mb-4">
+    <h1 class="text-2xl font-bold text-blue-700 mb-1">Database Jemaat</h1>
+    <h2 class="text-sm font-semibold text-gray-600 mb-6">GKI Diaspora Kotaraja</h2>
 
     <form id="loginForm">
       <label class="block mb-2 font-medium">Pilih Peran</label>
@@ -37,6 +39,39 @@
       <button type="submit" onclick="handleLogin()" class="w-full bg-blue-600 text-white py-2 rounded">Login</button>
     </form>
   </div>
+  <!-- Pilih Peran -->
+<select id="role" name="role">
+  <option value="Jemaat">Jemaat</option>
+  <option value="Majelis">Majelis</option>
+  <option value="Admin">Admin</option>
+</select>
+
+<!-- Group Rayon -->
+<div id="rayonGroup">
+  <label>Pilih Rayon</label>
+  <select name="rayon" id="rayon">
+    <option value="">Pilih Rayon</option>
+    <option value="Rayon I">Rayon I</option>
+    <option value="Rayon II">Rayon II</option>
+    ...
+  </select>
+</div>
+
+<!-- Group Nama -->
+<div id="namaGroup">
+  <label>Pilih Nama</label>
+  <select name="nama" id="nama">
+    <option value="">Pilih Nama</option>
+  </select>
+</div>
+
+<!-- Group Login Admin -->
+<div id="adminLoginGroup" style="display: none;">
+  <label>Username</label>
+  <input type="text" id="adminUsername" name="adminUsername">
+  <label>Password</label>
+  <input type="password" id="adminPassword" name="adminPassword">
+</div>
 
   <script>
   function handleRoleChange() {
@@ -164,56 +199,3 @@
   </script>
 
 </body>
-</html><!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | Database Jemaat</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-
-  <div class="bg-white p-8 rounded shadow-md w-full max-w-md text-center">
-    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhX9jX67zIfE0cZLQFf-NrGmiaHKzcSowRWKhSf8Q1ZmMCz7LPICneJpxotKpNUp6UlZIcvI5IisGEY7e_LrYE0IEctWPjzd5G-n8oEFtziafLuqLWiqXgbDA4_mcyUG_JQHae8VWbfpaLqJoSzB5cRFCiOUni5zs90jL2wCCELiNDe5s0H1EQ5k3I2B_g/s1600/Logo_GKITP.png" alt="Logo GKI" class="w-20 h-20 mx-auto mb-4">
-    <h1 class="text-2xl font-bold text-blue-700 mb-1">Database Jemaat</h1>
-    <h2 class="text-sm font-semibold text-gray-600 mb-6">GKI Diaspora Kotaraja</h2>
-
-    <form id="loginForm" class="space-y-4 text-left">
-      <input type="text" name="username" placeholder="Username" required class="w-full border px-4 py-2 rounded">
-      <input type="password" name="password" placeholder="Password" required class="w-full border px-4 py-2 rounded">
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Login</button>
-    </form>
-  </div>
-
-  <script>
-    const loginUrl = "https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec";
-
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const username = this.username.value.trim();
-      const password = this.password.value.trim();
-
-      fetch(loginUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `action=login&username=${username}&password=${password}`
-      })
-        .then(res => res.text())
-        .then(text => {
-          const result = JSON.parse(text);
-          if (result.success) {
-            localStorage.setItem("username", username);
-            localStorage.setItem("role", result.role);
-            window.location.href = "dashboard.html";
-          } else {
-            alert("Login gagal. Periksa username dan password.");
-          }
-        });
-    });
-  </script>
-
-</body>
-</html>
