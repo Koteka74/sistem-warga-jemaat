@@ -1,35 +1,22 @@
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method Not Allowed" });
-  }
+  if (req.method !== "POST") return res.status(405).json({ message: "Method not allowed" });
 
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({ error: "Username dan password wajib diisi" });
-  }
-
-  const sheetURL =
-    "https://script.google.com/macros/s/AKfycbw3-XllLxdu01cagX_pCQ_jGnTrCoTsMCbLoS_8l8wYKZGXiyWzEyk_TUSsMKaQvZfxWw/exec";
-
-  const params = new URLSearchParams();
-  params.append("action", "getAdmin"); // action ini harus cocok dengan yang di Apps Script kamu
-  params.append("username", username);
-  params.append("password", password);
+  const { role, username, password } = req.body;
 
   try {
-    const response = await fetch(`${sheetURL}?${params.toString()}`);
-    const data = await response.json();
+    const response = await fetch(
+      "https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_URL/exec?action=loginAdmin",
+      {
+        method: "POST",
+        body: JSON.stringify({ role, username, password }),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
-    if (data.success) {
-      // Login berhasil
-      return res.status(200).json({ success: true, user: data.user });
-    } else {
-      // Gagal login
-      return res.status(401).json({ success: false, message: "Username atau password salah" });
-    }
+    const data = await response.json();
+    res.status(200).json(data);
   } catch (err) {
-    console.error("Gagal login admin:", err);
-    return res.status(500).json({ error: "Gagal menghubungi server login" });
+    console.error("Login Admin Error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 }
