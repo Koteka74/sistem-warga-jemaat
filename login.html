@@ -96,9 +96,12 @@
     if (role !== "admin") {
       localStorage.setItem("rayon", rayon);
       localStorage.setItem("nama", nama);
+      localStorage.setItem("userRole", "Admin");
+      localStorage.setItem("userData", JSON.stringify(userData));
     }
 
     // Redirect ke dashboard
+    
     window.location.href = "dashboard.html";
   }
 
