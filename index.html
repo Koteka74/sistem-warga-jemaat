@@ -21,33 +21,51 @@
   </div>
 
   <script>
-    const loginUrl = "https://script.google.com/macros/s/AKfycby9w70psh_Xp_lsCmglN6x7PTxr1-VBo-UvXLknDgmPAmlcXhPzdujO2ExXOKIRAinJSg/exec";
+    const loginUrl = "https://script.google.com/macros/s/AKfycbyuSCpnuB7AfNcxTCE2VW7ANRr6juySf0fPnuKB1b1HZxtfiqdisRdIrbn-fl0MbFcULA/exec";
 
     document.getElementById("loginForm").addEventListener("submit", function (e) {
       e.preventDefault();
+    
       const username = this.username.value.trim();
       const password = this.password.value.trim();
+
+      if (!username || !password) {
+        alert("Username dan password harus diisi.");
+        return;
+      }
+
+      const body = `action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
 
       fetch(loginUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: `action=login&username=${username}&password=${password}`
+        body: body
       })
-        .then(res => res.text())
-        .then(text => {
+      .then(res => res.text())
+      .then(text => {
+        try {
           const result = JSON.parse(text);
           if (result.success) {
-            //localStorage.setItem("username", username);
-            //localStorage.setItem("role", result.role);
+            localStorage.setItem("username", username);
+            localStorage.setItem("role", result.role || "admin"); // default ke 'admin'
             window.location.href = "dashboard.html";
           } else {
             alert("Login gagal. Periksa username dan password.");
           }
-        });
+        } catch (e) {
+          console.error("Gagal parsing response:", text);
+          alert("Terjadi kesalahan saat login.");
+        }
+      })
+      .catch(err => {
+        console.error("Fetch error:", err);
+        alert("Gagal menghubungi server login.");
+      });
     });
   </script>
+
 
 </body>
 </html>
