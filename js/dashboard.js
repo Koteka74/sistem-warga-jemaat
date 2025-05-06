@@ -1,12 +1,6 @@
 const url = 'https://script.google.com/macros/s/AKfycby294uq0SODlKiwTl3qNx8A7j3ugAleXUi2rK6uBGA-PW3JkxhNa_oQQH3Qv9oTbStBgg/exec?action=getData';
 const scriptURL = "https://script.google.com/macros/s/AKfycby294uq0SODlKiwTl3qNx8A7j3ugAleXUi2rK6uBGA-PW3JkxhNa_oQQH3Qv9oTbStBgg/exec";
 
-const loginData = JSON.parse(localStorage.getItem("loginData")) || {};
-const userRole = loginData.role;
-const userRayon = loginData.rayon;
-const userNama = loginData.nama;
-
-
 let fullData = [];
 let filteredData = []; // 🆕 Untuk menyimpan data yang sedang difilter
 let currentRayon = "Semua";
@@ -14,73 +8,6 @@ let currentPage = 1;
 let rowsPerPage = 10;
 // Auto Logout jika tidak aktif selama 15 menit
 let idleTime = 0;
-
-//Validasi Login
-document.addEventListener("DOMContentLoaded", function () {
-  const loginData = JSON.parse(localStorage.getItem("loginData"));
-  if (!loginData || !loginData.role) {
-    // Jika belum login atau data tidak lengkap, redirect ke login
-    window.location.href = "index.html";
-    return;
-  }
-
-  // Tampilkan role dan username di UI (opsional)
-  const infoLogin = document.getElementById("infoLogin");
-  if (infoLogin) {
-    infoLogin.textContent = `Login sebagai: ${loginData.role} (${loginData.username})`;
-  }
-
-  // Simpan sebagai variabel global jika diperlukan
-  window.userRole = loginData.role;
-  window.userName = loginData.username;
-
-  // Mulai fetch data setelah login valid
-  fetchData();
-});
-
-
-
-//Fungsi muatData
-function muatData() {
-  fetch("/api/read")
-    .then(res => res.json())
-    .then(data => {
-      fullData = data;
-
-      const loginData = JSON.parse(localStorage.getItem("loginData"));
-      //const role = localStorage.getItem("userRole");
-      const userRayon = localStorage.getItem("userRayon");
-      const userNama = localStorage.getItem("userNama");
-      
-
-      // Ambil nama kolom
-      const headers = fullData[0];
-      const dataRows = fullData.slice(1);
-
-      let filteredRows;
-
-      if (role === "Admin") {
-        filteredRows = dataRows;
-      } else if (role === "Majelis") {
-        const rayonIndex = headers.findIndex(h => h.toLowerCase().trim() === "rayon");
-        filteredRows = dataRows.filter(row => row[rayonIndex] === userRayon);
-      } else if (role === "Jemaat") {
-        const namaIndex = headers.findIndex(h => h.toLowerCase().trim() === "nama lengkap");
-        const rayonIndex = headers.findIndex(h => h.toLowerCase().trim() === "rayon");
-
-        filteredRows = dataRows.filter(row =>
-          row[rayonIndex] === userRayon && row[namaIndex].toLowerCase().includes(userNama.toLowerCase())
-        );
-      } else {
-        filteredRows = [];
-      }
-
-      filteredData = [headers, ...filteredRows];
-      renderTable(filteredData);
-    });
-}
-
-
 
 //Format tanggal Indonesia
 function formatTanggalIndonesia(tanggal) {
@@ -443,42 +370,6 @@ function renderTable(data) {
   const headers = data[0];
   const rows = data.slice(1);
 
-  let rows = data.slice(1); // ambil semua baris data
-  const headers = data[0];
-
-  // Ambil info login
-  const role = localStorage.getItem("userRole");
-  const namaLogin = localStorage.getItem("userNama");
-  const rayonLogin = localStorage.getItem("userRayon");
-
-  // Identifikasi kolom yang dibutuhkan
-  const idxRayon = headers.findIndex(h => h.trim().toLowerCase() === "rayon");
-  const idxNama = headers.findIndex(h => h.trim().toLowerCase() === "nama");
-  const idxKeluarga = headers.findIndex(h => h.trim().toLowerCase() === "id keluarga");
-
-  // Filter data berdasarkan role
-  if (role === "rayon" && idxRayon >= 0) {
-    rows = rows.filter(row => row[idxRayon]?.trim() === rayonLogin);
-  }
-
-  if (role === "jemaat" && idxRayon >= 0 && idxNama >= 0 && idxKeluarga >= 0) {
-    // Cari ID Keluarga dari jemaat yang login
-    const barisJemaat = rows.find(row =>
-      row[idxRayon]?.trim() === rayonLogin &&
-      row[idxNama]?.trim().toLowerCase() === namaLogin?.toLowerCase()
-    );
-
-    if (barisJemaat) {
-      const idKeluarga = barisJemaat[idxKeluarga];
-      rows = rows.filter(row =>
-        row[idxRayon]?.trim() === rayonLogin &&
-        row[idxKeluarga]?.trim() === idKeluarga
-      );
-    } else {
-      rows = []; // Jika tidak ketemu, tampilkan kosong
-    }
-  }
-
   // Tambahkan kolom header "Aksi" paling awal
   const thAksi = document.createElement("th");
   thAksi.className = "px-2 py-1 border text-xs";
@@ -521,34 +412,22 @@ function renderTable(data) {
     const tdAksi = document.createElement("td");
     tdAksi.className = "px-2 py-1 border text-center";
 
-    const role = localStorage.getItem("userRole");
-    const userRayon = localStorage.getItem("userRayon");
+    const btnEdit = document.createElement("button");
+    btnEdit.textContent = "✎";
+    btnEdit.className = "text-blue-600 text-xs mr-2";
+    btnEdit.onclick = () => bukaModalEdit(indexAsli, row);
 
-    const rowRayonIndex = headers.findIndex(h => h.toLowerCase().trim() === "rayon");
-    const rowRayon = row[rowRayonIndex];
+    const btnHapus = document.createElement("button");
+    btnHapus.textContent = "🗑️";
+    btnHapus.className = "text-red-600 text-xs";
+    btnHapus.onclick = () => {
+      if (confirm("Yakin ingin menghapus data ini?")) {
+        hapusData(indexAsli);
+      }
+    };
 
-    // Admin bisa edit semua, Majelis hanya jika rayon cocok
-    if (role === "Admin" || (role === "Majelis" && rowRayon === userRayon)) {
-      const btnEdit = document.createElement("button");
-      btnEdit.textContent = "✎";
-      btnEdit.className = "text-blue-600 text-xs mr-2";
-      btnEdit.onclick = () => bukaModalEdit(indexAsli, row);
-
-      const btnHapus = document.createElement("button");
-      btnHapus.textContent = "🗑️";
-      btnHapus.className = "text-red-600 text-xs";
-      btnHapus.onclick = () => {
-        if (confirm("Yakin ingin menghapus data ini?")) {
-          hapusData(indexAsli);
-        }
-      };
-    
-      tdAksi.appendChild(btnEdit);
-      tdAksi.appendChild(btnHapus);
-    } else {
-      tdAksi.textContent = "-"; // Jemaat hanya lihat tanda strip
-    }
-    
+    tdAksi.appendChild(btnEdit);
+    tdAksi.appendChild(btnHapus);
     tr.insertBefore(tdAksi, tr.firstChild); // aksi di sisi kiri
 
     tableBody.appendChild(tr);
@@ -589,27 +468,8 @@ fetch(url)
 //Logout
 function logout() {
     localStorage.clear();
-    window.location.href = "login.html";
+    window.location.href = "index.html";
 }
-
-// Tampilkan info login pengguna
-document.addEventListener("DOMContentLoaded", () => {
-  const role = localStorage.getItem("userRole");
-  const nama = localStorage.getItem("userNama") || "";
-  const rayon = localStorage.getItem("userRayon") || "";
-
-  const display = document.getElementById("userDisplay");
-  if (!display) return;
-
-  if (role === "admin") {
-    display.textContent = "Login sebagai Admin";
-  } else if (role === "rayon") {
-    display.textContent = `Majelis Rayon ${rayon}`;
-  } else if (role === "jemaat") {
-    display.textContent = `Jemaat: ${nama} (Rayon ${rayon})`;
-  }
-});
-
 
 // 🔔 Fungsi toast modern
 function showToast(msg, warna = 'bg-green-600') {
