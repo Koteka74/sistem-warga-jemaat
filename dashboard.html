@@ -6,7 +6,47 @@
   <title>Dashboard - Data Jemaat</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
+    /* Modal Detail */
+    #modalKeluarga .modal-content {
+      font-size: 0.85rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 0.5rem;
+      max-width: 800px;
+      width: 100%;
+    }
 
+    #modalKeluarga .modal-title {
+      font-size: 1.25rem;
+      color: #2563eb; /* Warna biru */
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    #modalKeluarga .modal-subtitle {
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+
+    #modalKeluarga .modal-nokode {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    #modalKeluarga .data-table th,
+    #modalKeluarga .data-table td {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    #modalKeluarga .highlight-empty {
+      background-color: #fef2f2;
+      color: #991b1b;
+      font-weight: 500;
+    }
+
+    
     .loader {
       border-top-color: #3498db;
       animation: spin 1s linear infinite;
@@ -210,15 +250,17 @@
   <script src="js/dashboard.js"></script>
   
   <!-- Modal Detail Keluarga -->
-  <div id="modalKeluarga" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 overflow-auto">
-    <div class="min-h-screen flex items-center justify-center p-4">
-      <div class="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] p-6 shadow overflow-y-auto">
-        <h2 class="text-xl font-semibold mb-4">Detail Keluarga Jemaat</h2>
-        <div id="kontenKeluarga" class="space-y-4"></div>
-        <div class="flex justify-between mt-4">
-          <button onclick="tutupModalKeluarga()" class="px-4 py-2 bg-gray-400 text-white rounded">Kembali</button>
-          <button onclick="window.print()" class="px-4 py-2 bg-green-600 text-white rounded">Cetak</button>
-        </div>
+  <div id="modalKeluarga" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4 overflow-auto">
+    <div class="modal-content shadow-lg">
+      <h2 class="modal-title">Detail Keluarga Jemaat</h2>
+      <p id="kkNama" class="modal-subtitle"></p>
+      <p id="kkKode" class="modal-nokode"></p>
+
+      <div id="kontenKeluarga" class="overflow-x-auto mt-4"></div>
+
+      <div class="mt-4 flex justify-end gap-2">
+        <button onclick="cetakKartuKeluarga()" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700">Cetak</button>
+        <button onclick="tutupModalKeluarga()" class="bg-gray-300 text-gray-800 px-3 py-1 rounded hover:bg-gray-400">Kembali</button>
       </div>
     </div>
   </div>
