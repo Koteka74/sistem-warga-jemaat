@@ -1002,7 +1002,7 @@ function tampilkanKeluarga(noKode) {
       if (!tanggalNikah) daftarKosong.push("Tanggal Nikah");
     }
     if (!asalGereja) daftarKosong.push("Asal Gereja");
-    if (["d3", "s1", "s2", "s3", "profesi"].some(p => pendidikan.includes(p)) && !gelar) {
+    if (["diploma III", "Strata I", "Strata II", "Strata III"].some(p => pendidikan.includes(p)) && !gelar) {
       daftarKosong.push("Gelar Terakhir");
     }
     if (!namaAyah) daftarKosong.push("Nama Ayah");
