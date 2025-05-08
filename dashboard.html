@@ -7,6 +7,11 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     /* Modal Detail */
+    #modalKeluarga {
+      position: fixed;
+      overflow: auto;
+    }
+    
     #modalKeluarga .modal-content {
       font-size: 0.85rem;
       padding: 1.5rem;
@@ -17,7 +22,7 @@
     }
 
     #modalKeluarga .modal-body {
-      max-height: 70vh;
+      max-height: 80vh;
       overflow-y: auto;
     }
     
@@ -28,6 +33,10 @@
       margin-bottom: 0.25rem;
     }
 
+    #modalKeluarga table thead {
+      background-color: #e0f2fe; /* biru muda */
+    }
+    
     #modalKeluarga .modal-subtitle {
       font-size: 0.95rem;
       margin-bottom: 0.25rem;
@@ -257,9 +266,9 @@
   <!-- Modal Detail Keluarga -->
   <div id="modalKeluarga" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4 overflow-auto">
     <div class="modal-content shadow-lg">
-      <h2 class="modal-title">Detail Keluarga Jemaat</h2>
-      <p id="kkNama" class="modal-subtitle"></p>
-      <p id="kkKode" class="modal-nokode"></p>
+      <h2 class="text-blue-700 text-xl font-bold">Detail Keluarga Jemaat</h2>
+      <p class="font-semibold mt-1">Kepala Keluarga: <span id="namaKepalaKeluarga"></span></p>
+      <p class="text-sm text-gray-600">No Kode: <span id="noKodeKeluarga"></span></p>
 
       <!-- ✅ Tambahan ini -->
       <div class="modal-body max-h-[70vh] overflow-y-auto">
