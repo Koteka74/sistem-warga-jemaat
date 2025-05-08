@@ -489,6 +489,11 @@ window.tutupModalEdit = function () {
   document.getElementById("modalEdit").classList.add("hidden");
 };
 
+window.tutupModalKeluarga = function () {
+  document.getElementById("modalKeluarga").classList.add("hidden");
+};
+
+
 //Hapus Data
 function hapusData(rowIndex) {
   const url = 'https://script.google.com/macros/s/AKfycby294uq0SODlKiwTl3qNx8A7j3ugAleXUi2rK6uBGA-PW3JkxhNa_oQQH3Qv9oTbStBgg/exec?action=deleteData&row=' + rowIndex;
@@ -549,6 +554,18 @@ function renderTable(data) {
 
       const header = headers[j]?.trim().toLowerCase();
 
+      //Cek Kepala Keluarga
+      if (["suami", "kepala keluarga"].includes((row[12] || "").toLowerCase())) {
+        td.textContent = "";
+        const link = document.createElement("button");
+        link.textContent = cell;
+        link.className = "text-blue-600 underline text-xs";
+        link.onclick = () => tampilkanKeluarga(row[0]); // Berdasarkan No Kode
+        td.appendChild(link);
+      } else {
+        td.textContent = cell;
+      }
+ 
       if (["tanggal lahir", "tanggal nikah"].includes(header)) {
         td.textContent = formatTanggalIndonesia(cell);
       } else {
@@ -929,4 +946,60 @@ function showSpinner() {
 
 function hideSpinner() {
   document.getElementById("spinner").classList.add("hidden");
+}
+
+function tampilkanKeluarga(noKode) {
+  const header = fullData[0];
+  const anggota = fullData.filter(row => row[0] === noKode);
+  if (anggota.length === 0) {
+    alert("Data keluarga tidak ditemukan.");
+    return;
+  }
+
+  const konten = document.getElementById("kontenKeluarga");
+  konten.innerHTML = "";
+
+  anggota.forEach((row, index) => {
+    const dataKosong = [];
+
+    const nama = row[1] || "(Tanpa Nama)";
+    const golDarah = row[5];
+    const statusNikah = row[9];
+    const tempatNikah = row[10];
+    const tanggalNikah = row[4];
+    const asalGereja = row[19];
+    const pendidikan = row[13];
+    const gelar = row[14];
+    const ayah = row[17];
+    const ibu = row[18];
+
+    if (!golDarah) dataKosong.push("Golongan Darah");
+    if (statusNikah === "Sudah") {
+      if (!tempatNikah) dataKosong.push("Tempat Nikah");
+      if (!tanggalNikah) dataKosong.push("Tanggal Nikah");
+    }
+    if (!asalGereja) dataKosong.push("Asal Gereja");
+    if (["S1", "S2", "S3"].includes(pendidikan) && !gelar) {
+      dataKosong.push("Gelar Terakhir");
+    }
+    if (!ayah) dataKosong.push("Nama Ayah");
+    if (!ibu) dataKosong.push("Nama Ibu");
+
+    const div = document.createElement("div");
+    div.className = "border p-4 rounded shadow";
+
+    div.innerHTML = `
+      <p class="font-semibold">Nama: ${nama}</p>
+      <p>No Kode: ${noKode}</p>
+      <p>Jenis Kelamin: ${row[2]}</p>
+      <p>Tempat Lahir: ${row[3]}</p>
+      <p>Tanggal Lahir: ${formatTanggalIndonesia(row[4])}</p>
+      <p>Status Nikah: ${statusNikah}</p>
+      ${dataKosong.length > 0 ? `<p class="text-red-600 text-sm mt-2">⚠ Data belum lengkap: ${dataKosong.join(", ")}</p>` : ""}
+    `;
+
+    konten.appendChild(div);
+  });
+
+  document.getElementById("modalKeluarga").classList.remove("hidden");
 }
