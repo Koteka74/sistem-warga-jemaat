@@ -954,7 +954,6 @@ function tampilkanKeluarga(noKode) {
     return;
   }
 
-  // Ambil nama kepala keluarga
   const kkRow = keluarga.find(row =>
     (row[12] || "").toLowerCase().includes("suami") ||
     (row[12] || "").toLowerCase().includes("kepala keluarga")
@@ -964,54 +963,63 @@ function tampilkanKeluarga(noKode) {
   document.getElementById("kkNama").textContent = "Kepala Keluarga: " + kkNama;
   document.getElementById("kkKode").textContent = "No Kode: " + noKode;
 
-  // Buat tabel keluarga
-  let html = `<table class="min-w-full data-table border border-gray-300 mt-2">
-                <thead><tr>`;
-  header.forEach(h => html += `<th class="border">${h}</th>`);
-  html += `</tr></thead><tbody>`;
+  const kolomDiambil = ["Nama Lengkap", "Jenis Kelamin", "Tanggal Lahir", "Status Hubungan Dalam Keluarga"];
+  const indexes = kolomDiambil.map(kol => header.indexOf(kol));
+
+  let html = `<table class="min-w-full text-sm border border-gray-300 mt-2">
+    <thead><tr>${kolomDiambil.map(h => `<th class="border px-2 py-1">${h}</th>`).join("")}</tr></thead>
+    <tbody>`;
+
+  const daftarKosong = [];
 
   keluarga.slice(1).forEach(row => {
     html += `<tr>`;
-    row.forEach((cell, i) => {
-      const kolom = header[i].toLowerCase();
-      let highlight = "";
+    indexes.forEach((i, idx) => {
+      let val = row[i] || "-";
 
-      // 📌 Cek kolom penting yang kosong
-      if ([
-        "golongan darah", "asal gereja", "nama ayah", "nama ibu"
-      ].includes(kolom) && (!cell || cell.trim() === "")) {
-        highlight = "highlight-empty";
+      if (header[i] === "Tanggal Lahir" && val.includes("T")) {
+        val = formatTanggalIndonesia(val);
       }
 
-      // Tanggal & Tempat Nikah: jika sudah menikah
-      const statusNikah = row[9]?.toLowerCase();
-      if (
-        ["tempat nikah", "tanggal nikah"].includes(kolom) &&
-        statusNikah === "sudah" &&
-        (!cell || cell.trim() === "")
-      ) {
-        highlight = "highlight-empty";
-      }
-
-      // Gelar terakhir jika pendidikan > SLTA
-      if (
-        kolom === "gelar terakhir" &&
-        ["d3", "s1", "s2", "s3", "profesi"].some(p => (row[13] || "").toLowerCase().includes(p)) &&
-        (!cell || cell.trim() === "")
-      ) {
-        highlight = "highlight-empty";
-      }
-
-      html += `<td class="border ${highlight}">${cell || "-"}</td>`;
+      html += `<td class="border px-2 py-1">${val}</td>`;
     });
     html += `</tr>`;
+
+    // Cek kekurangan data:
+    const golDarah = row[5];
+    const statusNikah = (row[9] || "").toLowerCase();
+    const tempatNikah = row[10];
+    const tanggalNikah = row[11];
+    const asalGereja = row[19];
+    const pendidikan = (row[13] || "").toLowerCase();
+    const gelar = row[14];
+    const namaAyah = row[17];
+    const namaIbu = row[18];
+
+    if (!golDarah) daftarKosong.push("Golongan Darah");
+    if (statusNikah === "sudah") {
+      if (!tempatNikah) daftarKosong.push("Tempat Nikah");
+      if (!tanggalNikah) daftarKosong.push("Tanggal Nikah");
+    }
+    if (!asalGereja) daftarKosong.push("Asal Gereja");
+    if (["d3", "s1", "s2", "s3", "profesi"].some(p => pendidikan.includes(p)) && !gelar) {
+      daftarKosong.push("Gelar Terakhir");
+    }
+    if (!namaAyah) daftarKosong.push("Nama Ayah");
+    if (!namaIbu) daftarKosong.push("Nama Ibu");
   });
 
   html += `</tbody></table>`;
 
-  document.getElementById("kontenKeluarga").innerHTML = html;
+  // Tambahkan keterangan data kosong
+  const warning = daftarKosong.length
+    ? `<div class="text-red-600 mt-4 text-sm">⚠️ Data belum lengkap: ${[...new Set(daftarKosong)].join(", ")}</div>`
+    : `<div class="text-green-600 mt-4 text-sm">✅ Semua data keluarga sudah lengkap</div>`;
+
+  document.getElementById("kontenKeluarga").innerHTML = html + warning;
   document.getElementById("modalKeluarga").classList.remove("hidden");
 }
+
 
 function cetakKartuKeluarga() {
   const originalContent = document.body.innerHTML;
