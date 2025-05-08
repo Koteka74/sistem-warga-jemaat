@@ -555,19 +555,16 @@ function renderTable(data) {
       const header = headers[j]?.trim().toLowerCase();
 
       //Cek Kepala Keluarga
-      if (["suami", "kepala keluarga"].includes((row[12] || "").toLowerCase())) {
-        td.textContent = "";
-        const link = document.createElement("button");
-        link.textContent = cell;
-        link.className = "text-blue-600 underline text-xs";
-        link.onclick = () => tampilkanKeluarga(row[0]); // Berdasarkan No Kode
-        td.appendChild(link);
-      } else {
-        td.textContent = cell;
-      }
  
       if (["tanggal lahir", "tanggal nikah"].includes(header)) {
         td.textContent = formatTanggalIndonesia(cell);
+      } else if (j === 1 && ["suami", "kepala keluarga"].includes((row[12] || "").toLowerCase())) {
+        // Jika kolom Nama (j == 1) dan status suami/kepala keluarga
+        const btn = document.createElement("button");
+        btn.textContent = cell;
+        btn.className = "text-blue-600 underline text-xs";
+        btn.onclick = () => tampilkanKeluarga(row[0]); // row[0] = No Kode
+        td.appendChild(btn);
       } else {
         td.textContent = cell;
       }
