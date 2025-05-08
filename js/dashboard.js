@@ -136,7 +136,8 @@ window.bukaModalEdit = function (rowIndex, rowData) {
     const value = rowData[i] || "";
     
     console.log("Nilai tanggal untuk header:", header, "→", value); // ✅ tambahkan di sini
-    
+    console.log(dropdownFields[header])
+      
     const label = document.createElement("label");
     label.className = "text-sm font-medium";
     label.textContent = header;
