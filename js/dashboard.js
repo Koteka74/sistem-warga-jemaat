@@ -125,6 +125,8 @@ window.bukaModalEdit = function (rowIndex, rowData) {
     "Status Sidi": ["Belum", "Sudah"],
     "Status Nikah": ["Belum", "Sudah"],
     "Golongan Darah": ["A", "B", "AB", "O"],
+    "Status Hubungan Dalam Keluarga": ["Kepala Keluarga", "Suami", "Istri", "Anak", "Menantu", "Cucu", "Orang Tua", "Mertua", "Famili Lain", "Pembantu", "Lainnya"],
+    "Pendidikan Terakhir": ["Tidak/Belum Sekolah", "Belum Tamat SD", "Tamat SD", "SLTP", "SLTA", "Diploma I", "Diploma III", "Strata I", "Strata II", "Strata III"],
     "Intra": ["PKB", "PW", "PAM", "PAR"],
     "Rayon": ["Rayon I", "Rayon II", "Rayon III", "Rayon IV", "Rayon V", "Rayon VI"],
     "Status Domisili": ["Tetap", "Tidak Tetap"],
