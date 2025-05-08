@@ -947,56 +947,79 @@ function hideSpinner() {
 
 function tampilkanKeluarga(noKode) {
   const header = fullData[0];
-  const anggota = fullData.filter(row => row[0] === noKode);
-  if (anggota.length === 0) {
+  const keluarga = fullData.filter((row, i) => i === 0 || row[0] === noKode);
+
+  if (keluarga.length <= 1) {
     alert("Data keluarga tidak ditemukan.");
     return;
   }
 
-  const konten = document.getElementById("kontenKeluarga");
-  konten.innerHTML = "";
+  // Ambil nama kepala keluarga
+  const kkRow = keluarga.find(row =>
+    (row[12] || "").toLowerCase().includes("suami") ||
+    (row[12] || "").toLowerCase().includes("kepala keluarga")
+  );
+  const kkNama = kkRow ? kkRow[1] : "Tidak diketahui";
 
-  anggota.forEach((row, index) => {
-    const dataKosong = [];
+  document.getElementById("kkNama").textContent = "Kepala Keluarga: " + kkNama;
+  document.getElementById("kkKode").textContent = "No Kode: " + noKode;
 
-    const nama = row[1] || "(Tanpa Nama)";
-    const golDarah = row[5];
-    const statusNikah = row[9];
-    const tempatNikah = row[10];
-    const tanggalNikah = row[4];
-    const asalGereja = row[19];
-    const pendidikan = row[13];
-    const gelar = row[14];
-    const ayah = row[17];
-    const ibu = row[18];
+  // Buat tabel keluarga
+  let html = `<table class="min-w-full data-table border border-gray-300 mt-2">
+                <thead><tr>`;
+  header.forEach(h => html += `<th class="border">${h}</th>`);
+  html += `</tr></thead><tbody>`;
 
-    if (!golDarah) dataKosong.push("Golongan Darah");
-    if (statusNikah === "Sudah") {
-      if (!tempatNikah) dataKosong.push("Tempat Nikah");
-      if (!tanggalNikah) dataKosong.push("Tanggal Nikah");
-    }
-    if (!asalGereja) dataKosong.push("Asal Gereja");
-    if (["S1", "S2", "S3"].includes(pendidikan) && !gelar) {
-      dataKosong.push("Gelar Terakhir");
-    }
-    if (!ayah) dataKosong.push("Nama Ayah");
-    if (!ibu) dataKosong.push("Nama Ibu");
+  keluarga.slice(1).forEach(row => {
+    html += `<tr>`;
+    row.forEach((cell, i) => {
+      const kolom = header[i].toLowerCase();
+      let highlight = "";
 
-    const div = document.createElement("div");
-    div.className = "border p-4 rounded shadow";
+      // 📌 Cek kolom penting yang kosong
+      if ([
+        "golongan darah", "asal gereja", "nama ayah", "nama ibu"
+      ].includes(kolom) && (!cell || cell.trim() === "")) {
+        highlight = "highlight-empty";
+      }
 
-    div.innerHTML = `
-      <p class="font-semibold">Nama: ${nama}</p>
-      <p>No Kode: ${noKode}</p>
-      <p>Jenis Kelamin: ${row[2]}</p>
-      <p>Tempat Lahir: ${row[3]}</p>
-      <p>Tanggal Lahir: ${formatTanggalIndonesia(row[4])}</p>
-      <p>Status Nikah: ${statusNikah}</p>
-      ${dataKosong.length > 0 ? `<p class="text-red-600 text-sm mt-2">⚠ Data belum lengkap: ${dataKosong.join(", ")}</p>` : ""}
-    `;
+      // Tanggal & Tempat Nikah: jika sudah menikah
+      const statusNikah = row[9]?.toLowerCase();
+      if (
+        ["tempat nikah", "tanggal nikah"].includes(kolom) &&
+        statusNikah === "sudah" &&
+        (!cell || cell.trim() === "")
+      ) {
+        highlight = "highlight-empty";
+      }
 
-    konten.appendChild(div);
+      // Gelar terakhir jika pendidikan > SLTA
+      if (
+        kolom === "gelar terakhir" &&
+        ["d3", "s1", "s2", "s3", "profesi"].some(p => (row[13] || "").toLowerCase().includes(p)) &&
+        (!cell || cell.trim() === "")
+      ) {
+        highlight = "highlight-empty";
+      }
+
+      html += `<td class="border ${highlight}">${cell || "-"}</td>`;
+    });
+    html += `</tr>`;
   });
 
+  html += `</tbody></table>`;
+
+  document.getElementById("kontenKeluarga").innerHTML = html;
   document.getElementById("modalKeluarga").classList.remove("hidden");
+}
+
+function cetakKartuKeluarga() {
+  const originalContent = document.body.innerHTML;
+  const modalContent = document.getElementById("modalKeluarga").innerHTML;
+
+  document.body.innerHTML = modalContent;
+  window.print();
+
+  document.body.innerHTML = originalContent;
+  window.location.reload(); // Refresh agar semua fungsi kembali aktif
 }
