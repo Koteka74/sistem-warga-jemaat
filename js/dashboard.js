@@ -996,17 +996,17 @@ function tampilkanKeluarga(noKode) {
     const namaAyah = row[17];
     const namaIbu = row[18];
 
-    if (!golDarah) daftarKosong.push("Golongan Darah");
+    if (!golDarah) daftarKosong.push(`${namaLengkap}: Golongan Darah belum diisi`);
     if (statusNikah === "sudah") {
-      if (!tempatNikah) daftarKosong.push("Tempat Nikah");
-      if (!tanggalNikah) daftarKosong.push("Tanggal Nikah");
+      if (!tempatNikah) daftarKosong.push(`${namaLengkap}: Tempat Nikah belum diisi`);
+      if (!tanggalNikah) daftarKosong.push(`${namaLengkap}: Tanggal Nikah belum diisi`);
     }
-    if (!asalGereja) daftarKosong.push("Asal Gereja");
-    if (["diploma III", "Strata I", "Strata II", "Strata III"].some(p => pendidikan.includes(p)) && !gelar) {
-      daftarKosong.push("Gelar Terakhir");
+    if (!asalGereja) daftarKosong.push(`${namaLengkap}: Asal Gereja belum diisi`);
+    if (["Diploma III", "Strata I", "Strata II", "Strata III"].includes(pendidikan) && (!gelar || gelar.trim() === "")) {
+      daftarKosong.push(`${namaLengkap}: Gelar terakhir belum diisi`);
     }
-    if (!namaAyah) daftarKosong.push("Nama Ayah");
-    if (!namaIbu) daftarKosong.push("Nama Ibu");
+    if (!namaAyah) daftarKosong.push(`${namaLengkap}: Nama Ayah belum diisi`);
+    if (!namaIbu) daftarKosong.push(`${namaLengkap}: Nama Ibu belum diisi`);
   });
 
   html += `</tbody></table>`;
