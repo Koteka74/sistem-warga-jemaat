@@ -1012,8 +1012,8 @@ function tampilkanKeluarga(noKode) {
     const asalGereja = row[19];
     const pendidikan = (row[13] || "").trim();
     const gelar = row[14] || "";
-    const namaAyah = row[17];
-    const namaIbu = row[18];
+    const namaAyah = row[18];
+    const namaIbu = row[17];
 
     if (!golDarah) daftarKosong.push(`${namaLengkap}: Golongan Darah belum diisi`);
     if (statusNikah === "sudah") {
