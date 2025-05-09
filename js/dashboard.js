@@ -1014,9 +1014,18 @@ function tampilkanKeluarga(noKode) {
   html += `</tbody></table>`;
 
   // Tambahkan keterangan data kosong
-  const warning = daftarKosong.length
-    ? `<div class="text-red-600 mt-4 text-sm">⚠️ Data belum lengkap: ${[...new Set(daftarKosong)].join(", ")}</div>`
-    : `<div class="text-green-600 mt-4 text-sm">✅ Semua data keluarga sudah lengkap</div>`;
+  let warning = "";
+  if (daftarKosong.length) {
+    warning = `
+      <div class="text-red-600 mt-4 text-sm">
+        ⚠️ <strong>Data belum lengkap:</strong><br>
+        ${[...new Set(daftarKosong)].map(item => `• ${item}`).join("<br>")}
+      </div>
+    `;
+  } else {
+    warning = `<div class="text-green-600 mt-4 text-sm">✅ Semua data keluarga sudah lengkap</div>`;
+  }
+
 
   document.getElementById("kontenKeluarga").innerHTML = html + warning;
   document.getElementById("modalKeluarga").classList.remove("hidden");
