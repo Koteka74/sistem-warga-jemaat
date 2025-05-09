@@ -408,6 +408,17 @@ window.bukaModal = function () {
   });
 
   document.getElementById("modalTambah").classList.remove("hidden");
+
+  // Ambil No Kode terakhir
+  const noKodeIndex = fullData[0].indexOf("No Kode");
+  const kodeList = fullData
+    .slice(1)
+    .map(row => parseInt(row[noKodeIndex]))
+    .filter(num => !isNaN(num));
+
+  const lastKode = kodeList.length > 0 ? Math.max(...kodeList) : 0;
+
+  document.getElementById("noKodeTerakhir").textContent = `No Kode terakhir: ${lastKode}`;
 }
 
 //SIMPAN EDIT DATA
