@@ -986,14 +986,14 @@ function tampilkanKeluarga(noKode) {
     html += `</tr>`;
 
     // Cek kekurangan data:
-    const namaLengkap = row[1];
+    const namaLengkap = row[1] || "Tanpa Nama"; // ← tambahkan baris ini
     const golDarah = row[5];
     const statusNikah = (row[9] || "").toLowerCase();
     const tempatNikah = row[10];
     const tanggalNikah = row[11];
     const asalGereja = row[19];
-    const pendidikan = (row[13] || "").toLowerCase();
-    const gelar = row[14];
+    const pendidikan = (row[13] || "").trim();
+    const gelar = row[14] || "";
     const namaAyah = row[17];
     const namaIbu = row[18];
 
@@ -1003,7 +1003,8 @@ function tampilkanKeluarga(noKode) {
       if (!tanggalNikah) daftarKosong.push(`${namaLengkap}: Tanggal Nikah belum diisi`);
     }
     if (!asalGereja) daftarKosong.push(`${namaLengkap}: Asal Gereja belum diisi`);
-    if (["Diploma III", "Strata I", "Strata II", "Strata III"].includes(pendidikan) && (!gelar || gelar.trim() === "")) {
+    const butuhGelar = ["Diploma III", "Strata I", "Strata II", "Strata III"];
+    if (butuhGelar.includes(pendidikan) && gelar.trim() === "") {
       daftarKosong.push(`${namaLengkap}: Gelar terakhir belum diisi`);
     }
     if (!namaAyah) daftarKosong.push(`${namaLengkap}: Nama Ayah belum diisi`);
