@@ -1042,3 +1042,32 @@ function cetakKartuKeluarga() {
   document.body.innerHTML = originalContent;
   window.location.reload(); // Refresh agar semua fungsi kembali aktif
 }
+
+window.printKartuKeluarga = function () {
+  const modal = document.getElementById("modalKeluarga");
+  const content = modal.querySelector(".modal-body") || modal;
+
+  const printWindow = window.open("", "_blank");
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Cetak Kartu Keluarga</title>
+        <style>
+          body { font-family: Arial, sans-serif; padding: 20px; }
+          h2 { color: #2563eb; }
+          table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px; }
+          th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; }
+          th { background-color: #dbeafe; }
+          .warning { margin-top: 16px; color: #dc2626; font-size: 13px; }
+        </style>
+      </head>
+      <body>
+        ${content.innerHTML}
+      </body>
+    </html>
+  `);
+  printWindow.document.close();
+  printWindow.focus();
+  printWindow.print();
+  printWindow.close();
+};
