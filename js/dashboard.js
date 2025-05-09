@@ -599,6 +599,13 @@ function renderTable(data) {
     tableBody.appendChild(tr);
   });
 
+  //Konek ke tampilkan data per baris
+  document.getElementById("rowsPerPage").addEventListener("change", function () {
+    rowsPerPage = parseInt(this.value); // update jumlah baris
+    currentPage = 1; // reset ke halaman pertama
+    renderTable(filteredData.length ? filteredData : fullData); // tampilkan ulang tabel
+  });
+
   // Update page info
   const pageInfo = document.getElementById("pageInfo");
   const totalPages = Math.ceil(rows.length / rowsPerPage);
