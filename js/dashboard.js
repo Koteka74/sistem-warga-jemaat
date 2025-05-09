@@ -1007,13 +1007,13 @@ function tampilkanKeluarga(noKode) {
     const namaLengkap = row[1] || "Tanpa Nama"; // ← tambahkan baris ini
     const golDarah = row[5];
     const statusNikah = (row[9] || "").toLowerCase();
-    const tempatNikah = row[10];
-    const tanggalNikah = row[11];
-    const asalGereja = row[19];
+    const tanggalNikah = row[10];
+    const tempatNikah = row[11];
     const pendidikan = (row[13] || "").trim();
     const gelar = row[14] || "";
-    const namaAyah = row[18];
+    const asalGereja = row[16];
     const namaIbu = row[17];
+    const namaAyah = row[18];
 
     if (!golDarah) daftarKosong.push(`${namaLengkap}: Golongan Darah belum diisi`);
     if (statusNikah === "sudah") {
