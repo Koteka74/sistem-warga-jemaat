@@ -986,6 +986,7 @@ function tampilkanKeluarga(noKode) {
     html += `</tr>`;
 
     // Cek kekurangan data:
+    const namaLengkap = row[1];
     const golDarah = row[5];
     const statusNikah = (row[9] || "").toLowerCase();
     const tempatNikah = row[10];
