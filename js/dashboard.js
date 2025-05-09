@@ -960,8 +960,8 @@ function tampilkanKeluarga(noKode) {
   );
   const kkNama = kkRow ? kkRow[1] : "Tidak diketahui";
 
-  document.getElementById("kkNama").textContent = "Kepala Keluarga: " + kkNama;
-  document.getElementById("kkKode").textContent = "No Kode: " + noKode;
+  document.getElementById("namaKepalaKeluarga").textContent = kkNama;
+  document.getElementById("noKodeKeluarga").textContent = noKode;
 
   const kolomDiambil = ["Nama Lengkap", "Jenis Kelamin", "Tanggal Lahir", "Status Hubungan Dalam Keluarga"];
   const indexes = kolomDiambil.map(kol => header.indexOf(kol));
@@ -977,8 +977,8 @@ function tampilkanKeluarga(noKode) {
     indexes.forEach((i, idx) => {
       let val = row[i] || "-";
 
-      if (header[i] === "Tanggal Lahir" && val.includes("T")) {
-        val = formatTanggalIndonesia(val);
+      if (header[i] === "Tanggal Lahir") {
+        val = formatTanggal(val);
       }
 
       html += `<td class="border px-2 py-1">${val}</td>`;
