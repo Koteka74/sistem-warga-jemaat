@@ -1049,6 +1049,29 @@ function tampilkanKeluarga(noKode) {
   document.getElementById("modalKeluarga").classList.remove("hidden");
 }
 
+window.toggleExportMenu = function () {
+    const menu = document.getElementById("exportMenu");
+    menu.classList.toggle("hidden");
+  }
+
+// Ekspor semua data
+window.exportToExcel = function () {
+  const worksheet = XLSX.utils.aoa_to_sheet(fullData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Data Jemaat");
+  XLSX.writeFile(workbook, "Data_Jemaat_Semua.xlsx");
+}
+
+// Ekspor berdasarkan rayon terpilih dari dropdown
+window.exportRayonSelected = function () {
+  const selectedRayon = document.getElementById("rayonSelect").value;
+  const filteredData = fullData.filter((row, i) => i === 0 || row[34] === selectedRayon);
+
+  const worksheet = XLSX.utils.aoa_to_sheet(filteredData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, selectedRayon);
+  XLSX.writeFile(workbook, `Data_Jemaat_${selectedRayon.replace(" ", "_")}.xlsx`);
+}
 
 function cetakKartuKeluarga() {
   const originalContent = document.body.innerHTML;
@@ -1089,28 +1112,6 @@ window.printKartuKeluarga = function () {
   printWindow.print();
   printWindow.close();
 
-  window.toggleExportMenu = function () {
-    const menu = document.getElementById("exportMenu");
-    menu.classList.toggle("hidden");
-  }
-
-  // Ekspor semua data
-  window.exportToExcel = function () {
-    const worksheet = XLSX.utils.aoa_to_sheet(fullData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Data Jemaat");
-    XLSX.writeFile(workbook, "Data_Jemaat_Semua.xlsx");
-  }
-
-  // Ekspor berdasarkan rayon terpilih dari dropdown
-  window.exportRayonSelected = function () {
-    const selectedRayon = document.getElementById("rayonSelect").value;
-    const filteredData = fullData.filter((row, i) => i === 0 || row[34] === selectedRayon);
-
-    const worksheet = XLSX.utils.aoa_to_sheet(filteredData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, selectedRayon);
-    XLSX.writeFile(workbook, `Data_Jemaat_${selectedRayon.replace(" ", "_")}.xlsx`);
-  }
+  
 
 };
