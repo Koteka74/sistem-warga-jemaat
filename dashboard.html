@@ -179,9 +179,27 @@
 
   <!-- Kanan: Tombol -->
   <div class="flex gap-2">
-    <button class="no-print bg-blue-600 text-white px-3 py-1 text-sm rounded hover:bg-blue-700 shadow" onclick="exportToExcel()">
-      Export Excel
-    </button>
+    <div class="relative inline-block">
+      <button onclick="toggleExportMenu()" class="no-print bg-blue-600 text-white px-3 py-1.5 text-sm rounded hover:bg-blue-700 shadow">
+        Export
+      </button>
+      <div id="exportMenu" class="hidden absolute bg-white border shadow rounded mt-2 right-0 z-50 w-64 p-3">
+        <button onclick="exportToExcel()" class="block w-full text-left px-2 py-1 hover:bg-blue-50 rounded text-sm">📄 Export Semua ke Excel</button>
+        <div class="mt-2">
+          <label for="rayonSelect" class="text-sm block mb-1">📁 Export Data per Rayon</label>
+          <select id="rayonSelect" class="w-full px-2 py-1 border rounded text-sm mb-2">
+            <option value="Rayon I">Rayon I</option>
+            <option value="Rayon II">Rayon II</option>
+            <option value="Rayon III">Rayon III</option>
+            <option value="Rayon IV">Rayon IV</option>
+            <option value="Rayon V">Rayon V</option>
+            <option value="Rayon VI">Rayon VI</option>
+          </select>
+          <button onclick="exportRayonSelected()" class="w-full bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-sm">Export Rayon</button>
+        </div>
+      </div>
+    </div>
+
    
   </div>
 </div>
