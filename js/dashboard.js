@@ -1088,4 +1088,29 @@ window.printKartuKeluarga = function () {
   printWindow.focus();
   printWindow.print();
   printWindow.close();
+
+  function toggleExportMenu() {
+  const menu = document.getElementById("exportMenu");
+  menu.classList.toggle("hidden");
+}
+
+// Ekspor semua data
+function exportToExcel() {
+  const worksheet = XLSX.utils.aoa_to_sheet(fullData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Data Jemaat");
+  XLSX.writeFile(workbook, "Data_Jemaat_Semua.xlsx");
+}
+
+// Ekspor berdasarkan rayon terpilih dari dropdown
+function exportRayonSelected() {
+  const selectedRayon = document.getElementById("rayonSelect").value;
+  const filteredData = fullData.filter((row, i) => i === 0 || row[34] === selectedRayon);
+
+  const worksheet = XLSX.utils.aoa_to_sheet(filteredData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, selectedRayon);
+  XLSX.writeFile(workbook, `Data_Jemaat_${selectedRayon.replace(" ", "_")}.xlsx`);
+}
+
 };
